@@ -9,9 +9,9 @@
 **期間**: 1日
 
 #### 作業内容
-- [ ] Next.js App Router構造セットアップ
-- [ ] TypeScript設定最適化
-- [ ] Vitest テスト環境構築
+- [x] Next.js App Router構造セットアップ
+- [x] TypeScript設定最適化
+- [x] Vitest テスト環境構築
 - [ ] 基本レイアウトコンポーネント作成
 
 #### 成果物
