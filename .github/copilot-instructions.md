@@ -16,20 +16,26 @@ You are a programming expert.
 - Focus on actionable information and results
 - Avoid unnecessary explanations or commentary
 
-### 3. File Management and Task Execution
+### 3. Foundational programming knowledge
+- Utilize recent, stable versions for all adopted frameworks, libraries, and languages.
+- Use Context7 as needed for code generation, setup, configuration, or library/API documentation.
+- The Context7 MCP tools will automatically handle library ID resolution and documentation retrieval.
+- If use Next.js 15+ with App Router, prefer Server Actions over traditional API Routes.
+
+### 4. File Management and Task Execution
 
 - Always reference the following md files before implementation, even without specific instructions:
   - `docs/*.md` contains basic requirements and specifications
 - Maintain traceability between requirements, tasks, and implementation
 
-### 4. Task Granularity Policy
+### 5. Task Granularity Policy
 
 - Maximum of 5 files can be created, modified, or deleted per single task
 - This limit defines the maximum granularity for one task
 - When work requires changes to more than 5 files, split into multiple tasks
 - Ensure each task remains focused and manageable
 
-### 5. Development and Testing Approach
+### 6. Development and Testing Approach
 
 - Break down implementation into small, granular tasks
 - Start development environment after each small task completion
@@ -41,7 +47,7 @@ You are a programming expert.
 - Run tests via `npm test`: Vitest: `vitest.config.ts` with jsdom; scan `**/*.test.{ts,tsx}`
 - Prioritize server verification in page.tsx (mock fetches); isolate clients in `_features/`; avoid E2E, keep tests fast/granular
 
-### 6. Token Management and Task Continuity
+### 7. Token Management and Task Continuity
 
 - Monitor subtask workload and token consumption
 - When approaching 100k tokens, generate separate continuation task
@@ -52,13 +58,13 @@ You are a programming expert.
   - Implementation decisions made
 - Ensure seamless handoff between task segments
 
-### 7. Solution Quality Standards
+### 8. Solution Quality Standards
 
 - Avoid ad-hoc solutions (hardcoding, manual operation assumptions, etc.)
 - Design scalable and maintainable solutions from the beginning
 - Consider long-term implications of implementation choices
 
-### 8. Error Response Protocol
+### 9. Error Response Protocol
 
 - When user reports issues or unexpected errors occur during development:
   - Do not immediately attempt fixes
@@ -66,13 +72,13 @@ You are a programming expert.
   - Present situation assessment and proposed solution options to user
   - Wait for user confirmation before proceeding with implementation
 
-### 9. Documentation Creation Policy
+### 10. Documentation Creation Policy
 
 - Do not create implementation md files unless explicitly instructed by user
 - Do not ask user about documentation creation
 - Focus on code implementation over documentation unless specified
 
-### 10. Documentation Maintenance
+### 11. Documentation Maintenance
 
 - Pause work at appropriate intervals to update project documentation
 - Update `md` that related to your tasks and documentation files in project
@@ -130,8 +136,6 @@ style: adjust typography for improved readability
 
 ## Coding Rules
 
-- Use Next.js 15+ with App Router.
-- Prefer Server Actions over traditional API Routes.
 - Design by Functional Domain Modeling.
 - Use function. Do not use `class`.
 - Design types using Algebraic Data Types.
