@@ -1,48 +1,65 @@
-"use client"
+'use client'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { useEffect, useState } from 'react';
-
-export type CurrentTime = {
-  hours: number;
-  minutes: number;
-  seconds: number;
-  timeString: string; // HH:MM:SS
-};
-
-function pad(n: number) {
-  return String(n).padStart(2, '0');
-}
-
-export function getCurrentTime(date = new Date()): CurrentTime {
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-  return {
-    hours,
-    minutes,
-    seconds,
-    timeString: `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`,
-  };
-}
+export type UseClockResult = { currentTime: Date }
 
 /**
- w* useCurrentTime
- * - returns the current time and updates every second
- * - small and strongly-typed to make testing easy
+ * useClock
+ * - Returns { currentTime: Date }
+ * - Syncs to seconds using setTimeout (avoids setInterval drift)
+ * - Re-syncs on visibility/focus
  */
-export default function useCurrentTime(): CurrentTime {
-  const [now, setNow] = useState<CurrentTime>(() => getCurrentTime());
+export function useClock(): UseClockResult {
+  const [currentTime, setCurrentTime] = useState<Date>(() => new Date())
+  const timerRef = useRef<number | null>(null)
+
+  const clearTimer = useCallback(() => {
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
+  }, [])
+
+  const scheduleTick = useCallback(() => {
+    clearTimer()
+    const now = new Date()
+    setCurrentTime(now)
+    const msToNextSecond = 1000 - now.getMilliseconds()
+    timerRef.current = window.setTimeout(() => {
+      scheduleTick()
+    }, msToNextSecond)
+  }, [clearTimer])
 
   useEffect(() => {
-    function tick() {
-      setNow(getCurrentTime());
+    scheduleTick()
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        // re-sync immediately and restart scheduling
+        setCurrentTime(new Date())
+        clearTimer()
+        scheduleTick()
+      } else {
+        // optionally pause timer when hidden
+        clearTimer()
+      }
     }
 
-    // simple fixed interval: tick every 1000ms
-    const id = window.setInterval(tick, 1000) as unknown as number;
+    const handleFocus = () => {
+      setCurrentTime(new Date())
+      clearTimer()
+      scheduleTick()
+    }
 
-    return () => clearInterval(id as number);
-  }, []);
+    document.addEventListener('visibilitychange', handleVisibility)
+    window.addEventListener('focus', handleFocus)
 
-  return now;
+    return () => {
+      clearTimer()
+      document.removeEventListener('visibilitychange', handleVisibility)
+      window.removeEventListener('focus', handleFocus)
+    }
+  }, [scheduleTick, clearTimer])
+
+  return { currentTime }
 }
