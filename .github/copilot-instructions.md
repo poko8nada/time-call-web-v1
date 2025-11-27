@@ -32,6 +32,21 @@ You are a programming expert.
 - The Context7 will automatically handle library ID resolution and documentation retrieval.
 - When developing with Next.js, actively use “Next-devtools”.
 
+## Testing Policy
+
+- No E2E tests
+- Write minimal unit tests only
+- Test business logic and critical functions only
+- Skip UI components and trivial code
+- Place `*.test.ts(x)` files adjacent to source files
+
+### Running Tests
+
+```bash
+pnpm test              # Run all tests
+pnpm test *.test.tsx   # Run specific tests
+```
+
 ---
 
 ## Standard Coding Rules
@@ -160,11 +175,14 @@ try {
 ### Boundaries
 
 - **Colocation**: Route-specific files use `_prefix` (non-routed) and live within route directories
-- **Server-first**: Default to server components; use `'use client'` only when necessary
-- **Features**: Combine components in `_features/`; keep client logic minimal
-- **Actions**: Server actions in `_actions/` with `'use server'`; colocate tests as `*.test.ts`
-- **No nesting in features**: Use children in `app/` routing structure instead
 - **Parallel routes**: Use `@folder` for multi-part layouts
+- **Dynamic routes**: Use `[param]` for dynamic segments
+- **Route Grouping**: Use `(group)` for related routes
+- **Features**:
+  - It is Large size Components that combine multiple smaller components, hooks, and logic
+  - File is named like `DisplayUserProfile.tsx` not `UserProfileFeature.tsx`
+  - Combine components in `_features/`; keep client logic minimal
+  - No nesting in features Use children in `app/` routing structure instead
 - **Global types**: Only truly universal types (e.g., Result<T, E>) go in `utils/types.ts`
 
 ### Structure Example
@@ -186,18 +204,29 @@ my-nextjs-app/
 │   │
 │   ├ blog/                      # Route: /blog
 │   │  ├ page.tsx
+│   │  ├ [slug]/                  # Dynamic route: /blog/:slug
+│   │  │  └ page.tsx
 │   │  ├ _components/
 │   │  ├ _features/
 │   │  ├ _hooks/
 │   │  ├ _actions/
 │   │  └ _config/
 │   │
-│   ├ layout.tsx                 # Root layout
-│   └ page.tsx                   # Root page (/)
+│   ├ (root)/                    # Can be omitted, Route: /
+│   │  ├ page.tsx                # Root page (/)
+│   │  ├ _components/
+│   │  ├ _features/
+│   │  ├ _hooks/
+│   │  ├ _actions/
+│   │  └ _config/
+│   │
+|   ├ page.tsx                   # Fallback root page (if no (root)/)
+│   └ layout.tsx                 # Root layout
 │
 ├─ components/                   # Global shared UI
 ├─ hooks/                        # Global shared hooks
-├─ utils/                        # Global utilities/config/actions
+├─ utils/                        # Global utilities/config/actions/types
+│   └ types.ts                   # Global types (e.g., Result<T, E>)
 └─ public/                       # Static assets
 ```
 
@@ -207,9 +236,8 @@ my-nextjs-app/
 
 ### Basic
 
-**Commit Format:** `<type>: <description>`
-
-**Types:** feat, fix, refactor, chore, style, WIP
+- **Commit Format:** `<type>: <description>`
+- **Types:** feat, fix, refactor, chore, style, WIP
 
 ### Rules
 
