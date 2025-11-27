@@ -8,10 +8,10 @@
 
 ### Task 1: 型定義とユーティリティ基盤
 
-- [ ] `utils/types.ts` - グローバル型定義（Result<T, E>など）
-- [ ] `utils/formatTime.ts` - 時刻フォーマット関数 **(FR-02)**
-- [ ] `utils/formatTime.test.ts` - 最小限の単体テスト（ビジネスロジック）
-- [ ] `utils/audioContext.ts` - Web Audio API初期化ヘルパー **(FR-06)**
+- [x] `utils/types.ts` - グローバル型定義（Result<T, E>など）
+- [x] `utils/formatTime.ts` - 時刻フォーマット関数 **(FR-02)**
+- [x] `utils/formatTime.test.ts` - 最小限の単体テスト（ビジネスロジック）
+- [x] `utils/audioContext.ts` - Web Audio API初期化ヘルパー **(FR-06)**
 
 **依存関係**: なし  
 **成果物**: 共通型定義、時刻フォーマット関数、Audio API初期化  
