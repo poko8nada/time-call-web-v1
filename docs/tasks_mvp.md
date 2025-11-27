@@ -23,8 +23,8 @@
 
 ### Task 2: 時刻取得・更新システム
 
-- [ ] `app/_hooks/useClock.ts` - 現在時刻の取得とリアルタイム更新 **(FR-01)**
-- [ ] `app/_hooks/useClock.test.ts` - 最小限の単体テスト（重要な関数）
+- [x] `app/_hooks/useClock.ts` - 現在時刻の取得とリアルタイム更新 **(FR-01)**
+- [x] `app/_hooks/useClock.test.ts` - 最小限の単体テスト（重要な関数）
 
 **依存関係**: Task 1 (formatTime.ts)  
 **成果物**: 1秒ごとに更新される現在時刻管理フック  
