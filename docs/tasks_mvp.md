@@ -11,10 +11,9 @@
 - [x] `utils/types.ts` - グローバル型定義（Result<T, E>など）
 - [x] `utils/formatTime.ts` - 時刻フォーマット関数 **(FR-02)**
 - [x] `utils/formatTime.test.ts` - 最小限の単体テスト（ビジネスロジック）
-- [x] `utils/audioContext.ts` - Web Audio API初期化ヘルパー **(FR-06)**
 
 **依存関係**: なし  
-**成果物**: 共通型定義、時刻フォーマット関数、Audio API初期化  
+**成果物**: 共通型定義、時刻フォーマット関数  
 **完了条件**: 型エラーなし、`pnpm test formatTime.test.ts`がパス
 
 ---
@@ -36,16 +35,18 @@
 
 ### Task 3: ビープ音（予報音）システム
 
-- [ ] `app/_hooks/useBeepSound.ts` - Web Audio APIによる予報音生成・再生 **(FR-07)**
+- [x] `/public/sounds/beep-sequence.mp3` - OtoLogicから音源ダウンロード・配置（CC BY 4.0）
+- [ ] `app/_hooks/useBeepSound.ts` - MP3音源再生 **(FR-06)**
 
-**依存関係**: Task 1 (audioContext.ts)  
+**依存関係**: なし  
 **成果物**: 5秒間のビープ音シーケンス再生機能、音量調整機能  
-**完了条件**: 実ブラウザでビープ音が1秒間隔で5回再生されること、音量調整が反映されること  
-**テスト**: 単体テスト不要（UI連携コード）
+**完了条件**: 実ブラウザでビープ音が正しく再生されること、音量調整が反映されること  
+**テスト**: 単体テスト不要（UI連携コード）  
+**ライセンス**: CC BY 4.0 (OtoLogic - https://otologic.jp) - クレジット表記必須
 
 ### Task 4: 音声合成システム
 
-- [ ] `app/_hooks/useSpeechSynthesis.ts` - Web Speech APIラッパー **(FR-08)**
+- [ ] `app/_hooks/useSpeechSynthesis.ts` - Web Speech APIラッパー **(FR-07)**
 
 **依存関係**: Task 1 (formatTime.ts - speechTime用)  
 **成果物**: 日本語音声リスト取得、音声選択、読み上げ実行機能  
@@ -71,8 +72,8 @@
 
 ### Task 6: 時計表示と音量調整UI
 
-- [ ] `app/_components/DigitalClock.tsx` - HH:MM:SS形式デジタル時計 **(FR-09)**
-- [ ] `app/_components/VolumeControl.tsx` - 音量調整スライダー **(FR-10)**
+- [ ] `app/_components/DigitalClock.tsx` - HH:MM:SS形式デジタル時計 **(FR-08)**
+- [ ] `app/_components/VolumeControl.tsx` - 音量調整スライダー **(FR-09)**
 
 **依存関係**: Task 1 (formatTime.ts), Task 2 (useClock.ts)  
 **成果物**: デジタル時計表示コンポーネント、音量調整スライダーコンポーネント  
@@ -95,7 +96,7 @@
 
 ### Task 8: 設定パネル統合
 
-- [ ] `app/_features/SettingsPanel.tsx` - 設定パネル **(FR-12)**
+- [ ] `app/_features/SettingsPanel.tsx` - 設定パネル **(FR-11)**
 
 **依存関係**: Task 6 (VolumeControl.tsx), Task 4 (useSpeechSynthesis.ts)  
 **成果物**: 音量調整×2（ビープ・読み上げ）+ 音声選択の統合パネル  
@@ -104,7 +105,7 @@
 
 ### Task 9: 時報サービス統合
 
-- [ ] `app/_features/TimeCallService.tsx` - サービス全体統合 **(FR-11)**
+- [ ] `app/_features/TimeCallService.tsx` - サービス全体統合 **(FR-10)**
 
 **依存関係**: Task 5 (useTimeCallTimer.ts), Task 6 (DigitalClock.tsx), Task 7 (IntervalSelector.tsx, ControlButton.tsx)  
 **成果物**: 全フック・コンポーネントの統合、タイマー連携制御  
@@ -113,13 +114,14 @@
 
 ### Task 10: ページ構成・スタイリング
 
-- [ ] `app/page.tsx` - トップページ **(FR-13)**
-- [ ] `app/layout.tsx` - Root Layout **(FR-14)**
+- [ ] `app/page.tsx` - トップページ **(FR-12)**
+- [ ] `app/layout.tsx` - Root Layout **(FR-13)**
 - [ ] `app/globals.css` - グローバルスタイル
+- [ ] ライセンスクレジット表示 - フッターにOtoLogic (CC BY 4.0)を表記 **(FR-14)**
 
 **依存関係**: Task 8 (SettingsPanel.tsx), Task 9 (TimeCallService.tsx)  
-**成果物**: 完成したトップページ、レスポンシブレイアウト  
-**完了条件**: 実ブラウザでPC・スマホで正しく表示されること、axe監査でアクセシビリティ基準を満たすこと  
+**成果物**: 完成したトップページ、レスポンシブレイアウト、ライセンス表記  
+**完了条件**: 実ブラウザでPC・スマホで正しく表示されること、axe監査でアクセシビリティ基準を満たすこと、ライセンスクレジットが正しく表示されること  
 **テスト**: 単体テスト不要（ページ構成）
 
 ---
@@ -216,3 +218,4 @@ Task 1 → Task 2 → Task 3/4 (並行) → Task 5 → Task 6/7 (並行) → Tas
 - [ ] レスポンシブ表示確認（スマホ・タブレット・PC）
 - [ ] コンソールエラー・警告なし
 - [ ] Lighthouse スコア90以上（Performance, Accessibility）
+- [ ] ライセンスクレジット表示確認（OtoLogic CC BY 4.0）

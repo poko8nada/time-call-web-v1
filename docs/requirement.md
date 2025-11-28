@@ -89,26 +89,18 @@
 
 #### 3.3. 音声出力 (Audio Output)
 
-6. **FR-06: `audioContext.ts`**
-   - 要件: Web Audio API初期化ヘルパー
+6. **FR-06: `useBeepSound.ts`**
+   - 要件: 予報音（ビープ音）の再生
    - 詳細:
-     - `AudioContext`のシングルトンインスタンス管理
-     - ブラウザ互換性を考慮した初期化（`webkitAudioContext`対応）
-     - ユーザーインタラクション後の`resume()`処理
-   - 関数: `getAudioContext(): AudioContext`
-   - テスト観点: AudioContextが正しく初期化されること
-
-7. **FR-07: `useBeepSound.ts`**
-   - 要件: 予報音（ビープ音）の生成と再生
-   - 詳細:
-     - `OscillatorNode`で440Hzのビープ音生成
-     - `GainNode`で音量調整（0.0〜1.0）
-     - 1秒間隔で5回連続再生する機能
+     - `/public/sounds/beep-sequence.mp3`を再生
+     - `HTMLAudioElement`で音量調整（0.0〜1.0）
+     - 5秒間のビープ音シーケンス再生機能
      - 再生中の中断機能
+     - 音源: OtoLogic (CC BY 4.0) - https://otologic.jp
    - 戻り値: `{ playBeepSequence: () => void, stopBeep: () => void, volume: number, setVolume: (v: number) => void }`
    - テスト観点: ビープ音が正しいタイミングで再生されること、音量調整が反映されること
 
-8. **FR-08: `useSpeechSynthesis.ts`**
+7. **FR-07: `useSpeechSynthesis.ts`**
    - 要件: Web Speech APIによる音声合成
    - 詳細:
      - `speechSynthesis.getVoices()`でja-JP音声リスト取得
@@ -120,7 +112,7 @@
 
 #### 3.4. UI表示 (UI Display)
 
-9. **FR-09: `DigitalClock.tsx`**
+8. **FR-08: `DigitalClock.tsx`**
    - 要件: デジタル時計の表示
    - 詳細:
      - `formatDigitalTime`を使用してHH:MM:SS形式で表示
@@ -129,18 +121,18 @@
    - Props: `{ currentTime: Date }`
    - テスト観点: 時刻が正しくフォーマットされて表示されること
 
-10. **FR-10: `VolumeControl.tsx`**
-    - 要件: 音量調整スライダー
-    - 詳細:
-      - 0〜100の範囲で調整（内部的には0.0〜1.0に変換）
-      - ラベル表示（"ビープ音量" / "読み上げ音量"）
-      - リアルタイムフィードバック（現在の音量値表示）
-    - Props: `{ volume: number, onChange: (v: number) => void, label: string }`
-    - テスト観点: スライダー操作で正しい値が渡されること
+9. **FR-09: `VolumeControl.tsx`**
+   - 要件: 音量調整スライダー
+   - 詳細:
+     - 0〜100の範囲で調整（内部的には0.0〜1.0に変換）
+     - ラベル表示（"ビープ音量" / "読み上げ音量"）
+     - リアルタイムフィードバック（現在の音量値表示）
+   - Props: `{ volume: number, onChange: (v: number) => void, label: string }`
+   - テスト観点: スライダー操作で正しい値が渡されること
 
 #### 3.5. 統合・設定 (Integration & Settings)
 
-11. **FR-11: `TimeCallService.tsx`**
+10. **FR-10: `TimeCallService.tsx`**
     - 要件: 時報サービス全体の統合
     - 詳細:
       - `useClock`, `useTimeCallTimer`, `useBeepSound`, `useSpeechSynthesis`を統合
@@ -150,7 +142,7 @@
     - 機能: 全体のオーケストレーション
     - テスト観点: 各フック・コンポーネントが正しく連携すること
 
-12. **FR-12: `SettingsPanel.tsx`**
+11. **FR-11: `SettingsPanel.tsx`**
     - 要件: 設定パネル
     - 詳細:
       - ビープ音量調整（`VolumeControl`）
@@ -162,7 +154,7 @@
 
 #### 3.6. ページ構成 (Pages)
 
-13. **FR-13: `page.tsx`**
+12. **FR-12: `page.tsx`**
     - 要件: トップページ
     - 詳細:
       - Server Componentとして実装
@@ -170,13 +162,24 @@
       - レスポンシブレイアウト
     - 機能: ページ全体の構成
 
-14. **FR-14: `layout.tsx`**
+13. **FR-13: `layout.tsx`**
     - 要件: Root Layout
     - 詳細:
       - メタデータ設定（title, description）
       - `globals.css`読み込み
       - フォント設定
     - 機能: アプリ全体のレイアウト基盤
+
+#### 3.7. ライセンス表示 (License Attribution)
+
+14. **FR-14: ライセンスクレジット表示**
+    - 要件: 使用素材のライセンス表記
+    - 詳細:
+      - ページフッターにOtoLogicへのクレジット表示
+      - CC BY 4.0ライセンスの明示
+      - リンク: https://otologic.jp
+    - 配置: `app/layout.tsx`または`app/page.tsx`のフッター部分
+    - テスト観点: クレジット表示が正しく表示されること
 
 ---
 
@@ -194,6 +197,8 @@
   - 詳細: フェーズ2移行時、VOICEVOX APIキーなどの機密情報をフロントエンドに公開しないこと。
 - 項目: アーキテクチャ
   - 詳細: フェーズ1のロジックは、フェーズ2への移行時にコアロジックの変更なしに置き換え可能であること。（抽象化の徹底）
+- 項目: ライセンスコンプライアンス
+  - 詳細: 使用する全ての外部リソース（音源、フォント、画像等）のライセンスを遵守し、必要なクレジット表記を行うこと。
 
 ---
 
@@ -221,44 +226,37 @@
 ```
 time-call-web-v1/
 ├─ app/
-│  ├─ layout.tsx                    # FR-14: Root layout (Server Component)
-│  ├─ page.tsx                      # FR-13: Top page (Server Component)
+│  ├─ layout.tsx                    # FR-13: Root layout (Server Component)
+│  ├─ page.tsx                      # FR-12: Top page (Server Component)
 │  ├─ globals.css                   # Global styles
 │  ├─ _components/                  # Route-specific UI components (Client)
-│  │  ├─ DigitalClock.tsx          # FR-09: デジタル時計表示
+│  │  ├─ DigitalClock.tsx          # FR-08: デジタル時計表示
 │  │  ├─ IntervalSelector.tsx      # FR-04: 読み上げ間隔選択UI
 │  │  ├─ ControlButton.tsx         # FR-05: 開始/停止ボタン
-│  │  └─ VolumeControl.tsx         # FR-10: 音量調整スライダー
+│  │  └─ VolumeControl.tsx         # FR-09: 音量調整スライダー
 │  ├─ _features/                    # Route-specific features (Client)
-│  │  ├─ TimeCallService.tsx       # FR-11: 時報サービス全体の統合UI
-│  │  └─ SettingsPanel.tsx         # FR-12: 設定パネル (音量・音声選択)
-│  ├─ _hooks/                       # Route-specific hooks
-│  │  ├─ useClock.ts               # FR-01: 現在時刻取得・更新
-│  │  ├─ useTimeCallTimer.ts       # FR-03: 読み上げタイマー制御
-│  │  ├─ useBeepSound.ts           # FR-07: 予報音再生
-│  │  └─ useSpeechSynthesis.ts     # FR-08: Web Speech API wrapper
-│  ├─ _hooks/                       # Route-specific hooks
-│  │  ├─ useClock.ts               # FR-01: 現在時刻取得・更新
-│  │  ├─ useClock.test.ts          # Minimal unit test
-│  │  ├─ useTimeCallTimer.ts       # FR-03: 読み上げタイマー制御
-│  │  ├─ useTimeCallTimer.test.ts  # Minimal unit test
-│  │  ├─ useBeepSound.ts           # FR-07: 予報音再生
-│  │  └─ useSpeechSynthesis.ts     # FR-08: Web Speech API wrapper
-</text>
-<new_text>
+│  │  ├─ TimeCallService.tsx       # FR-10: 時報サービス全体の統合UI
+│  │  └─ SettingsPanel.tsx         # FR-11: 設定パネル (音量・音声選択)
+│  └─ _hooks/                       # Route-specific hooks
+│     ├─ useClock.ts               # FR-01: 現在時刻取得・更新
+│     ├─ useClock.test.ts          # Minimal unit test
+│     ├─ useTimeCallTimer.ts       # FR-03: 読み上げタイマー制御
+│     ├─ useTimeCallTimer.test.ts  # Minimal unit test
+│     ├─ useBeepSound.ts           # FR-06: 予報音再生
+│     └─ useSpeechSynthesis.ts     # FR-07: Web Speech API wrapper
 │
 ├─ utils/                            # Global utilities
 │  ├─ types.ts                      # Global types (Result<T, E>)
 │  ├─ formatTime.ts                 # FR-02: 時刻フォーマット関数
-│  ├─ formatTime.test.ts            # Minimal unit test
-│  └─ audioContext.ts               # FR-06: Web Audio API初期化ヘルパー
+│  └─ formatTime.test.ts            # Minimal unit test
 │
 ├─ components/                       # Global shared UI (if needed)
 │
 ├─ hooks/                            # Global shared hooks (if needed)
 │
 └─ public/                           # Static assets
-   └─ (future: audio files, icons, etc.)
+   └─ sounds/
+      └─ beep-sequence.mp3          # OtoLogic (CC BY 4.0)
 ```
 
 #### 6.2. 実装順序 (Implementation Order)
@@ -267,16 +265,15 @@ time-call-web-v1/
 
 1. `utils/types.ts` - 型定義
 2. `utils/formatTime.ts` + `formatTime.test.ts` - 時刻フォーマット（ビジネスロジック）
-3. `utils/audioContext.ts` - Audio API初期化
-4. `app/_hooks/useClock.ts` + `useClock.test.ts` - 時刻管理（重要な関数）
+3. `app/_hooks/useClock.ts` + `useClock.test.ts` - 時刻管理（重要な関数）
 
-**Phase 2: 音声機能** 5. `app/_hooks/useBeepSound.ts` - ビープ音（テスト不要：UI連携）6. `app/_hooks/useSpeechSynthesis.ts` - 音声合成（テスト不要：ブラウザAPI wrapper）
+**Phase 2: 音声機能** 4. `/public/sounds/beep-sequence.mp3` - 音源配置（OtoLogic, CC BY 4.0）5. `app/_hooks/useBeepSound.ts` - ビープ音再生（テスト不要：UI連携）6. `app/_hooks/useSpeechSynthesis.ts` - 音声合成（テスト不要：ブラウザAPI wrapper）
 
 **Phase 3: タイマー機能** 7. `app/_hooks/useTimeCallTimer.ts` + `useTimeCallTimer.test.ts` - タイマー制御（重要なロジック）
 
 **Phase 4: UIコンポーネント** 8. `app/_components/DigitalClock.tsx` - 時計表示 9. `app/_components/VolumeControl.tsx` - 音量調整 10. `app/_components/IntervalSelector.tsx` - 間隔選択 11. `app/_components/ControlButton.tsx` - 開始/停止
 
-**Phase 5: 統合** 12. `app/_features/SettingsPanel.tsx` - 設定パネル 13. `app/_features/TimeCallService.tsx` - サービス統合 14. `app/page.tsx` - ページ構成
+**Phase 5: 統合** 12. `app/_features/SettingsPanel.tsx` - 設定パネル 13. `app/_features/TimeCallService.tsx` - サービス統合 14. `app/page.tsx` + ライセンスクレジット表示 (FR-14) - ページ構成
 
 #### 6.3. フェーズ2への拡張ポイント
 
