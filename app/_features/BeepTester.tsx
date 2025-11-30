@@ -13,6 +13,7 @@ export default function BeepTester() {
   const { playBeepSequence, stopBeep, volume, setVolume } = useBeepSound(0.5)
   const [lastAction, setLastAction] = useState<string | null>(null)
   const inputId = useId()
+  console.debug('BeepTester loaded')
 
   const handlePlay = useCallback(() => {
     playBeepSequence()
