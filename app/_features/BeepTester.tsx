@@ -1,7 +1,6 @@
 'use client'
 
-import type React from 'react'
-import { useCallback, useState } from 'react'
+import { type ChangeEvent, useCallback, useId, useState } from 'react'
 import { useBeepSound } from '../_hooks/useBeepSound'
 
 /**
@@ -13,6 +12,7 @@ import { useBeepSound } from '../_hooks/useBeepSound'
 export default function BeepTester() {
   const { playBeepSequence, stopBeep, volume, setVolume } = useBeepSound(0.5)
   const [lastAction, setLastAction] = useState<string | null>(null)
+  const inputId = useId()
 
   const handlePlay = useCallback(() => {
     playBeepSequence()
@@ -25,7 +25,7 @@ export default function BeepTester() {
   }, [stopBeep])
 
   const handleVolumeChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       const v = Math.max(0, Math.min(100, Number(e.target.value)))
       setVolume(v / 100)
       setLastAction(`volume ${v}%`)
@@ -74,14 +74,11 @@ export default function BeepTester() {
       </div>
 
       <div className='mb-2'>
-        <label
-          htmlFor='beep-volume'
-          className='block text-xs text-gray-600 mb-1'
-        >
+        <label htmlFor={inputId} className='block text-xs text-gray-600 mb-1'>
           Volume: {Math.round(volume * 100)}%
         </label>
         <input
-          id='beep-volume'
+          id={inputId}
           type='range'
           min={0}
           max={100}
