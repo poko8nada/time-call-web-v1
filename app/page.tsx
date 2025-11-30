@@ -1,4 +1,8 @@
-import BeepTester from './_features/BeepTester'
+import dynamic from 'next/dynamic'
+
+const BeepTester = dynamic(() => import('./_features/BeepTester'), {
+  ssr: false,
+})
 
 const isDev = process.env.NODE_ENV === 'development'
 
