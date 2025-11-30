@@ -19,7 +19,7 @@ You are a programming expert.
 
 ### Development Workflow
 
-**Always get approval first**
+**Always get approval first if task is quite small or in a hurry.**
 
 1. List tasks and files (create/modify/delete) → **Get approval**
 2. Run `pnpm test *.test.tsx`
