@@ -19,10 +19,12 @@ You are a programming expert.
 
 ### Development Workflow
 
-1. List tasks and files (create/modify/delete) → Get approval
+**Always get approval first**
+
+1. List tasks and files (create/modify/delete) → **Get approval**
 2. Run `pnpm test *.test.tsx`
-3. If tests fail → Investigate, propose fixes → Get approval → Execute fixes
-4. Create and ask staging files list and commit message → Get approval → `git add` and `git commit`
+3. If tests fail → Investigate, propose fixes → **Get approval** → Execute fixes
+4. Create and ask staging files list and commit message → **Get approval** → `git add` and `git commit`
 5. Check off completed task in the task markdown file
 
 ## Tools
