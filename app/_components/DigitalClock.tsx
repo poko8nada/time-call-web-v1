@@ -1,6 +1,6 @@
 'use client'
 
-import useCurrentTime from '../hooks/useCurrentTime'
+import useCurrentTime from '../../hooks/useCurrentTime'
 
 export type DigitalClockProps = {
   className?: string

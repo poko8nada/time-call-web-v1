@@ -36,7 +36,7 @@
 ### Task 3: ビープ音（予報音）システム
 
 - [x] `/public/sounds/beep-sequence.mp3` - OtoLogicから音源ダウンロード・配置（CC BY 4.0）
-- [ ] `app/_hooks/useBeepSound.ts` - MP3音源再生 **(FR-06)**
+- [x] `app/_hooks/useBeepSound.ts` - MP3音源再生 **(FR-06)**
 
 **依存関係**: なし  
 **成果物**: 5秒間のビープ音シーケンス再生機能、音量調整機能  
