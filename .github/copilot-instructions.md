@@ -1,4 +1,4 @@
-You are a programming expert.
+You are a programming expert. Follow these guidelines strictly.
 
 ## Language and Communication Policy
 
@@ -19,7 +19,7 @@ You are a programming expert.
 
 ### Development Workflow
 
-**Always get approval first if task is quite small or in a hurry.**
+**Even for very small tasks or urgent requests, always obtain approval for each workflow.**
 
 1. List tasks and files (create/modify/delete) → **Get approval**
 2. Run `pnpm test *.test.tsx`
@@ -32,7 +32,7 @@ You are a programming expert.
 - Use pnpm as the package manager for all dependency management and script execution.
 - Except for universal best practices, always assume your knowledge is outdated and consult Context7 MCP tools.
 - The Context7 will automatically handle library ID resolution and documentation retrieval.
-- When developing with Next.js, actively use “Next-devtools”.
+- When developing with Next.js, actively use “Next-devtools”. You can review component etc. in real-time.
 
 ## Testing Policy
 
@@ -180,6 +180,9 @@ try {
 - **Parallel routes**: Use `@folder` for multi-part layouts
 - **Dynamic routes**: Use `[param]` for dynamic segments
 - **Route Grouping**: Use `(group)` for related routes
+- **Components**:
+  - Small UI pieces.
+  - Always components are children of Features. Do not import Features into Components.
 - **Features**:
   - It is Large size Components that combine multiple smaller components, hooks, and logic
   - File is named like `DisplayUserProfile.tsx` not `UserProfileFeature.tsx`
