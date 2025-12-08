@@ -7,14 +7,11 @@ type UseSpeechSynthesisReturn = {
     text: string,
     options?: { cancelPrev?: boolean },
   ) => Promise<Result<void, string>>
-  stop: () => void
   voices: SpeechSynthesisVoice[]
   selectedVoice: SpeechSynthesisVoice | null
   setSelectedVoice: (v: SpeechSynthesisVoice | null) => void
   volume: number
-  setVolume: (v: number) => void
   isSupported: boolean
-  isSpeaking: boolean
 }
 
 function getVoicesByWaitFor(ss: SpeechSynthesis, timeoutMs = 1200) {
@@ -69,7 +66,7 @@ function getVoicesByListener(ss: SpeechSynthesis) {
 async function loadVoices(): Promise<Result<SpeechSynthesisVoice[], string>> {
   const ss = (window as Window & { speechSynthesis: SpeechSynthesis })
     .speechSynthesis
-  let voices = ss.getVoices()
+  const voices = ss.getVoices()
   if (voices.length > 0) return ok(voices)
 
   try {
@@ -107,7 +104,20 @@ function selectPreferredVoice(
   return voices[0] ?? null
 }
 
-export function useSpeechSynthesis(defaultVolume?: number) {
+async function loadUtterance() {
+  return new Promise<Result<SpeechSynthesisUtterance, string>>(
+    (resolve, reject) => {
+      try {
+        const utterance = new SpeechSynthesisUtterance()
+        resolve(ok(utterance))
+      } catch (e) {
+        reject(err(String(e)))
+      }
+    },
+  )
+}
+
+export function useSpeechSynthesis(defaultVolume = 0.5) {
   const isSupported =
     typeof window !== 'undefined' &&
     'speechSynthesis' in window &&
@@ -116,10 +126,7 @@ export function useSpeechSynthesis(defaultVolume?: number) {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
   const [selectedVoice, setSelectedVoice] =
     useState<SpeechSynthesisVoice | null>(null)
-  const [volume, setVolume] = useState<number>(
-    defaultVolume !== undefined ? defaultVolume : 1,
-  )
-  const [isSpeaking, setIsSpeaking] = useState<boolean>(false)
+  const [volume, setVolumeState] = useState(defaultVolume)
 
   useEffect(() => {
     if (!isSupported) return
@@ -140,6 +147,50 @@ export function useSpeechSynthesis(defaultVolume?: number) {
     }
   }, [isSupported])
 
+  const speak = useCallback(
+    async (text: string) => {
+      if (!isSupported) return
+      const ss = (window as Window & { speechSynthesis: SpeechSynthesis })
+        .speechSynthesis
+
+      const utteranceResult = await loadUtterance()
+      if (!utteranceResult.ok) {
+        return err(`Failed to create utterance: ${utteranceResult.error}`)
+      }
+
+      let settled = false
+      const cleanup = (result: Result<void, string>) => {
+        if (settled) return
+        settled = true
+        try {
+          utterance.removeEventListener('end', () => result)
+          utterance.removeEventListener('error', () => console.error(result))
+        } catch {}
+      }
+
+      const utterance = utteranceResult.value
+      if (selectedVoice) {
+        utterance.voice = selectedVoice
+      }
+      utterance.volume = volume
+      utterance.lang = selectedVoice?.lang || 'ja-JP'
+      utterance.text = text
+      utterance.addEventListener('end', () => {
+        cleanup(ok(undefined))
+      })
+      utterance.addEventListener('error', e => {
+        cleanup(err(`SpeechSynthesisUtterance error: ${String(e)}`))
+      })
+
+      try {
+        ss.speak(utterance)
+      } catch (e) {
+        cleanup(err(`Failed to speak: ${String(e)}`))
+        return err(String(e))
+      }
+    },
+    [isSupported, selectedVoice, volume],
+  )
   return {
     isSupported,
     voices,
