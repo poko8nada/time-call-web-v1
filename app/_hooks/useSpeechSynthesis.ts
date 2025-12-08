@@ -1,18 +1,6 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
-import { err, type Ok, ok, type Result } from '@/utils/types'
-
-type UseSpeechSynthesisReturn = {
-  speak: (
-    text: string,
-    options?: { cancelPrev?: boolean },
-  ) => Promise<Result<void, string>>
-  voices: SpeechSynthesisVoice[]
-  selectedVoice: SpeechSynthesisVoice | null
-  setSelectedVoice: (v: SpeechSynthesisVoice | null) => void
-  volume: number
-  isSupported: boolean
-}
+import { err, ok, type Result } from '@/utils/types'
 
 function getVoicesByWaitFor(ss: SpeechSynthesis, timeoutMs = 1200) {
   return new Promise<SpeechSynthesisVoice[]>(resolve => {
@@ -117,7 +105,18 @@ async function loadUtterance() {
   )
 }
 
-export function useSpeechSynthesis(defaultVolume = 0.5) {
+type UseSpeechSynthesisReturn = {
+  isSupported: boolean
+  speak: (text: string) => void
+  voices: SpeechSynthesisVoice[]
+  selectedVoice: SpeechSynthesisVoice | null
+  setSelectedVoice: (v: SpeechSynthesisVoice | null) => void
+  setVolumeState: (v: number) => void
+}
+
+export function useSpeechSynthesis(
+  defaultVolume = 0.5,
+): UseSpeechSynthesisReturn {
   const isSupported =
     typeof window !== 'undefined' &&
     'speechSynthesis' in window &&
@@ -195,5 +194,8 @@ export function useSpeechSynthesis(defaultVolume = 0.5) {
     isSupported,
     voices,
     selectedVoice,
+    setSelectedVoice,
+    speak,
+    setVolumeState,
   }
 }
