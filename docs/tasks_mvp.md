@@ -46,7 +46,7 @@
 
 ### Task 4: 音声合成システム
 
-- [ ] `app/_hooks/useSpeechSynthesis.ts` - Web Speech APIラッパー **(FR-07)**
+- [x] `app/_hooks/useSpeechSynthesis.ts` - Web Speech APIラッパー **(FR-07)**
 
 **依存関係**: Task 1 (formatTime.ts - speechTime用)  
 **成果物**: 日本語音声リスト取得、音声選択、読み上げ実行機能  
