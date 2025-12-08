@@ -106,9 +106,11 @@
      - `speechSynthesis.getVoices()`でja-JP音声リスト取得
      - 選択された音声で`SpeechSynthesisUtterance`を生成
      - 音量調整（0.0〜1.0）
-     - テキスト読み上げ実行
-   - 戻り値: `{ speak: (text: string) => void, voices: SpeechSynthesisVoice[], selectedVoice: SpeechSynthesisVoice | null, setVoice: (voice: SpeechSynthesisVoice) => void, volume: number, setVolume: (v: number) => void }`
-   - テスト観点: 音声リストが取得できること、読み上げが実行されること
+     - テキスト読み上げ実行（Promise<Result<void, string>>を返す）
+     - 読み上げ中断機能（cancel）
+     - エラーハンドリング（interrupted は警告レベル、その他はエラーレベル）
+   - 戻り値: `{ isSupported: boolean, speak: (text: string) => Promise<Result<void, string>>, voices: SpeechSynthesisVoice[], selectedVoice: SpeechSynthesisVoice | null, setSelectedVoice: (voice: SpeechSynthesisVoice | null) => void, setVolumeState: (v: number) => void, cancel: () => void }`
+   - テスト観点: 音声リストが取得できること、読み上げが実行されること、Promiseが正しく解決されること、中断機能が動作すること
 
 #### 3.4. UI表示 (UI Display)
 

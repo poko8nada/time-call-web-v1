@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { err, ok, type Result } from '@/utils/types'
 
 function getVoicesByWaitFor(ss: SpeechSynthesis, timeoutMs = 1200) {
@@ -92,26 +92,96 @@ function selectPreferredVoice(
   return voices[0] ?? null
 }
 
-async function loadUtterance() {
-  return new Promise<Result<SpeechSynthesisUtterance, string>>(
-    (resolve, reject) => {
+async function loadUtterance(): Promise<
+  Result<SpeechSynthesisUtterance, string>
+> {
+  try {
+    const utterance = new SpeechSynthesisUtterance()
+    return ok(utterance)
+  } catch (e) {
+    return err(String(e))
+  }
+}
+
+async function speakUtterance(
+  ss: SpeechSynthesis,
+  utterance: SpeechSynthesisUtterance,
+): Promise<Result<void, string>> {
+  return new Promise<Result<void, string>>(resolve => {
+    let settled = false
+
+    const cleanup = () => {
+      if (settled) return
+      settled = true
       try {
-        const utterance = new SpeechSynthesisUtterance()
-        resolve(ok(utterance))
-      } catch (e) {
-        reject(err(String(e)))
+        utterance.removeEventListener('end', onEnd)
+        utterance.removeEventListener('error', onError)
+      } catch {}
+    }
+
+    const onEnd = () => {
+      cleanup()
+      resolve(ok(undefined))
+    }
+
+    const onError = (event: Event) => {
+      cleanup()
+      // Extract detailed error information from SpeechSynthesisErrorEvent
+      let errorMsg = 'Speech utterance error'
+
+      // Type guard for SpeechSynthesisErrorEvent
+      if (event && 'error' in event) {
+        const errorEvent = event as SpeechSynthesisErrorEvent
+        errorMsg += `: ${errorEvent.error}`
+
+        // Log full event details for debugging with JSON.stringify for Next.js dev tools
+        const errorDetails = {
+          error: errorEvent.error,
+          message: errorEvent.type,
+          elapsedTime: errorEvent.elapsedTime,
+          charIndex: errorEvent.charIndex,
+        }
+
+        // 'interrupted' is expected during page navigation/refresh, use warn
+        if (errorEvent.error === 'interrupted') {
+          console.warn(
+            `Speech synthesis interrupted: ${JSON.stringify(errorDetails)}`,
+          )
+        } else {
+          // Other errors are unexpected, use error
+          console.error(
+            `Speech synthesis error details: ${JSON.stringify(errorDetails)}`,
+          )
+        }
+      } else {
+        console.error(
+          `Speech synthesis error (unknown format): ${String(event)}`,
+        )
       }
-    },
-  )
+
+      resolve(err(errorMsg))
+    }
+
+    utterance.addEventListener('end', onEnd)
+    utterance.addEventListener('error', onError)
+
+    try {
+      ss.speak(utterance)
+    } catch (e) {
+      cleanup()
+      resolve(err(`Failed to call speak: ${String(e)}`))
+    }
+  })
 }
 
 type UseSpeechSynthesisReturn = {
   isSupported: boolean
-  speak: (text: string) => void
+  speak: (text: string) => Promise<Result<void, string>>
   voices: SpeechSynthesisVoice[]
   selectedVoice: SpeechSynthesisVoice | null
   setSelectedVoice: (v: SpeechSynthesisVoice | null) => void
   setVolumeState: (v: number) => void
+  cancel: () => void
 }
 
 export function useSpeechSynthesis(
@@ -126,6 +196,7 @@ export function useSpeechSynthesis(
   const [selectedVoice, setSelectedVoice] =
     useState<SpeechSynthesisVoice | null>(null)
   const [volume, setVolumeState] = useState(defaultVolume)
+  const currentUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
 
   useEffect(() => {
     if (!isSupported) return
@@ -146,25 +217,37 @@ export function useSpeechSynthesis(
     }
   }, [isSupported])
 
+  const cancel = useCallback(() => {
+    if (!isSupported) return
+    const ss = (window as Window & { speechSynthesis: SpeechSynthesis })
+      .speechSynthesis
+    try {
+      // Cancel any ongoing speech
+      ss.cancel()
+      // Clear the current utterance reference
+      currentUtteranceRef.current = null
+    } catch (e) {
+      console.error('Failed to cancel speechSynthesis:', e)
+    }
+  }, [isSupported])
+
   const speak = useCallback(
-    async (text: string) => {
-      if (!isSupported) return
+    async (text: string): Promise<Result<void, string>> => {
+      if (!isSupported) {
+        return err('speechSynthesis not supported')
+      }
+
       const ss = (window as Window & { speechSynthesis: SpeechSynthesis })
         .speechSynthesis
+
+      // Cancel any ongoing speech before starting new one
+      if (ss.speaking || ss.pending) {
+        ss.cancel()
+      }
 
       const utteranceResult = await loadUtterance()
       if (!utteranceResult.ok) {
         return err(`Failed to create utterance: ${utteranceResult.error}`)
-      }
-
-      let settled = false
-      const cleanup = (result: Result<void, string>) => {
-        if (settled) return
-        settled = true
-        try {
-          utterance.removeEventListener('end', () => result)
-          utterance.removeEventListener('error', () => console.error(result))
-        } catch {}
       }
 
       const utterance = utteranceResult.value
@@ -174,22 +257,23 @@ export function useSpeechSynthesis(
       utterance.volume = volume
       utterance.lang = selectedVoice?.lang || 'ja-JP'
       utterance.text = text
-      utterance.addEventListener('end', () => {
-        cleanup(ok(undefined))
-      })
-      utterance.addEventListener('error', e => {
-        cleanup(err(`SpeechSynthesisUtterance error: ${String(e)}`))
-      })
 
-      try {
-        ss.speak(utterance)
-      } catch (e) {
-        cleanup(err(`Failed to speak: ${String(e)}`))
-        return err(String(e))
+      // Store reference to current utterance
+      currentUtteranceRef.current = utterance
+
+      // Delegate event handling to separated function
+      const result = await speakUtterance(ss, utterance)
+
+      // Clear reference if this was the utterance we just spoke
+      if (currentUtteranceRef.current === utterance) {
+        currentUtteranceRef.current = null
       }
+
+      return result
     },
     [isSupported, selectedVoice, volume],
   )
+
   return {
     isSupported,
     voices,
@@ -197,5 +281,6 @@ export function useSpeechSynthesis(
     setSelectedVoice,
     speak,
     setVolumeState,
+    cancel,
   }
 }
