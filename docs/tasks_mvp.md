@@ -39,8 +39,8 @@
 - [x] `app/_hooks/useBeepSound.ts` - MP3音源再生 **(FR-06)**
 
 **依存関係**: なし  
-**成果物**: 5秒間のビープ音シーケンス再生機能、音量調整機能  
-**完了条件**: 実ブラウザでビープ音が正しく再生されること、音量調整が反映されること  
+**成果物**: `playBeepSequence: () => Promise<Result<void, string>>`を実装した5秒間のビープ音シーケンス再生機能、音量調整機能  
+**完了条件**: 実ブラウザでビープ音が正しく再生されること、音量調整が反映されること、PromiseベースのエラーハンドリングがResult型で動作すること  
 **テスト**: 単体テスト不要（UI連携コード）  
 **ライセンス**: CC BY 4.0 (OtoLogic - https://otologic.jp) - クレジット表記必須
 
@@ -49,8 +49,8 @@
 - [x] `app/_hooks/useSpeechSynthesis.ts` - Web Speech APIラッパー **(FR-07)**
 
 **依存関係**: Task 1 (formatTime.ts - speechTime用)  
-**成果物**: 日本語音声リスト取得、音声選択、読み上げ実行機能  
-**完了条件**: 実ブラウザでja-JP音声が取得できること、読み上げが実行されること  
+**成果物**: 日本語音声リスト取得、音声選択、`speak: (text: string) => Promise<Result<void, string>>`を実装した読み上げ実行機能  
+**完了条件**: 実ブラウザでja-JP音声が取得できること、読み上げが実行されること、PromiseベースのエラーハンドリングがResult型で動作すること  
 **テスト**: 単体テスト不要（ブラウザAPI wrapper）
 
 ---

@@ -97,7 +97,7 @@
      - 5秒間のビープ音シーケンス再生機能
      - 再生中の中断機能
      - 音源: OtoLogic (CC BY 4.0) - https://otologic.jp
-   - 戻り値: `{ playBeepSequence: () => void, stopBeep: () => void, volume: number, setVolume: (v: number) => void }`
+   - 戻り値: `{ playBeepSequence: () => Promise<Result<void, string>>, stopBeep: () => void, volume: number, setVolume: (v: number) => void }`
    - テスト観点: ビープ音が正しいタイミングで再生されること、音量調整が反映されること
 
 7. **FR-07: `useSpeechSynthesis.ts`**
@@ -106,7 +106,7 @@
      - `speechSynthesis.getVoices()`でja-JP音声リスト取得
      - 選択された音声で`SpeechSynthesisUtterance`を生成
      - 音量調整（0.0〜1.0）
-     - テキスト読み上げ実行（Promise<Result<void, string>>を返す）
+     - テキスト読み上げ実行（`Promise<Result<void, string>>`を返す）
      - 読み上げ中断機能（cancel）
      - エラーハンドリング（interrupted は警告レベル、その他はエラーレベル）
    - 戻り値: `{ isSupported: boolean, speak: (text: string) => Promise<Result<void, string>>, voices: SpeechSynthesisVoice[], selectedVoice: SpeechSynthesisVoice | null, setSelectedVoice: (voice: SpeechSynthesisVoice | null) => void, setVolumeState: (v: number) => void, cancel: () => void }`
