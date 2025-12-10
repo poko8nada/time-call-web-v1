@@ -63,7 +63,7 @@
    - 要件: 読み上げタイマーのロジック制御
    - 詳細:
      - 指定間隔（分単位）で次回読み上げ時刻を計算
-     - 読み上げ時刻の5秒前にビープ音トリガー発火
+     - 読み上げ時刻の3秒前にビープ音トリガー発火
      - 読み上げ時刻にスピーチトリガー発火
      - 開始/停止状態の管理
    - 戻り値: `{ isRunning: boolean, start: () => void, stop: () => void, interval: number, setInterval: (min: number) => void, nextCallTime: Date | null }`
@@ -94,7 +94,7 @@
    - 詳細:
      - `/public/sounds/beep-sequence.mp3`を再生
      - `HTMLAudioElement`で音量調整（0.0〜1.0）
-     - 5秒間のビープ音シーケンス再生機能
+     - 3秒間のビープ音シーケンス再生機能
      - 再生中の中断機能
      - 音源: OtoLogic (CC BY 4.0) - https://otologic.jp
    - 戻り値: `{ playBeepSequence: () => Promise<Result<void, string>>, stopBeep: () => void, volume: number, setVolume: (v: number) => void }`
