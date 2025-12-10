@@ -72,8 +72,8 @@
 
 ### Task 6: 時計表示と音量調整UI
 
-- [ ] `app/_components/DigitalClock.tsx` - HH:MM:SS形式デジタル時計 **(FR-08)**
-- [ ] `app/_components/VolumeControl.tsx` - 音量調整スライダー **(FR-09)**
+- [x] `app/_components/DigitalClock.tsx` - HH:MM:SS形式デジタル時計 **(FR-08)**
+- [x] `app/_components/VolumeControl.tsx` - 音量調整スライダー **(FR-09)**
 
 **依存関係**: Task 1 (formatTime.ts), Task 2 (useClock.ts)  
 **成果物**: デジタル時計表示コンポーネント、音量調整スライダーコンポーネント  
