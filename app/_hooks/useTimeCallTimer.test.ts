@@ -12,7 +12,7 @@ describe('calculateNextCallTime', () => {
     expect(callTime.getMilliseconds()).toBe(0)
 
     expect(beepTime.getMinutes()).toBe(24)
-    expect(beepTime.getSeconds()).toBe(55)
+    expect(beepTime.getSeconds()).toBe(57)
   })
 
   it('moves to next interval when already on boundary (10:25:00)', () => {
@@ -56,12 +56,12 @@ describe('calculateNextCallTime', () => {
     expect(callTime.getSeconds()).toBe(0)
   })
 
-  it('beep time is always 5 seconds before call time', () => {
+  it('beep time is always 3 seconds before call time', () => {
     const current = new Date(2024, 0, 1, 10, 23, 45)
     const { callTime, beepTime } = calculateNextCallTime(current, 5)
 
     const diffMs = callTime.getTime() - beepTime.getTime()
-    expect(diffMs).toBe(5000)
+    expect(diffMs).toBe(3000)
   })
 
   it('preserves milliseconds to 0 in call time', () => {

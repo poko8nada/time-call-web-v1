@@ -16,22 +16,28 @@ export function calculateNextCallTime(currentTime: Date, interval: number) {
   }
   callTime.setSeconds(0, 0)
 
-  // Set beep time 5 seconds before
+  // Set beep time 3 seconds before
   const beepTime = new Date(callTime)
-  beepTime.setSeconds(beepTime.getSeconds() - 5)
+  beepTime.setSeconds(beepTime.getSeconds() - 3)
 
   return { callTime, beepTime }
 }
 
-export function useTimeCallTimer() {
-  const { playBeepSequence } = useBeepSound()
-  const { speak } = useSpeechSynthesis()
+export function useTimeCallTimer(masterVolume: number = 0.7) {
+  const { playBeepSequence, setVolume: setBeepVolume } = useBeepSound(masterVolume)
+  const { speak, setVolumeState } = useSpeechSynthesis(masterVolume)
   const { currentTime } = useClock()
 
   const [isRunning, setIsRunning] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [interval, setInterval] = useState(5) // default interval in minutes
   const [nextCallTime, setNextCallTime] = useState<Date | null>(null)
+
+  // Sync masterVolume with both beep and speech hooks
+  useEffect(() => {
+    setBeepVolume(masterVolume)
+    setVolumeState(masterVolume)
+  }, [masterVolume, setBeepVolume, setVolumeState])
 
   const calculateCallback = useCallback(
     (currentTime: Date, interval: number) =>
