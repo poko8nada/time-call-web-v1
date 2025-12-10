@@ -1,7 +1,7 @@
 'use client'
 
 import { type ChangeEvent, useCallback, useId, useState } from 'react'
-import { useSpeechSynthesis } from '../_hooks/useSpeechSynthesis'
+import { useSpeechSynthesis } from '../../_hooks/useSpeechSynthesis'
 
 /**
  * Dev-only SpeechTester component

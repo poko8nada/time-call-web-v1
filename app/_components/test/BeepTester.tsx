@@ -1,7 +1,7 @@
 'use client'
 
 import { type ChangeEvent, useCallback, useId, useState } from 'react'
-import { useBeepSound } from '../_hooks/useBeepSound'
+import { useBeepSound } from '../../_hooks/useBeepSound'
 
 /**
  * Dev-only BeepTester component

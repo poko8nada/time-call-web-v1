@@ -1,8 +1,8 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import { useClock } from '../_hooks/useClock'
-import { useTimeCallTimer } from '../_hooks/useTimeCallTimer'
+import { useClock } from '../../_hooks/useClock'
+import { useTimeCallTimer } from '../../_hooks/useTimeCallTimer'
 
 /**
  * Dev-only TimeCallTester component

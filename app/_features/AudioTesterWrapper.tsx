@@ -2,15 +2,15 @@
 
 import dynamic from 'next/dynamic'
 
-const BeepTester = dynamic(() => import('../_components/BeepTester'), {
+const BeepTester = dynamic(() => import('../_components/test/BeepTester'), {
   ssr: false,
 })
 
-const SpeechTester = dynamic(() => import('../_components/SpeechTester'), {
+const SpeechTester = dynamic(() => import('../_components/test/SpeechTester'), {
   ssr: false,
 })
 
-const TimeCallTester = dynamic(() => import('../_components/TimeCallTester'), {
+const TimeCallTester = dynamic(() => import('../_components/test/TimeCallTester'), {
   ssr: false,
 })
 
