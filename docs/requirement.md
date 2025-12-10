@@ -72,7 +72,7 @@
 4. **FR-04: `IntervalSelector.tsx`**
    - 要件: 読み上げ間隔選択UI
    - 詳細:
-     - 1, 5, 10, 30, 60分の選択肢を提供
+     - 1, 5, 10, 15, 30, 60分の選択肢を提供
      - ラジオボタンまたはドロップダウンで選択
      - タイマー実行中は選択不可（disabled）
    - Props: `{ interval: number, onChange: (min: number) => void, disabled: boolean }`

@@ -10,6 +10,10 @@ const SpeechTester = dynamic(() => import('../_components/SpeechTester'), {
   ssr: false,
 })
 
+const TimeCallTester = dynamic(() => import('../_components/TimeCallTester'), {
+  ssr: false,
+})
+
 const isDev = process.env.NODE_ENV === 'development'
 
 export default function AudioTesterWrapper() {
@@ -22,6 +26,7 @@ export default function AudioTesterWrapper() {
       <div className='space-y-4'>
         <BeepTester />
         <SpeechTester />
+        <TimeCallTester />
       </div>
 
       <div className='text-xs text-gray-500 dark:text-gray-400 mt-6 p-4 bg-gray-50 dark:bg-zinc-800 rounded border border-gray-200 dark:border-zinc-700'>
@@ -29,6 +34,7 @@ export default function AudioTesterWrapper() {
         <ul className='list-disc list-inside space-y-1'>
           <li>Test beep sound playback and volume control</li>
           <li>Test speech synthesis with different voices</li>
+          <li>Test time call timer logic and timing accuracy</li>
           <li>Verify audio components work before integration</li>
           <li>These components are hidden in production builds</li>
         </ul>

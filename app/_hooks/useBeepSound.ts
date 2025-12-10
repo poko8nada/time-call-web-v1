@@ -1,9 +1,10 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { err, ok, type Result } from '@/utils/types'
 
 type UseBeepSoundReturn = {
-  playBeepSequence: () => void
+  playBeepSequence: () => Promise<Result<void, string>>
   stopBeep: () => void
   volume: number
   setVolume: (volume: number) => void
@@ -49,13 +50,40 @@ export function useBeepSound(defaultVolume = 0.5): UseBeepSoundReturn {
     }
   }, [volume])
 
-  const playBeepSequence = useCallback(() => {
-    if (!isAudioLoaded || !audioRef.current) return
-    // If audio is already playing, ignore duplicate play requests to prevent overlapping sounds
-    if (!audioRef.current.paused) return
-    audioRef.current.currentTime = 0
-    audioRef.current.play().catch(error => {
-      console.error('Error playing beep sound:', error)
+  const playBeepSequence = useCallback(async (): Promise<
+    Result<void, string>
+  > => {
+    return new Promise(resolve => {
+      let settled = false
+
+      const handleEnded = () => {
+        if (settled) return
+        settled = true
+        if (audioRef.current) {
+          audioRef.current.removeEventListener('ended', handleEnded)
+        }
+        resolve(ok<void, string>(undefined))
+      }
+
+      if (!isAudioLoaded || !audioRef.current) {
+        return resolve(err<void, string>('Audio not loaded'))
+      }
+
+      if (!audioRef.current.paused) {
+        return resolve(err<void, string>('Audio is already playing'))
+      }
+
+      audioRef.current.addEventListener('ended', handleEnded)
+      audioRef.current.currentTime = 0
+
+      audioRef.current.play().catch(error => {
+        settled = true
+        audioRef.current?.removeEventListener('ended', handleEnded)
+        const errorMessage =
+          error instanceof Error ? error.message : 'Failed to play beep sound'
+        console.error('Error playing beep sound:', error)
+        resolve(err<void, string>(errorMessage))
+      })
     })
   }, [isAudioLoaded])
 

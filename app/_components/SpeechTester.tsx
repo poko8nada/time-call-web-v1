@@ -14,7 +14,6 @@ export default function SpeechTester() {
     isSupported,
     speak,
     voices,
-    selectedVoice,
     setSelectedVoice,
     setVolumeState,
     cancel,
@@ -24,6 +23,7 @@ export default function SpeechTester() {
   const [lastAction, setLastAction] = useState<string | null>(null)
   const [lastResult, setLastResult] = useState<string | null>(null)
   const [volume, setVolume] = useState(50)
+  const [selectedVoiceIndex, setSelectedVoiceIndex] = useState(0)
   const inputId = useId()
   const volumeId = useId()
   const voiceSelectId = useId()
@@ -74,6 +74,7 @@ export default function SpeechTester() {
     (e: ChangeEvent<HTMLSelectElement>) => {
       const idx = Number(e.target.value)
       if (idx >= 0 && idx < voices.length) {
+        setSelectedVoiceIndex(idx)
         setSelectedVoice(voices[idx])
         setLastAction(`voice: ${voices[idx].name}`)
       }
@@ -120,13 +121,13 @@ export default function SpeechTester() {
         </label>
         <select
           id={voiceSelectId}
-          value={voices.findIndex(v => v === selectedVoice)}
+          value={selectedVoiceIndex}
           onChange={handleVoiceChange}
           className='w-full px-2 py-1 text-xs border border-gray-300 rounded dark:bg-zinc-800 dark:border-zinc-700'
           aria-label='select voice'
         >
           {voices.map((voice, idx) => (
-            <option key={voice.voiceURI} value={idx}>
+            <option key={`${voice.voiceURI}-${idx}`} value={idx}>
               {voice.name} ({voice.lang})
             </option>
           ))}

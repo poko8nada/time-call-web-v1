@@ -59,8 +59,8 @@
 
 ### Task 5: 読み上げタイマー制御システム
 
-- [ ] `app/_hooks/useTimeCallTimer.ts` - タイマーロジック **(FR-03)**
-- [ ] `app/_hooks/useTimeCallTimer.test.ts` - 最小限の単体テスト（重要なロジック）
+- [x] `app/_hooks/useTimeCallTimer.ts` - タイマーロジック **(FR-03)**
+- [x] `app/_hooks/useTimeCallTimer.test.ts` - 最小限の単体テスト（重要なロジック）
 
 **依存関係**: Task 2 (useClock.ts), Task 3 (useBeepSound.ts), Task 4 (useSpeechSynthesis.ts)  
 **成果物**: 指定間隔での読み上げタイマー、ビープ音→読み上げの連携制御  
@@ -86,7 +86,7 @@
 - [ ] `app/_components/ControlButton.tsx` - 開始/停止ボタン **(FR-05)**
 
 **依存関係**: Task 5 (useTimeCallTimer.ts)  
-**成果物**: 間隔選択コンポーネント（1, 5, 10, 30, 60分）、開始/停止ボタンコンポーネント  
+**成果物**: 間隔選択コンポーネント（1, 5, 10, 15, 30, 60分）、開始/停止ボタンコンポーネント  
 **完了条件**: 実ブラウザで間隔選択が動作すること、ボタンで開始/停止ができること  
 **テスト**: 単体テスト不要（UIコンポーネント）
 
