@@ -82,8 +82,8 @@
 
 ### Task 7: タイマー制御UI
 
-- [ ] `app/_components/IntervalSelector.tsx` - 読み上げ間隔選択 **(FR-04)**
-- [ ] `app/_components/ControlButton.tsx` - 開始/停止ボタン **(FR-05)**
+- [x] `app/_components/IntervalSelector.tsx` - 読み上げ間隔選択 **(FR-04)**
+- [x] `app/_components/ControlButton.tsx` - 開始/停止ボタン **(FR-05)**
 
 **依存関係**: Task 5 (useTimeCallTimer.ts)  
 **成果物**: 間隔選択コンポーネント（1, 5, 10, 15, 30, 60分）、開始/停止ボタンコンポーネント  

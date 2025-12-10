@@ -1,0 +1,90 @@
+'use client'
+
+import { useCallback } from 'react'
+
+interface IntervalSelectorProps {
+  /**
+   * Current selected interval in minutes
+   */
+  interval: number
+
+  /**
+   * Callback fired when interval changes
+   */
+  onChange: (minutes: number) => void
+
+  /**
+   * Disable the selector (e.g., when timer is running)
+   */
+  disabled?: boolean
+}
+
+const INTERVAL_OPTIONS = [1, 5, 10, 15, 30, 60]
+
+/**
+ * IntervalSelector
+ *
+ * Radio button group for selecting time call interval.
+ * Allows user to choose between 1, 5, 10, 15, 30, or 60 minutes.
+ *
+ * FR-04: 読み上げ間隔選択UI
+ * - Interval options: 1, 5, 10, 15, 30, 60 minutes
+ * - Radio button selection
+ * - Disabled state when timer is running
+ * - Accessibility: fieldset + legend + aria labels
+ *
+ * Usage:
+ * <IntervalSelector
+ *   interval={5}
+ *   onChange={(min) => setInterval(min)}
+ *   disabled={isRunning}
+ * />
+ */
+export function IntervalSelector({
+  interval,
+  onChange,
+  disabled = false,
+}: IntervalSelectorProps) {
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newInterval = Number.parseInt(e.target.value, 10)
+      onChange(newInterval)
+    },
+    [onChange],
+  )
+
+  return (
+    <fieldset
+      disabled={disabled}
+      className='border-0 p-0'
+      aria-label='Time call interval selection'
+    >
+      <legend className='text-sm font-semibold text-foreground dark:text-foreground mb-3'>
+        読み上げ間隔
+      </legend>
+
+      <div className='flex flex-wrap gap-2 sm:gap-3'>
+        {INTERVAL_OPTIONS.map(option => (
+          <label
+            key={option}
+            className='flex items-center cursor-pointer group'
+          >
+            <input
+              type='radio'
+              name='interval'
+              value={option}
+              checked={interval === option}
+              onChange={handleChange}
+              className='w-4 h-4 cursor-pointer accent-blue-500 dark:accent-blue-400'
+              aria-label={`${option}分`}
+              disabled={disabled}
+            />
+            <span className='ml-2 text-sm font-medium text-foreground dark:text-foreground group-disabled:opacity-50 group-disabled:cursor-not-allowed'>
+              {option}分
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  )
+}

@@ -1,14 +1,18 @@
 'use client'
 
 import { useState } from 'react'
+import { ControlButton } from './_components/ControlButton'
 import { DigitalClock } from './_components/DigitalClock'
+import { IntervalSelector } from './_components/IntervalSelector'
 import { VolumeControl } from './_components/VolumeControl'
+import { useTimeCallTimer } from './_hooks/useTimeCallTimer'
 
 // import AudioTesterWrapper from './_features/AudioTesterWrapper'
 
 export default function Home() {
   const [beepVolume, setBeepVolume] = useState(70)
   const [speechVolume, setSpeechVolume] = useState(70)
+  const { isRunning, start, stop, interval, setInterval } = useTimeCallTimer()
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-white dark:bg-black p-4'>
@@ -28,10 +32,35 @@ export default function Home() {
           <DigitalClock />
         </div>
 
+        {/* Timer Control Section */}
+        <div className='space-y-6 bg-gray-50 dark:bg-zinc-900 p-6 rounded-lg'>
+          <h2 className='text-lg font-semibold text-foreground dark:text-foreground'>
+            タイマー制御
+          </h2>
+
+          <div className='space-y-6'>
+            {/* Interval Selector */}
+            <IntervalSelector
+              interval={interval}
+              onChange={setInterval}
+              disabled={isRunning}
+            />
+
+            {/* Control Button */}
+            <div className='flex justify-center'>
+              <ControlButton
+                isRunning={isRunning}
+                onStart={start}
+                onStop={stop}
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Settings Section */}
         <div className='space-y-6 bg-gray-50 dark:bg-zinc-900 p-6 rounded-lg'>
           <h2 className='text-lg font-semibold text-foreground dark:text-foreground'>
-            設定
+            音声設定
           </h2>
 
           <div className='space-y-4'>
