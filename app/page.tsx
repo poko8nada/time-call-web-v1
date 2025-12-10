@@ -1,106 +1,42 @@
-'use client'
+import { TimeCallService } from './_features/TimeCallService'
 
-import { useEffect, useState } from 'react'
-import { ControlButton } from './_components/ControlButton'
-import { DigitalClock } from './_components/DigitalClock'
-import { IntervalSelector } from './_components/IntervalSelector'
-import { VolumeControl } from './_components/VolumeControl'
-import { useTimeCallTimer } from './_hooks/useTimeCallTimer'
-import { useSpeechSynthesis } from './_hooks/useSpeechSynthesis'
-
-// import AudioTesterWrapper from './_features/AudioTesterWrapper'
-
+/**
+ * Home Page
+ *
+ * Server Component that composes the time call service UI.
+ * TimeCallService is a Client Component that manages all state and interactivity.
+ *
+ * FR-12: トップページ
+ * - Server Component (default)
+ * - Renders TimeCallService
+ * - Responsive layout container
+ * - License attribution footer
+ */
 export default function Home() {
-  const [masterVolume, setMasterVolume] = useState(70)
-  const { setVolumeState } = useSpeechSynthesis(masterVolume / 100)
-  const { isRunning, start, stop, interval, setInterval } = useTimeCallTimer(masterVolume / 100)
-
-  // Sync masterVolume state with useSpeechSynthesis hook
-  useEffect(() => {
-    setVolumeState(masterVolume / 100)
-  }, [masterVolume, setVolumeState])
-
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-white dark:bg-black p-4'>
-      <main className='w-full max-w-2xl space-y-8'>
-        {/* Header */}
-        <div className='text-center space-y-2'>
-          <h1 className='text-2xl sm:text-3xl md:text-4xl font-bold text-foreground dark:text-foreground'>
-            時刻読み上げサービス
-          </h1>
-          <p className='text-sm sm:text-base text-gray-600 dark:text-gray-400'>
-            指定した間隔で現在時刻をお知らせします
-          </p>
-        </div>
+      <TimeCallService />
 
-        {/* Digital Clock Section */}
-        <div className='flex flex-col items-center justify-center py-8 sm:py-12 md:py-16 bg-gray-50 dark:bg-zinc-900 rounded-lg'>
-          <DigitalClock />
-        </div>
-
-        {/* Timer Control Section */}
-        <div className='space-y-6 bg-gray-50 dark:bg-zinc-900 p-6 rounded-lg'>
-          <h2 className='text-lg font-semibold text-foreground dark:text-foreground'>
-            タイマー制御
-          </h2>
-
-          <div className='space-y-6'>
-            {/* Interval Selector */}
-            <IntervalSelector
-              interval={interval}
-              onChange={setInterval}
-              disabled={isRunning}
-            />
-
-            {/* Control Button */}
-            <div className='flex justify-center'>
-              <ControlButton
-                isRunning={isRunning}
-                onStart={start}
-                onStop={stop}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Settings Section */}
-        <div className='space-y-6 bg-gray-50 dark:bg-zinc-900 p-6 rounded-lg'>
-          <h2 className='text-lg font-semibold text-foreground dark:text-foreground'>
-            音声設定
-          </h2>
-
-          <div className='space-y-4'>
-            <VolumeControl
-              volume={masterVolume}
-              onChange={setMasterVolume}
-              label='音量'
-            />
-          </div>
-        </div>
-
-        {/* Footer - License Attribution */}
-        <footer className='text-center text-xs text-gray-500 dark:text-gray-400 py-4 border-t border-gray-200 dark:border-zinc-800'>
-          <p>
-            音源:{' '}
-            <a
-              href='https://otologic.jp'
-              className='underline hover:text-gray-700 dark:hover:text-gray-300'
-            >
-              OtoLogic
-            </a>{' '}
-            ({' '}
-            <a
-              href='https://creativecommons.org/licenses/by/4.0/'
-              className='underline hover:text-gray-700 dark:hover:text-gray-300'
-            >
-              CC BY 4.0
-            </a>
-            )
-          </p>
-        </footer>
-      </main>
-
-      {/* <AudioTesterWrapper /> */}
+      {/* Footer - License Attribution */}
+      <footer className='text-center text-xs text-gray-500 dark:text-gray-400 py-4 border-t border-gray-200 dark:border-zinc-800 mt-8 w-full max-w-2xl'>
+        <p>
+          音源:{' '}
+          <a
+            href='https://otologic.jp'
+            className='underline hover:text-gray-700 dark:hover:text-gray-300'
+          >
+            OtoLogic
+          </a>{' '}
+          ({' '}
+          <a
+            href='https://creativecommons.org/licenses/by/4.0/'
+            className='underline hover:text-gray-700 dark:hover:text-gray-300'
+          >
+            CC BY 4.0
+          </a>
+          )
+        </p>
+      </footer>
     </div>
   )
 }

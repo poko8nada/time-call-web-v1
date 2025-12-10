@@ -164,11 +164,14 @@ function useCreatePost() {
 - **Dynamic routes**: `[param]` for dynamic segments
 - **Route Grouping**: `(group)` for related routes
 - **Components**:
-  - Small or medium UI pieces. Always components are children of Features. Do not import Features into Components.
-- **Features**: Large components combining small components and logic.
-  - Named like `DisplayUserProfile.tsx` not `UserProfileFeature.tsx`
-  - In `_features/`, minimal client logic
-  - Compose Features in `page.tsx`, not inside other Features
+  - Small UI pieces. Always children of Features.
+  - OK to compose UI primitives; use children over prop drilling
+  - Do not import Features into Components.
+- **Features**: Large components combining small components and logic
+  - Named like `DisplayUserProfile.tsx` or `DisplayUserProfile/index.tsx`
+  - Compose Features in `page.tsx`, not across same-level Features
+  - OK to nest sub-features within a Feature directory using composition pattern
+  - Colocate feature-specific hooks/utils inside Feature directory
 - **Global types**: Only universal types (e.g., Result<T, E>) in `utils/types.ts`
 
 ### Structure Example
@@ -181,7 +184,13 @@ app/
 │  ├─ page.tsx             # Server component
 │  ├─ _components/         # Route-specific UI
 │  ├─ _features/           # Route-specific logic
-│  ├─ _hooks/              # Route-specific hooks
+│  │  ├─ DisplayUserProfile.tsx
+│  │  └─ UserDashboard/    # Feature with sub-features (colocation)
+│  │     ├─ index.tsx
+│  │     ├─ UserActivityFeed.tsx
+│  │     ├─ UserStats.tsx
+│  │     └─ useUserData.ts # Feature-specific hook
+│  ├─ _hooks/              # Shared across route features
 │  ├─ _actions/            # Route-specific server actions
 │  └─ _config/             # Route-specific config
 ├─ blog/
@@ -200,7 +209,7 @@ components/                # Global shared UI
 └─ ...                     # Custom global components
 hooks/                     # Global shared hooks
 utils/                     # Global utilities
-└─ types.ts                # Global types(e.g., Result<T, E>)
+└─ types.ts                # Global types
 public/                    # Static assets
 ```
 

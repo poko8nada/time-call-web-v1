@@ -99,7 +99,7 @@
 - [ ] `app/_features/SettingsPanel.tsx` - 設定パネル **(FR-11)**
 
 **依存関係**: Task 6 (VolumeControl.tsx), Task 4 (useSpeechSynthesis.ts)  
-**成果物**: 音量調整×2（ビープ・読み上げ）+ 音声選択の統合パネル  
+**成果物**: 音量調整 + 音声選択の統合パネル  
 **完了条件**: 実ブラウザで全ての設定が正しく動作すること  
 **テスト**: 単体テスト不要（統合UI）
 

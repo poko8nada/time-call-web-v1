@@ -1,9 +1,6 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
-import { formatSpeechTime } from '@/utils/formatTime'
-import { useBeepSound } from './useBeepSound'
 import { useClock } from './useClock'
-import { useSpeechSynthesis } from './useSpeechSynthesis'
 
 export function calculateNextCallTime(currentTime: Date, interval: number) {
   const callTime = new Date(currentTime)
@@ -23,9 +20,12 @@ export function calculateNextCallTime(currentTime: Date, interval: number) {
   return { callTime, beepTime }
 }
 
-export function useTimeCallTimer(masterVolume: number = 0.7) {
-  const { playBeepSequence, setVolume: setBeepVolume } = useBeepSound(masterVolume)
-  const { speak, setVolumeState } = useSpeechSynthesis(masterVolume)
+type UseTimeCallTimerOptions = {
+  onInterval?: () => Promise<void>
+}
+
+export function useTimeCallTimer(options: UseTimeCallTimerOptions = {}) {
+  const { onInterval } = options
   const { currentTime } = useClock()
 
   const [isRunning, setIsRunning] = useState(false)
@@ -33,39 +33,17 @@ export function useTimeCallTimer(masterVolume: number = 0.7) {
   const [interval, setInterval] = useState(5) // default interval in minutes
   const [nextCallTime, setNextCallTime] = useState<Date | null>(null)
 
-  // Sync masterVolume with both beep and speech hooks
-  useEffect(() => {
-    setBeepVolume(masterVolume)
-    setVolumeState(masterVolume)
-  }, [masterVolume, setBeepVolume, setVolumeState])
-
   const calculateCallback = useCallback(
     (currentTime: Date, interval: number) =>
       calculateNextCallTime(currentTime, interval),
     [],
   )
 
-  const formatSpeechTimeCallback = useCallback(
-    (callTime: Date) => formatSpeechTime(callTime),
-    [],
-  )
-
-  const handleBeepAndSpeak = useCallback(async () => {
-    if (!nextCallTime) return
-    const timeText = formatSpeechTimeCallback(nextCallTime)
-
-    const beepResult = await playBeepSequence()
-    if (!beepResult.ok) {
-      console.error('Beep failed:', beepResult.error)
-      return
+  const handleInterval = useCallback(async () => {
+    if (onInterval) {
+      await onInterval()
     }
-
-    const speakResult = await speak(timeText)
-    if (!speakResult.ok) {
-      console.error('Speech failed:', speakResult.error)
-      return
-    }
-  }, [playBeepSequence, speak, nextCallTime, formatSpeechTimeCallback])
+  }, [onInterval])
 
   const start = useCallback(() => {
     setIsRunning(true)
@@ -89,7 +67,7 @@ export function useTimeCallTimer(masterVolume: number = 0.7) {
 
     if (currentTime >= beepTime && currentTime < nextCallTime && !isPlaying) {
       setIsPlaying(true)
-      handleBeepAndSpeak()
+      handleInterval()
     }
     if (currentTime >= nextCallTime) {
       setIsPlaying(false)
@@ -103,7 +81,7 @@ export function useTimeCallTimer(masterVolume: number = 0.7) {
     interval,
     nextCallTime,
     calculateCallback,
-    handleBeepAndSpeak,
+    handleInterval,
   ])
 
   return {
