@@ -1,18 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ControlButton } from './_components/ControlButton'
 import { DigitalClock } from './_components/DigitalClock'
 import { IntervalSelector } from './_components/IntervalSelector'
 import { VolumeControl } from './_components/VolumeControl'
 import { useTimeCallTimer } from './_hooks/useTimeCallTimer'
+import { useSpeechSynthesis } from './_hooks/useSpeechSynthesis'
 
 // import AudioTesterWrapper from './_features/AudioTesterWrapper'
 
 export default function Home() {
-  const [beepVolume, setBeepVolume] = useState(70)
-  const [speechVolume, setSpeechVolume] = useState(70)
-  const { isRunning, start, stop, interval, setInterval } = useTimeCallTimer()
+  const [masterVolume, setMasterVolume] = useState(70)
+  const { setVolumeState } = useSpeechSynthesis(masterVolume / 100)
+  const { isRunning, start, stop, interval, setInterval } = useTimeCallTimer(masterVolume / 100)
+
+  // Sync masterVolume state with useSpeechSynthesis hook
+  useEffect(() => {
+    setVolumeState(masterVolume / 100)
+  }, [masterVolume, setVolumeState])
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-white dark:bg-black p-4'>
@@ -65,14 +71,9 @@ export default function Home() {
 
           <div className='space-y-4'>
             <VolumeControl
-              volume={beepVolume}
-              onChange={setBeepVolume}
-              label='ビープ音量'
-            />
-            <VolumeControl
-              volume={speechVolume}
-              onChange={setSpeechVolume}
-              label='読み上げ音量'
+              volume={masterVolume}
+              onChange={setMasterVolume}
+              label='音量'
             />
           </div>
         </div>
