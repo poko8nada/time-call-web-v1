@@ -52,7 +52,7 @@ export function TimeCallService() {
 
       {/* Digital Clock Section */}
       <div className='flex flex-col items-center justify-center py-8 sm:py-12 md:py-16 bg-gray-50 dark:bg-zinc-900 rounded-lg'>
-        <DigitalClock />
+        <DigitalClock currentTime={currentTime} />
       </div>
 
       {/* Timer Control Section */}

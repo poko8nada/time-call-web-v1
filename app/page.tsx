@@ -1,4 +1,4 @@
-import { TimeCallService } from './_features/TimeCallService'
+import { TimeCallService } from '@/app/_features/TimeCallService'
 
 /**
  * Home Page

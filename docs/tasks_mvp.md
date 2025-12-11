@@ -11,9 +11,10 @@
 - [x] `utils/types.ts` - グローバル型定義（Result<T, E>など）
 - [x] `utils/formatTime.ts` - 時刻フォーマット関数 **(FR-02)**
 - [x] `utils/formatTime.test.ts` - 最小限の単体テスト（ビジネスロジック）
+- [x] `utils/audioContext.ts` - Web Audio API ヘルパー
 
 **依存関係**: なし  
-**成果物**: 共通型定義、時刻フォーマット関数  
+**成果物**: 共通型定義、時刻フォーマット関数、Audio コンテキスト管理  
 **完了条件**: 型エラーなし、`pnpm test formatTime.test.ts`がパス
 
 ---
@@ -25,7 +26,7 @@
 - [x] `app/_hooks/useClock.ts` - 現在時刻の取得とリアルタイム更新 **(FR-01)**
 - [x] `app/_hooks/useClock.test.ts` - 最小限の単体テスト（重要な関数）
 
-**依存関係**: Task 1 (formatTime.ts)  
+**依存関係**: Task 1  
 **成果物**: 1秒ごとに更新される現在時刻管理フック  
 **完了条件**: `pnpm test useClock.test.ts`がパス、実ブラウザで動作確認
 
@@ -38,9 +39,9 @@
 - [x] `/public/sounds/beep-sequence.mp3` - OtoLogicから音源ダウンロード・配置（CC BY 4.0）
 - [x] `app/_hooks/useBeepSound.ts` - MP3音源再生 **(FR-06)**
 
-**依存関係**: なし  
-**成果物**: `playBeep: () => Promise<Result<void, string>>`を実装した5秒間のビープ音シーケンス再生機能、音量調整機能  
-**完了条件**: 実ブラウザでビープ音が正しく再生されること、音量調整が反映されること、PromiseベースのエラーハンドリングがResult型で動作すること  
+**依存関係**: Task 1  
+**成果物**: `playBeep: () => Promise<Result<void, string>>` を実装した予報音再生機能、`stopBeep: () => void` で再生停止、`setBeepVolume(volume: number)` で音量調整  
+**完了条件**: 実ブラウザでビープ音が正しく再生されること、音量調整が反映されること、Promise ベースのエラーハンドリングが Result 型で動作すること  
 **テスト**: 単体テスト不要（UI連携コード）  
 **ライセンス**: CC BY 4.0 (OtoLogic - https://otologic.jp) - クレジット表記必須
 
@@ -48,10 +49,10 @@
 
 - [x] `app/_hooks/useSpeechSynthesis.ts` - Web Speech APIラッパー **(FR-07)**
 
-**依存関係**: Task 1 (formatTime.ts - speechTime用)  
-**成果物**: 日本語音声リスト取得、音声選択、`speak: (text: string) => Promise<Result<void, string>>`を実装した読み上げ実行機能  
-**完了条件**: 実ブラウザでja-JP音声が取得できること、読み上げが実行されること、PromiseベースのエラーハンドリングがResult型で動作すること  
-**テスト**: 単体テスト不要（ブラウザAPI wrapper）
+**依存関係**: Task 1  
+**成果物**: 日本語音声リスト取得、音声選択、`playSpeech: (text: string) => Promise<Result<void, string>>` を実装した読み上げ実行機能、`cancelSpeech()` で読み上げ中止、`setSpeechVolume(volume: number)` で音量調整  
+**完了条件**: 実ブラウザで ja-JP 音声が取得できること、読み上げが実行されること、Promise ベースのエラーハンドリングが Result 型で動作すること、中止機能が動作すること  
+**テスト**: 単体テスト不要（ブラウザ API wrapper）
 
 ---
 
@@ -59,11 +60,11 @@
 
 ### Task 5: 読み上げタイマー制御システム
 
-- [x] `app/_hooks/useTimeCallTimer.ts` - タイマーロジック **(FR-03)**
-- [x] `app/_hooks/useTimeCallTimer.test.ts` - 最小限の単体テスト（重要なロジック）
+- [x] `app/_features/TimeCallService/useTimeCallTimer.ts` - タイマーロジック **(FR-03)**
+- [x] `app/_features/TimeCallService/useTimeCallTimer.test.ts` - 最小限の単体テスト（重要なロジック）
 
-**依存関係**: Task 2 (useClock.ts), Task 3 (useBeepSound.ts), Task 4 (useSpeechSynthesis.ts)  
-**成果物**: 指定間隔での読み上げタイマー、ビープ音→読み上げの連携制御  
+**依存関係**: Task 2, Task 3, Task 4  
+**成果物**: 指定間隔での読み上げタイマー、ビープ音→読み上げの連携制御。戻り値: `{ isRunning: boolean, startTimer: () => void, stopTimer: () => void, interval: number, setInterval: (min: number) => void, nextCallTime: Date | null }`  
 **完了条件**: `pnpm test useTimeCallTimer.test.ts`がパス、実ブラウザでタイマーが正確に動作すること
 
 ---
@@ -75,19 +76,20 @@
 - [x] `app/_components/DigitalClock.tsx` - HH:MM:SS形式デジタル時計 **(FR-08)**
 - [x] `app/_components/VolumeControl.tsx` - 音量調整スライダー **(FR-09)**
 
-**依存関係**: Task 1 (formatTime.ts), Task 2 (useClock.ts)  
-**成果物**: デジタル時計表示コンポーネント、音量調整スライダーコンポーネント  
+**依存関係**: Task 1, Task 2  
+**成果物**: デジタル時計表示コンポーネント、音量調整スライダーコンポーネント。Props: `{ masterVolume: number, onSetMasterVolume: (volume: number) => void, label: string, disabled?: boolean, description?: string }`  
 **完了条件**: 実ブラウザで時刻が正しく表示されること、スライダーで音量が調整できること  
 **テスト**: 単体テスト不要（UIコンポーネント）
 
-### Task 7: タイマー制御UI
+### Task 7: タイマー制御UI と音声選択
 
 - [x] `app/_components/IntervalSelector.tsx` - 読み上げ間隔選択 **(FR-04)**
 - [x] `app/_components/ControlButton.tsx` - 開始/停止ボタン **(FR-05)**
+- [x] `app/_components/VoiceSelector.tsx` - 音声選択ドロップダウン **(FR-09.5)**
 
-**依存関係**: Task 5 (useTimeCallTimer.ts)  
-**成果物**: 間隔選択コンポーネント（1, 5, 10, 15, 30, 60分）、開始/停止ボタンコンポーネント  
-**完了条件**: 実ブラウザで間隔選択が動作すること、ボタンで開始/停止ができること  
+**依存関係**: Task 5, Task 4  
+**成果物**: 間隔選択コンポーネント（1, 5, 10, 15, 30, 60分）、開始/停止ボタンコンポーネント、音声選択コンポーネント  
+**完了条件**: 実ブラウザで間隔選択が動作すること、ボタンで開始/停止ができること、音声選択が動作すること  
 **テスト**: 単体テスト不要（UIコンポーネント）
 
 ---
@@ -96,32 +98,34 @@
 
 ### Task 8: 設定パネル統合
 
-- [ ] `app/_features/SettingsPanel.tsx` - 設定パネル **(FR-11)**
+- [x] `app/_components/SettingsPanel.tsx` - 設定パネル（UIプリミティブ） **(FR-11)**
 
-**依存関係**: Task 6 (VolumeControl.tsx), Task 4 (useSpeechSynthesis.ts)  
-**成果物**: 音量調整 + 音声選択の統合パネル  
-**完了条件**: 実ブラウザで全ての設定が正しく動作すること  
-**テスト**: 単体テスト不要（統合UI）
+**依存関係**: Task 6 (VolumeControl.tsx), Task 7 (VoiceSelector.tsx)  
+**成果物**: UI プリミティブ コンテナで、子コンポーネント（VolumeControl, VoiceSelector）を composition パターンで配置。Props: `{ children?: React.ReactNode }`  
+**完了条件**: 実ブラウザで子コンポーネントが正しく表示されること、hydration エラーが発生しないこと  
+**テスト**: 単体テスト不要（UIプリミティブ）
 
 ### Task 9: 時報サービス統合
 
-- [ ] `app/_features/TimeCallService.tsx` - サービス全体統合 **(FR-10)**
+- [x] `app/_features/TimeCallService/index.tsx` - サービス全体統合 **(FR-10)**
+- [x] `app/_features/TimeCallService/TimerControls.tsx` - タイマー制御UI統合 **(FR-03.5)**
+- [x] `app/_features/TimeCallService/AudioSettings.tsx` - オーディオ設定統合
 
-**依存関係**: Task 5 (useTimeCallTimer.ts), Task 6 (DigitalClock.tsx), Task 7 (IntervalSelector.tsx, ControlButton.tsx)  
-**成果物**: 全フック・コンポーネントの統合、タイマー連携制御  
+**依存関係**: Task 5 (useTimeCallTimer.ts), Task 6 (DigitalClock.tsx, VolumeControl.tsx), Task 7 (IntervalSelector.tsx, ControlButton.tsx, VoiceSelector.tsx), Task 8 (SettingsPanel.tsx)  
+**成果物**: 全フック・コンポーネントの統合、タイマー連携制御。TimeCallService/index.tsx が完全な統合を実現し、TimerControls.tsx と AudioSettings.tsx がUI群を組織化  
 **完了条件**: 実ブラウザでデジタル時計→間隔選択→開始/停止→ビープ音→読み上げの一連の流れが動作すること  
 **テスト**: 単体テスト不要（統合UI）
 
 ### Task 10: ページ構成・スタイリング
 
-- [ ] `app/page.tsx` - トップページ **(FR-12)**
-- [ ] `app/layout.tsx` - Root Layout **(FR-13)**
-- [ ] `app/globals.css` - グローバルスタイル
-- [ ] ライセンスクレジット表示 - フッターにOtoLogic (CC BY 4.0)を表記 **(FR-14)**
+- [x] `app/page.tsx` - トップページ **(FR-12)**
+- [x] `app/layout.tsx` - Root Layout **(FR-13)**
+- [x] `app/globals.css` - グローバルスタイル
+- [x] ライセンスクレジット表示 - フッターにOtoLogic (CC BY 4.0)を表記 **(FR-14)**
 
-**依存関係**: Task 8 (SettingsPanel.tsx), Task 9 (TimeCallService.tsx)  
-**成果物**: 完成したトップページ、レスポンシブレイアウト、ライセンス表記  
-**完了条件**: 実ブラウザでPC・スマホで正しく表示されること、axe監査でアクセシビリティ基準を満たすこと、ライセンスクレジットが正しく表示されること  
+**依存関係**: Task 9 (TimeCallService)  
+**成果物**: 完成したトップページ、レスポンシブレイアウト、ライセンス表記。FR-14 は page.tsx フッター内に実装済み  
+**完了条件**: 実ブラウザで PC・スマホで正しく表示されること、ライセンスクレジットが正しく表示されること  
 **テスト**: 単体テスト不要（ページ構成）
 
 ---
@@ -137,7 +141,7 @@
 - [ ] パフォーマンス測定
   - タイマー精度（±100ms以内）
   - UI更新フレームレート（60fps以上）
-  - Chrome DevToolsで確認
+  - Chrome DevTools で確認
 - [ ] アクセシビリティ監査（axe DevTools）
 - [ ] 最小限の単体テスト実行
   - `pnpm test` - 全テストがパス
@@ -145,17 +149,17 @@
 **依存関係**: Task 10完了  
 **成果物**: 互換性レポート、パフォーマンスレポート  
 **完了条件**: 全ブラウザで動作確認完了、最小限のテストがパス  
-**注**: E2Eテストは実施しない（copilot-instructions.mdポリシー準拠）
+**注**: E2E テストは実施しない（copilot-instructions.md ポリシー準拠）
 
 ### Task 12: デプロイ準備・本番環境確認
 
-- [ ] Vercelデプロイ設定
+- [ ] Vercel デプロイ設定
   - 環境変数設定（必要に応じて）
   - ビルド設定確認
-- [ ] OGP画像作成・配置
+- [ ] OGP 画像作成・配置
   - `/public/og.png` (1200x630px)
   - メタデータ設定（layout.tsx）
-- [ ] Favicon準備・追加
+- [ ] Favicon 準備・追加
   - `/public/favicon.ico`
   - `/app/icon.png` (App Router形式)
 - [ ] 本番環境での動作確認
@@ -163,12 +167,12 @@
   - 音声再生の確認
   - レスポンシブ表示確認
 - [ ] フェーズ2準備ドキュメント作成
-  - VOICEVOX移行計画
-  - Server Actions設計書
-  - Cloud Run構成案
+  - VOICEVOX 移行計画
+  - Server Actions 設計書
+  - Cloud Run 構成案
 
 **依存関係**: Task 11完了  
-**成果物**: デプロイ済みMVP、運用ドキュメント  
+**成果物**: デプロイ済み MVP、運用ドキュメント  
 **完了条件**: 本番環境で全機能が動作すること
 
 ---
@@ -177,32 +181,25 @@
 
 ### 全体スケジュール
 
-- **Phase 1-2**: 2日（基盤・時刻管理）
-- **Phase 3-4**: 3日（音声・タイマー）
-- **Phase 5-6**: 4日（UI・統合）
-- **Phase 7**: 3日（テスト・デプロイ）
-- **合計**: 約12日
+- **Phase 1-2**: 完了（基盤・時刻管理）
+- **Phase 3-4**: 完了（音声・タイマー）
+- **Phase 5-6**: 完了（UI・統合）
+- **Phase 7**: 進行中（テスト・デプロイ）
 
 ### Critical Path
 
 ```
-Task 1 → Task 2 → Task 3/4 (並行) → Task 5 → Task 6/7 (並行) → Task 9 → Task 10 → Task 11 → Task 12
+Task 1 → Task 2 → Task 3/4 (並行) → Task 5 → Task 6/7 (並行) → Task 8 → Task 9 → Task 10 → Task 11 → Task 12
 ```
-
-### マイルストーン
-
-1. **Week 1 (Day 5)**: Phase 4完了 - タイマー制御システム完成
-2. **Week 2 (Day 9)**: Phase 6完了 - UI統合完成
-3. **Week 2 (Day 12)**: Phase 7完了 - MVP完成・デプロイ
 
 ### リスク管理
 
-| リスク                     | 影響度 | 発生確率 | 対策                                                   |
-| -------------------------- | ------ | -------- | ------------------------------------------------------ |
-| Web Speech API互換性問題   | 高     | 中       | Task 4完了時点で全ブラウザ確認実施                     |
-| タイマー精度の問題         | 中     | 低       | Task 5でパフォーマンス測定、必要に応じてWorker使用検討 |
-| アクセシビリティ要件未達   | 中     | 中       | Task 10でaxe監査実施、修正タスク追加                   |
-| デプロイ時の予期せぬエラー | 低     | 低       | Task 12前にステージング環境で確認                      |
+| リスク                     | 影響度 | 発生確率 | 対策                                             |
+| -------------------------- | ------ | -------- | ------------------------------------------------ |
+| Web Speech API互換性問題   | 高     | 中       | Task 11 でブラウザ互換性テスト実施               |
+| タイマー精度の問題         | 中     | 低       | Task 11 でパフォーマンス測定、必要に応じて最適化 |
+| アクセシビリティ要件未達   | 中     | 中       | Task 11 で axe 監査実施、修正タスク追加          |
+| デプロイ時の予期せぬエラー | 低     | 低       | Task 12 前にステージング環境で確認               |
 
 ---
 

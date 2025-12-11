@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { formatDigitalTime } from '@/utils/formatTime'
-import { useClock } from '../_hooks/useClock'
 
 /**
  * DigitalClock
@@ -18,8 +17,7 @@ import { useClock } from '../_hooks/useClock'
  *
  * Note: Uses deferred state to avoid hydration mismatch
  */
-export function DigitalClock() {
-  const { currentTime } = useClock()
+export function DigitalClock({ currentTime }: { currentTime: Date }) {
   const [isMounted, setIsMounted] = useState(false)
 
   // Defer rendering until after hydration

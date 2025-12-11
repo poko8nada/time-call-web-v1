@@ -66,7 +66,7 @@
      - 読み上げ時刻の3秒前にビープ音トリガー発火
      - 読み上げ時刻にスピーチトリガー発火
      - 開始/停止状態の管理
-   - 戻り値: `{ isRunning: boolean, start: () => void, stop: () => void, interval: number, setInterval: (min: number) => void, nextCallTime: Date | null }`
+   - 戻り値: `{ isRunning: boolean, startTimer: () => void, stopTimer: () => void, interval: number, setInterval: (min: number) => void, nextCallTime: Date | null }`
    - テスト観点: タイマーが正確に動作すること、開始/停止が正しく機能すること
 
 4. **FR-04: `IntervalSelector.tsx`**
@@ -97,7 +97,7 @@
      - 3秒間のビープ音シーケンス再生機能
      - 再生中の中断機能
      - 音源: OtoLogic (CC BY 4.0) - https://otologic.jp
-   - 戻り値: `{ playBeep: () => Promise<Result<void, string>>, stopBeep: () => void, volume: number, setVolume: (v: number) => void }`
+   - 戻り値: `{ playBeep: () => Promise<Result<void, string>>, stopBeep: () => void, setBeepVolume: (v: number) => void }`
    - テスト観点: ビープ音が正しいタイミングで再生されること、音量調整が反映されること
 
 7. **FR-07: `useSpeechSynthesis.ts`**
@@ -109,7 +109,7 @@
      - テキスト読み上げ実行（`Promise<Result<void, string>>`を返す）
      - 読み上げ中断機能（cancel）
      - エラーハンドリング（interrupted は警告レベル、その他はエラーレベル）
-   - 戻り値: `{ isSupported: boolean, speak: (text: string) => Promise<Result<void, string>>, voices: SpeechSynthesisVoice[], selectedVoice: SpeechSynthesisVoice | null, setSelectedVoice: (voice: SpeechSynthesisVoice | null) => void, setSpeechVolume: (v: number) => void, cancel: () => void }`
+   - 戻り値: `{ isSupported: boolean, playSpeech: (text: string) => Promise<Result<void, string>>, voices: SpeechSynthesisVoice[], selectedVoice: SpeechSynthesisVoice | null, setSelectedVoice: (voice: SpeechSynthesisVoice | null) => void, setSpeechVolume: (v: number) => void, cancelSpeech: () => void }`
    - テスト観点: 音声リストが取得できること、読み上げが実行されること、Promiseが正しく解決されること、中断機能が動作すること
 
 #### 3.4. UI表示 (UI Display)
@@ -129,8 +129,29 @@
      - 0〜100の範囲で調整（内部的には0.0〜1.0に変換）
      - ラベル表示（"音量"）- ビープ音と読み上げ音の統一ボリュームコントロール
      - リアルタイムフィードバック（現在の音量値表示）
-   - Props: `{ volume: number, onChange: (v: number) => void, label: string }`
+   - Props: `{ masterVolume: number, onSetMasterVolume: (volume: number) => void, label: string, disabled?: boolean, description?: string }`
    - テスト観点: スライダー操作で正しい値が渡されること、ビープ音と読み上げ音の両方に反映されること
+
+10. **FR-09.5: `VoiceSelector.tsx`**
+    - 要件: 音声選択UIコンポーネント
+    - 詳細:
+      - `useSpeechSynthesis`から取得した音声リストをドロップダウンで表示
+      - 選択された音声を「音声名 (言語コード)」形式で表示
+      - マウント後のみレンダリング（hydration対応）
+      - 音声リストが空またはサポートされていない場合は非表示
+    - Props: `{ voices: SpeechSynthesisVoice[], selectedVoice: SpeechSynthesisVoice | null, onVoiceChange: (voice: SpeechSynthesisVoice) => void, isSupported: boolean }`
+    - テスト観点: 音声リストが正しく表示されること、選択で正しいコールバックが呼ばれること
+
+#### 3.2.1 タイマーUI統合
+
+- **FR-03.5: `TimerControls.tsx`**
+  - 要件: 間隔選択と開始/停止ボタンの統合UI
+  - 詳細:
+    - `IntervalSelector` と `ControlButton` を組み合わせたコンポーネント
+    - Props drilling を避ける（composition パターン）
+    - Props: `{ interval: number, onIntervalChange: (min: number) => void, isRunning: boolean, onStart: () => void, onStop: () => void, disabled: boolean }`
+  - 機能: タイマー制御UI の統合
+  - テスト観点: 各ボタン・選択肢が正しく動作すること
 
 #### 3.5. 統合・設定 (Integration & Settings)
 
@@ -145,25 +166,27 @@
     - テスト観点: 各フック・コンポーネントが正しく連携すること
 
 11. **FR-11: `SettingsPanel.tsx`**
-    - 要件: 設定パネル
+    - 要件: 設定パネル - UIプリミティブコンポーネント
     - 詳細:
-      - マスターボリューム調整（`VolumeControl` - ビープ音と読み上げ音の統一コントロール）
-      - 音声選択ドロップダウン
-      - 設定の永続化（`localStorage`）※オプション
-    - 機能: 設定UIの集約
-    - テスト観点: 各設定が正しく反映されること、マスターボリューム変更がビープ音と読み上げ音の両方に反映されること
+      - Composition パターンで `children` を受け取りレイアウト提供
+      - `VolumeControl` + `VoiceSelector` などの子コンポーネントを配置
+      - Hydration 対策：マウント前は空のレイアウトを表示
+      - Props drilling を避ける（children パターン）
+    - Props: `{ children?: React.ReactNode }`
+    - 機能: 設定UI群のレイアウトコンテナ
+    - テスト観点: 子コンポーネントが正しく表示されること、hydration エラーが発生しないこと
 
 #### 3.6. ページ構成 (Pages)
 
-12. **FR-12: `page.tsx`**
+13. **FR-12: `page.tsx`**
     - 要件: トップページ
     - 詳細:
       - Server Componentとして実装
-      - `TimeCallService`と`SettingsPanel`を配置
+      - `TimeCallService`を配置
       - レスポンシブレイアウト
     - 機能: ページ全体の構成
 
-13. **FR-13: `layout.tsx`**
+14. **FR-13: `layout.tsx`**
     - 要件: Root Layout
     - 詳細:
       - メタデータ設定（title, description）
@@ -173,13 +196,13 @@
 
 #### 3.7. ライセンス表示 (License Attribution)
 
-14. **FR-14: ライセンスクレジット表示**
+15. **FR-14: ライセンスクレジット表示**
     - 要件: 使用素材のライセンス表記
     - 詳細:
       - ページフッターにOtoLogicへのクレジット表示
       - CC BY 4.0ライセンスの明示
       - リンク: https://otologic.jp
-    - 配置: `app/layout.tsx`または`app/page.tsx`のフッター部分
+    - 配置: `app/page.tsx`のフッター部分
     - テスト観点: クレジット表示が正しく表示されること
 
 ---
@@ -234,30 +257,38 @@ time-call-web-v1/
 │  │  ├─ DigitalClock.tsx          # FR-08: デジタル時計表示
 │  │  ├─ IntervalSelector.tsx      # FR-04: 読み上げ間隔選択UI
 │  │  ├─ ControlButton.tsx         # FR-05: 開始/停止ボタン
-│  │  └─ VolumeControl.tsx         # FR-09: 音量調整スライダー
+│  │  ├─ VolumeControl.tsx         # FR-09: 音量調整スライダー
+│  │  ├─ VoiceSelector.tsx         # FR-09.5: 音声選択ドロップダウン
+│  │  └─ SettingsPanel.tsx         # FR-11: 設定パネル（UIプリミティブ）
 │  ├─ _features/                    # Route-specific features (Client)
-│  │  ├─ TimeCallService.tsx       # FR-10: 時報サービス全体の統合UI
-│  │  └─ SettingsPanel.tsx         # FR-11: 設定パネル (音量・音声選択)
+│  │  └─ TimeCallService/          # 時報サービス統合 (コロケーション)
+│  │     ├─ index.tsx              # FR-10: 時報サービス全体の統合UI
+│  │     ├─ useTimeCallTimer.ts    # FR-03: 読み上げタイマー制御（Feature内ロジック）
+│  │     ├─ useTimeCallTimer.test.ts
+│  │     ├─ TimerControls.tsx      # FR-03.5: 開始/停止・間隔選択統合
+│  │     └─ AudioSettings.tsx      # 音量・音声設定統合
 │  └─ _hooks/                       # Route-specific hooks
 │     ├─ useClock.ts               # FR-01: 現在時刻取得・更新
-│     ├─ useClock.test.ts          # Minimal unit test
-│     ├─ useTimeCallTimer.ts       # FR-03: 読み上げタイマー制御
-│     ├─ useTimeCallTimer.test.ts  # Minimal unit test
+│     ├─ useClock.test.ts
 │     ├─ useBeepSound.ts           # FR-06: 予報音再生
 │     └─ useSpeechSynthesis.ts     # FR-07: Web Speech API wrapper
 │
 ├─ utils/                            # Global utilities
 │  ├─ types.ts                      # Global types (Result<T, E>)
 │  ├─ formatTime.ts                 # FR-02: 時刻フォーマット関数
-│  └─ formatTime.test.ts            # Minimal unit test
+│  ├─ formatTime.test.ts
+│  └─ audioContext.ts               # Web Audio API ヘルパー（環境判定・singleton管理）
 │
 ├─ components/                       # Global shared UI (if needed)
-│
 ├─ hooks/                            # Global shared hooks (if needed)
-│
 └─ public/                           # Static assets
    └─ sounds/
       └─ beep-sequence.mp3          # OtoLogic (CC BY 4.0)
+```
+
+**Note:** `TimeCallService` ディレクトリにて、タイマーロジック（useTimeCallTimer.ts）と統合UIを同じディレクトリに配置することで、
+Feature内のロジック・UIの完全なコロケーション を実現している。これにより保守性と関連ファイルの発見性が向上。
+
 ```
 
 #### 6.2. 実装順序 (Implementation Order)
@@ -268,13 +299,32 @@ time-call-web-v1/
 2. `utils/formatTime.ts` + `formatTime.test.ts` - 時刻フォーマット（ビジネスロジック）
 3. `app/_hooks/useClock.ts` + `useClock.test.ts` - 時刻管理（重要な関数）
 
-**Phase 2: 音声機能** 4. `/public/sounds/beep-sequence.mp3` - 音源配置（OtoLogic, CC BY 4.0）5. `app/_hooks/useBeepSound.ts` - ビープ音再生（テスト不要：UI連携）6. `app/_hooks/useSpeechSynthesis.ts` - 音声合成（テスト不要：ブラウザAPI wrapper）
+**Phase 2: 音声機能**
 
-**Phase 3: タイマー機能** 7. `app/_hooks/useTimeCallTimer.ts` + `useTimeCallTimer.test.ts` - タイマー制御（重要なロジック）
+4. `/public/sounds/beep-sequence.mp3` - 音源配置（OtoLogic, CC BY 4.0）
+5. `app/_hooks/useBeepSound.ts` - ビープ音再生（テスト不要：UI連携）
+6. `app/_hooks/useSpeechSynthesis.ts` - 音声合成（テスト不要：ブラウザAPI wrapper）
+7. `utils/audioContext.ts` - Web Audio API ヘルパー
 
-**Phase 4: UIコンポーネント** 8. `app/_components/DigitalClock.tsx` - 時計表示 9. `app/_components/VolumeControl.tsx` - 音量調整 10. `app/_components/IntervalSelector.tsx` - 間隔選択 11. `app/_components/ControlButton.tsx` - 開始/停止
+**Phase 3: タイマー機能**
 
-**Phase 5: 統合** 12. `app/_features/SettingsPanel.tsx` - 設定パネル 13. `app/_features/TimeCallService.tsx` - サービス統合 14. `app/page.tsx` + ライセンスクレジット表示 (FR-14) - ページ構成
+8. `app/_features/TimeCallService/useTimeCallTimer.ts` + `useTimeCallTimer.test.ts` - タイマー制御（重要なロジック）
+
+**Phase 4: UIコンポーネント**
+
+9. `app/_components/DigitalClock.tsx` - 時計表示
+10. `app/_components/VolumeControl.tsx` - 音量調整
+11. `app/_components/VoiceSelector.tsx` - 音声選択
+12. `app/_components/IntervalSelector.tsx` - 間隔選択
+13. `app/_components/ControlButton.tsx` - 開始/停止
+14. `app/_components/SettingsPanel.tsx` - 設定パネル（UIプリミティブ）
+
+**Phase 5: 統合**
+
+15. `app/_features/TimeCallService/TimerControls.tsx` - タイマーコントロール統合
+16. `app/_features/TimeCallService/AudioSettings.tsx` - オーディオ設定統合
+17. `app/_features/TimeCallService/index.tsx` - サービス統合
+18. `app/page.tsx` + ライセンスクレジット表示 (FR-14) - ページ構成
 
 #### 6.3. フェーズ2への拡張ポイント
 
@@ -291,3 +341,4 @@ time-call-web-v1/
 **インフラ:**
 
 - 環境変数管理 (VOICEVOX_API_KEY)
+```
