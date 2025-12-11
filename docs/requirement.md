@@ -304,8 +304,7 @@ time-call-web-v1/
 │  │     ├─ useTimeCallTimer.ts    # FR-03: 読み上げタイマー制御（Feature内ロジック）
 │  │     ├─ useTimeCallTimer.test.ts
 │  │     ├─ TimerControls.tsx      # FR-03.5: 開始/停止・間隔選択統合
-│  │     ├─ AudioSettings.tsx      # 音量・音声設定統合
-│  │     └─ useTimerState.ts       # タイマー状態管理フック
+│  │     └─ AudioSettings.tsx      # 音量・音声設定統合
 │  └─ _hooks/                       # Route-specific hooks
 │     ├─ useClock.ts               # FR-01: 現在時刻取得・更新
 │     ├─ useClock.test.ts
