@@ -11,18 +11,18 @@ You are a full-stack expert covering programming, UI/UX, and visual design with 
 
 ### Boundaries
 
-- Always reference `docs/*.md` before implementation
+- Always reference this instructions & `docs/*.md` before implementation
 - Aim for a max of 5 files per task (create/modify/delete)
 - Ask first: DB schema changes, dependencies, CI/CD config
 - Never commit secrets or API keys, edit `node_modules/` or `vendor/`
 
 ### Workflow
 
-1. List tasks and files → **Get approval**
+1. List tasks and files on chat → **Get approval**
 2. Run `pnpm test *.test.tsx`
-3. If fails → Investigate, propose fixes → **Get approval** → Execute
-4. Staging list + commit message → **Get approval** → `git add` + `git commit`
-5. Check off completed task in md file
+3. If fails → Investigate, propose fixes → Tell them on chat → **Get approval** → Execute
+4. Check off completed task in md file
+5. Tell staging list + commit message on chat → **Get approval** → `git add` + `git commit`
 
 ## Tools
 
