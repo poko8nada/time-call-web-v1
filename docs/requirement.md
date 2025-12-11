@@ -295,6 +295,8 @@ time-call-web-v1/
 │  │  ├─ ControlButton.tsx         # FR-05: 開始/停止ボタン
 │  │  ├─ VolumeControl.tsx         # FR-09: 音量調整スライダー
 │  │  ├─ VoiceSelector.tsx         # FR-09.5: 音声選択ドロップダウン
+│  │  ├─ NextCallTimeDisplay.tsx   # FR-16: 次の読み上げ時刻表示
+│  │  ├─ CurrentIntervalDisplay.tsx # FR-15: タイマー実行中の現在間隔表示
 │  │  └─ SettingsPanel.tsx         # FR-11: 設定パネル（UIプリミティブ）
 │  ├─ _features/                    # Route-specific features (Client)
 │  │  └─ TimeCallService/          # 時報サービス統合 (コロケーション)
@@ -302,7 +304,8 @@ time-call-web-v1/
 │  │     ├─ useTimeCallTimer.ts    # FR-03: 読み上げタイマー制御（Feature内ロジック）
 │  │     ├─ useTimeCallTimer.test.ts
 │  │     ├─ TimerControls.tsx      # FR-03.5: 開始/停止・間隔選択統合
-│  │     └─ AudioSettings.tsx      # 音量・音声設定統合
+│  │     ├─ AudioSettings.tsx      # 音量・音声設定統合
+│  │     └─ useTimerState.ts       # タイマー状態管理フック
 │  └─ _hooks/                       # Route-specific hooks
 │     ├─ useClock.ts               # FR-01: 現在時刻取得・更新
 │     ├─ useClock.test.ts
@@ -313,7 +316,8 @@ time-call-web-v1/
 │  ├─ types.ts                      # Global types (Result<T, E>)
 │  ├─ formatTime.ts                 # FR-02: 時刻フォーマット関数
 │  ├─ formatTime.test.ts
-│  └─ audioContext.ts               # Web Audio API ヘルパー（環境判定・singleton管理）
+│  ├─ audioContext.ts               # Web Audio API ヘルパー（環境判定・singleton管理）
+│  └─ voicePresets.ts               # FR-17: 推奨音声プリセット定義
 │
 ├─ components/                       # Global shared UI (if needed)
 ├─ hooks/                            # Global shared hooks (if needed)
@@ -355,12 +359,19 @@ Feature内のロジック・UIの完全なコロケーション を実現して�
 13. `app/_components/ControlButton.tsx` - 開始/停止
 14. `app/_components/SettingsPanel.tsx` - 設定パネル（UIプリミティブ）
 
-**Phase 5: 統合**
+**Phase 5: プリセット音声・時刻表示**
 
-15. `app/_features/TimeCallService/TimerControls.tsx` - タイマーコントロール統合
-16. `app/_features/TimeCallService/AudioSettings.tsx` - オーディオ設定統合
-17. `app/_features/TimeCallService/index.tsx` - サービス統合
-18. `app/page.tsx` + ライセンスクレジット表示 (FR-14) - ページ構成
+15. `utils/voicePresets.ts` - 推奨音声プリセット定義 (FR-17)
+16. `app/_components/NextCallTimeDisplay.tsx` - 次の読み上げ時刻表示 (FR-16)
+17. `app/_components/CurrentIntervalDisplay.tsx` - タイマー実行中の現在間隔表示 (FR-15)
+18. `app/_hooks/useSpeechSynthesis.ts` - プリセット音声フィルタリング機能追加 (FR-07 Enhanced)
+
+**Phase 6: 統合**
+
+19. `app/_features/TimeCallService/TimerControls.tsx` - タイマーコントロール統合（NextCallTimeDisplay, CurrentIntervalDisplay 含む）
+20. `app/_features/TimeCallService/AudioSettings.tsx` - オーディオ設定統合
+21. `app/_features/TimeCallService/index.tsx` - サービス統合
+22. `app/page.tsx` + ライセンスクレジット表示 (FR-14) - ページ構成
 
 #### 6.3. フェーズ2への拡張ポイント
 
