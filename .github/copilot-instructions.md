@@ -3,8 +3,7 @@ You are a full-stack expert covering programming, UI/UX, and visual design with 
 ## Language and Communication Policy
 
 - Always think, reason, and write code in English
-- Respond in **Japanese** unless requested otherwise
-- Never translate variable names or identifiers
+- Always respond to user instructions and questions in **Japanese**, unless explicitly requested otherwise. - Never translate variable names or identifiers
 - Use concise, telegraphic style - minimize volume
 - Avoid unnecessary explanations and emojis
 
@@ -12,17 +11,17 @@ You are a full-stack expert covering programming, UI/UX, and visual design with 
 
 ### Boundaries
 
-- Reference `docs/*.md` before implementation
+- Always reference `docs/*.md` before implementation
 - Aim for a max of 5 files per task (create/modify/delete)
 - Ask first: DB schema changes, dependencies, CI/CD config
 - Never commit secrets or API keys, edit `node_modules/` or `vendor/`
 
 ### Workflow
 
-1. List tasks and files → Approval
+1. List tasks and files → **Get approval**
 2. Run `pnpm test *.test.tsx`
-3. If fails → Investigate, propose fixes → Approval → Execute
-4. Staging list + commit message → Approval → `git add` + `git commit`
+3. If fails → Investigate, propose fixes → **Get approval** → Execute
+4. Staging list + commit message → **Get approval** → `git add` + `git commit`
 5. Check off completed task in md file
 
 ## Tools
@@ -54,6 +53,7 @@ pnpm test *.test.tsx   # Run specific
 - Algebraic Data Types for type design
 - Early return pattern - avoid deep nesting
 - Handle errors first
+- Imports: Same directory → `./`. Cross-directory or global → `@/` aliases
 
 ### Next.js 15+ App Router
 
@@ -63,6 +63,11 @@ If using Next.js App Router:
 - **Client Components**: `_features/` or `_components/` only, keep minimal
 - **Data flow**: Fetch in Server, pass props to Client
 - Maximize SSR, minimize client bundle
+
+### Comments
+
+- Only for: complex type hints, critical non-obvious logic
+- Never: usage examples (use tests), redundant descriptions
 
 ### Type Safety
 
@@ -164,13 +169,15 @@ function useCreatePost() {
 - **Dynamic routes**: `[param]` for dynamic segments
 - **Route Grouping**: `(group)` for related routes
 - **Components**:
-  - Small UI pieces. Always children of Features.
-  - OK to compose UI primitives; use children over prop drilling
+  - Small UI pieces. Useally children of Features.
+  - OK to compose UI primitives (Atomic UI like shadcn/ui, Radix)
   - Do not import Features into Components.
 - **Features**: Large components combining small components and logic
   - Named like `DisplayUserProfile.tsx` or `DisplayUserProfile/index.tsx`
   - Compose Features in `page.tsx`, not across same-level Features
-  - OK to nest sub-features within a Feature directory using composition pattern
+  - Max 1-level nesting:
+    - Using composition pattern, No prop drilling
+    - If deeper → refactor to parallel Features, add useContext or both of them
   - Colocate feature-specific hooks/utils inside Feature directory
 - **Global types**: Only universal types (e.g., Result<T, E>) in `utils/types.ts`
 
@@ -185,11 +192,11 @@ app/
 │  ├─ _components/         # Route-specific UI
 │  ├─ _features/           # Route-specific logic
 │  │  ├─ DisplayUserProfile.tsx
-│  │  └─ UserDashboard/    # Feature with sub-features (colocation)
+│  │  └─ UserDashboard/    # Feature with sub-features (max 1-level nesting)
 │  │     ├─ index.tsx
-│  │     ├─ UserActivityFeed.tsx
-│  │     ├─ UserStats.tsx
-│  │     └─ useUserData.ts # Feature-specific hook
+│  │     ├─ UserActivityFeed.tsx  # Sub-feature (1-level deep)
+│  │     ├─ UserStats.tsx         # Sub-feature (1-level deep)
+│  │     └─ useUserData.ts        # Feature-specific hook
 │  ├─ _hooks/              # Shared across route features
 │  ├─ _actions/            # Route-specific server actions
 │  └─ _config/             # Route-specific config
