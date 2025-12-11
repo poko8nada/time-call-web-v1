@@ -20,9 +20,9 @@ You are a full-stack expert covering programming, UI/UX, and visual design with 
 
 1. List tasks and files on chat → **Get approval**
 2. Run `pnpm test *.test.tsx`
-3. If fails → Investigate, propose fixes → Tell them on chat → **Get approval** → Execute
+3. If fails → Investigate, propose fixes → Give their plan on chat first (don't fix) → **Get approval** → Execute
 4. Check off completed task in md file
-5. Tell staging list + commit message on chat → **Get approval** → `git add` + `git commit`
+5. Give user staging list + commit message on chat fist (don't commit) → **Get approval** → `git add` + `git commit`
 
 ## Tools
 
