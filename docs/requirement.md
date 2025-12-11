@@ -100,17 +100,20 @@
    - 戻り値: `{ playBeep: () => Promise<Result<void, string>>, stopBeep: () => void, setBeepVolume: (v: number) => void }`
    - テスト観点: ビープ音が正しいタイミングで再生されること、音量調整が反映されること
 
-7. **FR-07: `useSpeechSynthesis.ts`**
-   - 要件: Web Speech APIによる音声合成
+7. **FR-07: `useSpeechSynthesis.ts` (with voice preset filtering)**
+   - 要件: Web Speech APIによる音声合成＋プリセット音声フィルタリング
    - 詳細:
-     - `speechSynthesis.getVoices()`でja-JP音声リスト取得
+     - `speechSynthesis.getVoices()`で全音声リスト取得
+     - `voicePresets.ts`で定義されたハードコード音声配列でフィルタリング
+     - プリセットに該当する音声のみUIに提供
+     - 該当音声がない場合、リストは空（アプリは動作しない）
      - 選択された音声で`SpeechSynthesisUtterance`を生成
      - 音量調整（0.0〜1.0）
      - テキスト読み上げ実行（`Promise<Result<void, string>>`を返す）
      - 読み上げ中断機能（cancel）
      - エラーハンドリング（interrupted は警告レベル、その他はエラーレベル）
    - 戻り値: `{ isSupported: boolean, playSpeech: (text: string) => Promise<Result<void, string>>, voices: SpeechSynthesisVoice[], selectedVoice: SpeechSynthesisVoice | null, setSelectedVoice: (voice: SpeechSynthesisVoice | null) => void, setSpeechVolume: (v: number) => void, cancelSpeech: () => void }`
-   - テスト観点: 音声リストが取得できること、読み上げが実行されること、Promiseが正しく解決されること、中断機能が動作すること
+   - テスト観点: プリセット音声でフィルタリングが動作すること、読み上げが実行されること、Promiseが正しく解決されること、中止機能が動作すること
 
 #### 3.4. UI表示 (UI Display)
 
@@ -132,15 +135,16 @@
    - Props: `{ masterVolume: number, onSetMasterVolume: (volume: number) => void, label: string, disabled?: boolean, description?: string }`
    - テスト観点: スライダー操作で正しい値が渡されること、ビープ音と読み上げ音の両方に反映されること
 
-10. **FR-09.5: `VoiceSelector.tsx`**
-    - 要件: 音声選択UIコンポーネント
+10. **FR-09.5: `VoiceSelector.tsx` (with preset filtering)**
+    - 要件: 音声選択UIコンポーネント（プリセット音声フィルタリング済み）
     - 詳細:
-      - `useSpeechSynthesis`から取得した音声リストをドロップダウンで表示
+      - `useSpeechSynthesis`から取得したプリセットフィルタリング済み音声リストをドロップダウンで表示
       - 選択された音声を「音声名 (言語コード)」形式で表示
       - マウント後のみレンダリング（hydration対応）
       - 音声リストが空またはサポートされていない場合は非表示
+      - プリセット音声のみを表示（品質保証、音量調整対応音声）
     - Props: `{ voices: SpeechSynthesisVoice[], selectedVoice: SpeechSynthesisVoice | null, onVoiceChange: (voice: SpeechSynthesisVoice) => void, isSupported: boolean }`
-    - テスト観点: 音声リストが正しく表示されること、選択で正しいコールバックが呼ばれること
+    - テスト観点: プリセット音声リストが正しく表示されること、選択で正しいコールバックが呼ばれること
 
 #### 3.2.1 タイマーUI統合
 
@@ -152,6 +156,38 @@
     - Props: `{ interval: number, onIntervalChange: (min: number) => void, isRunning: boolean, onStart: () => void, onStop: () => void, disabled: boolean }`
   - 機能: タイマー制御UI の統合
   - テスト観点: 各ボタン・選択肢が正しく動作すること
+
+- **FR-15: `CurrentIntervalDisplay.tsx`**
+  - 要件: タイマー実行中の現在間隔表示
+  - 詳細:
+    - タイマー実行中に「現在: ○分間隔」と常に表示
+    - `IntervalSelector`がdisabledでも視認可能
+    - 実行中でない場合は非表示
+    - Props: `{ isRunning: boolean, interval: number }`
+  - 機能: ユーザーが現在の間隔設定を確認できる
+  - テスト観点: isRunning=true時に間隔が表示されること、isRunning=false時は非表示
+
+- **FR-16: `NextCallTimeDisplay.tsx`**
+  - 要件: 次の読み上げ時刻表示
+  - 詳細:
+    - `nextCallTime`を「次の読み上げ: HH:MM:SS」形式で表示
+    - タイマー実行中のみ表示
+    - DigitalClock下に配置
+    - Props: `{ nextCallTime: Date | null, isRunning: boolean }`
+  - 機能: ユーザーが次の読み上げまでの時間を確認できる
+  - テスト観点: isRunning=true かつ nextCallTime!=nullの時のみ表示されること
+
+#### 3.4.1 プリセット音声定義
+
+- **FR-17: `voicePresets.ts`**
+  - 要件: 推奨音声プリセット定義
+  - 詳細:
+    - ハードコードされた推奨音声配列（OSやブラウザの標準音声から厳選）
+    - 各プリセット項目: `{ name: string, lang: string }`
+    - 音量調整が可能な音声のみを含む
+    - `useSpeechSynthesis.ts`でこのリストでフィルタリング
+  - エクスポート: `const VOICE_PRESETS: Array<{ name: string; lang: string }>`
+  - テスト観点: プリセット配列が正しい形式で定義されていること
 
 #### 3.5. 統合・設定 (Integration & Settings)
 

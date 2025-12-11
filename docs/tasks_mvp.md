@@ -110,11 +110,37 @@
 - [x] `app/_features/TimeCallService/index.tsx` - サービス全体統合 **(FR-10)**
 - [x] `app/_features/TimeCallService/TimerControls.tsx` - タイマー制御UI統合 **(FR-03.5)**
 - [x] `app/_features/TimeCallService/AudioSettings.tsx` - オーディオ設定統合
+- [ ] NextCallTimeDisplay と CurrentIntervalDisplay の統合 **(FR-15, FR-16)**
 
-**依存関係**: Task 5 (useTimeCallTimer.ts), Task 6 (DigitalClock.tsx, VolumeControl.tsx), Task 7 (IntervalSelector.tsx, ControlButton.tsx, VoiceSelector.tsx), Task 8 (SettingsPanel.tsx)  
-**成果物**: 全フック・コンポーネントの統合、タイマー連携制御。TimeCallService/index.tsx が完全な統合を実現し、TimerControls.tsx と AudioSettings.tsx がUI群を組織化  
-**完了条件**: 実ブラウザでデジタル時計→間隔選択→開始/停止→ビープ音→読み上げの一連の流れが動作すること  
+**依存関係**: Task 5 (useTimeCallTimer.ts), Task 6 (DigitalClock.tsx, VolumeControl.tsx), Task 7 (IntervalSelector.tsx, ControlButton.tsx, VoiceSelector.tsx), Task 8 (SettingsPanel.tsx), Task 13 (NextCallTimeDisplay.tsx, CurrentIntervalDisplay.tsx)  
+**成果物**: 全フック・コンポーネントの統合、タイマー連携制御。TimeCallService/index.tsx が完全な統合を実現し、TimerControls.tsx と AudioSettings.tsx がUI群を組織化。NextCallTimeDisplay と CurrentIntervalDisplay を配置  
+**完了条件**: 実ブラウザでデジタル時計→間隔選択→開始/停止→次の読み上げ時刻表示→現在間隔表示→ビープ音→読み上げの一連の流れが動作すること  
 **テスト**: 単体テスト不要（統合UI）
+
+### Task 13: プリセット音声定義と Next Call Time 表示
+
+- [ ] `utils/voicePresets.ts` - 推奨音声プリセット定義 **(FR-17)**
+- [ ] `app/_components/NextCallTimeDisplay.tsx` - 次の読み上げ時刻表示 **(FR-16)**
+- [ ] `app/_components/CurrentIntervalDisplay.tsx` - タイマー実行中の現在間隔表示 **(FR-15)**
+- [ ] `app/_hooks/useSpeechSynthesis.ts` - プリセット音声フィルタリング機能追加 **(FR-07 Enhanced)**
+
+**依存関係**: Task 4 (useSpeechSynthesis.ts の基礎), Task 5 (useTimeCallTimer.ts)  
+**成果物**:
+
+- `voicePresets.ts`: ハードコードされた推奨音声配列。形式: `const VOICE_PRESETS = [{ name: string, lang: string }, ...]`
+- `NextCallTimeDisplay.tsx`: `nextCallTime`を「次の読み上げ: HH:MM:SS」形式で表示。Props: `{ nextCallTime: Date | null, isRunning: boolean }`
+- `CurrentIntervalDisplay.tsx`: 実行中に「現在: ○分間隔」と表示。Props: `{ isRunning: boolean, interval: number }`
+- `useSpeechSynthesis.ts` 更新: `loadVoices()`後にプリセットリストでフィルタリング。マッチなしの場合は空配列
+
+**完了条件**:
+
+- プリセット音声取得後、フィルタリングが正しく動作すること
+- NextCallTimeDisplay が実行中のみ表示されること
+- CurrentIntervalDisplay が実行中のみ表示されること
+- プリセット音声がない場合は`voices`が空配列になること
+- 実ブラウザで全機能が動作確認できること
+
+**テスト**: 単体テスト不要（UI連携）
 
 ### Task 10: ページ構成・スタイリング
 
@@ -128,14 +154,33 @@
 **完了条件**: 実ブラウザで PC・スマホで正しく表示されること、ライセンスクレジットが正しく表示されること  
 **テスト**: 単体テスト不要（ページ構成）
 
+### Task 14: UI/UX & Design Polish (Phase 6-7統合)
+
+- [ ] デザインシステム統合
+  - 色パレット統一（primary, secondary, background, text）
+  - タイポグラフィスケール確認（font-size, font-weight, line-height）
+  - スペーシング確認（4px/8px グリッド準拠）
+- [ ] レスポンシブ改善
+  - sm (640px), md (768px), lg (1024px) でのレイアウト確認
+  - モバイル・タブレット・PCでの表示確認
+- [ ] アクセシビリティ確認
+  - キーボードナビゲーション動作確認
+  - Screen reader対応確認（aria-label, role属性）
+  - 色コントラスト確認（WCAG 2.1 AA基準）
+
+**依存関係**: Task 13 (NextCallTimeDisplay, CurrentIntervalDisplay)  
+**成果物**: デザインシステム統一、レスポンシブ確認、アクセシビリティ基準達成  
+**完了条件**: PC・タブレット・スマホで正しく表示されること、axe DevTools で A基準合格  
+**テスト**: 手動確認のみ
+
 ---
 
 ## Phase 7: 検証・最適化・デプロイ (Validation & Deployment)
 
-### Task 11: ブラウザ互換性・パフォーマンス確認
+### Task 15: ブラウザ互換性・パフォーマンス確認
 
 - [ ] ブラウザ互換性テスト（手動確認）
-  - Chrome 90+: 全機能動作確認
+  - Chrome 90+: 全機能動作確認（プリセット音声フィルタリング、Next Call Time、Current Interval表示）
   - Firefox 88+: 全機能動作確認
   - Safari 14+: 全機能動作確認
 - [ ] パフォーマンス測定
@@ -146,12 +191,12 @@
 - [ ] 最小限の単体テスト実行
   - `pnpm test` - 全テストがパス
 
-**依存関係**: Task 10完了  
-**成果物**: 互換性レポート、パフォーマンスレポート  
+**依存関係**: Task 14完了  
+**成果物**: 互換性レポート、パフォーマンスレポート
 **完了条件**: 全ブラウザで動作確認完了、最小限のテストがパス  
 **注**: E2E テストは実施しない（copilot-instructions.md ポリシー準拠）
 
-### Task 12: デプロイ準備・本番環境確認
+### Task 16: デプロイ準備・本番環境確認
 
 - [ ] Vercel デプロイ設定
   - 環境変数設定（必要に応じて）
@@ -171,9 +216,9 @@
   - Server Actions 設計書
   - Cloud Run 構成案
 
-**依存関係**: Task 11完了  
+**依存関係**: Task 15完了  
 **成果物**: デプロイ済み MVP、運用ドキュメント  
-**完了条件**: 本番環境で全機能が動作すること
+**完了条件**: 本番環境で全機能（プリセット音声、Next Call Time、Current Interval表示含む）が動作すること
 
 ---
 
@@ -183,13 +228,15 @@
 
 - **Phase 1-2**: 完了（基盤・時刻管理）
 - **Phase 3-4**: 完了（音声・タイマー）
-- **Phase 5-6**: 完了（UI・統合）
+- **Phase 5-6**: 進行中（UI・統合・プリセット音声）
 - **Phase 7**: 進行中（テスト・デプロイ）
 
 ### Critical Path
 
 ```
-Task 1 → Task 2 → Task 3/4 (並行) → Task 5 → Task 6/7 (並行) → Task 8 → Task 9 → Task 10 → Task 11 → Task 12
+Task 1 → Task 2 → Task 3/4 (並行) → Task 5 → Task 6/7 (並行) → Task 8 → Task 9
+→ Task 13 (プリセット音声・Next Call Time・Current Interval) → Task 9更新統合
+→ Task 14 (UI/UX Polish) → Task 15 (互換性確認) → Task 16 (デプロイ)
 ```
 
 ### リスク管理
@@ -207,12 +254,16 @@ Task 1 → Task 2 → Task 3/4 (並行) → Task 5 → Task 6/7 (並行) → Tas
 
 - [ ] 最小限の単体テストがパス（`pnpm test`）
 - [ ] 全ブラウザで手動動作確認完了（Chrome, Firefox, Safari）
+  - [ ] プリセット音声フィルタリングが動作すること
+  - [ ] Next Call Time が正しく表示されること
+  - [ ] Current Interval が実行中のみ表示されること
 - [ ] アクセシビリティ監査合格（axe DevTools）
 - [ ] パフォーマンス基準達成（タイマー精度±100ms以内）
 - [ ] OGP画像・Favicon設置完了
-- [ ] 本番環境で音声再生確認
-- [ ] エラーハンドリング動作確認
+- [ ] 本番環境で音声再生確認（プリセット音声のみ利用可能か）
+- [ ] エラーハンドリング動作確認（プリセット音声がない場合の挙動）
 - [ ] レスポンシブ表示確認（スマホ・タブレット・PC）
 - [ ] コンソールエラー・警告なし
 - [ ] Lighthouse スコア90以上（Performance, Accessibility）
 - [ ] ライセンスクレジット表示確認（OtoLogic CC BY 4.0）
+- [ ] デザインシステム統一確認（色・タイポグラフィ・スペーシング）
