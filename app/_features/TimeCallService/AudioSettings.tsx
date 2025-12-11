@@ -6,28 +6,28 @@ import type { Result } from '@/utils/types'
 
 interface AudioSettingsProps {
   masterVolume: number
-  setMasterVolume: (volume: number) => void
+  onSetMasterVolume: (volume: number) => void
   isSupported: boolean
   voices: SpeechSynthesisVoice[]
   selectedVoice: SpeechSynthesisVoice | null
   onVoiceChange: (voice: SpeechSynthesisVoice | null) => void
-  onSpeak: (text: string) => Promise<Result<void, string>>
+  onPlaySpeech: (text: string) => Promise<Result<void, string>>
 }
 
 export function AudioSettings({
   masterVolume,
-  setMasterVolume,
+  onSetMasterVolume,
   isSupported,
   voices,
   selectedVoice,
   onVoiceChange,
-  onSpeak,
+  onPlaySpeech,
 }: AudioSettingsProps) {
   return (
     <SettingsPanel>
       <VolumeControl
-        volume={masterVolume}
-        onChange={setMasterVolume}
+        masterVolume={masterVolume}
+        onSetMasterVolume={onSetMasterVolume}
         label='マスターボリューム'
         description='ビープ音と読み上げ音の両方に適用されます'
       />
@@ -40,7 +40,7 @@ export function AudioSettings({
         />
         <TestPlayButton
           selectedVoice={selectedVoice}
-          onSpeak={onSpeak}
+          onPlaySpeech={onPlaySpeech}
           isSupported={isSupported}
         />
       </div>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { calculateNextCallTime } from './useTimeCallTimer'
+import { calculateNextCallTime } from '../_features/TimeCallService/useTimeCallTimer'
 
 describe('calculateNextCallTime', () => {
   it('calculates next 5-minute multiple when current time is 10:23:45', () => {

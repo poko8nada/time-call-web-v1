@@ -1,52 +1,42 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DigitalClock } from '@/app/_components/DigitalClock'
 import { useBeepSound } from '@/app/_hooks/useBeepSound'
-import { formatSpeechTime } from '@/utils/formatTime'
+import { useClock } from '@/app/_hooks/useClock'
+import { useSpeechSynthesis } from '@/app/_hooks/useSpeechSynthesis'
 import { AudioSettings } from './AudioSettings'
 import { TimerControls } from './TimerControls'
-import { useAudioSettings } from './useAudioSettings'
-import { useTimerState } from './useTimerState'
+import { useTimeCallTimer } from './useTimeCallTimer'
 
 export function TimeCallService() {
   const [masterVolume, setMasterVolume] = useState(70)
-  const [nextCallTime, setNextCallTime] = useState<Date | null>(null)
 
-  const { setVolume: setBeepVolume, playBeepSequence } = useBeepSound()
-  const audioSettings = useAudioSettings()
+  const { currentTime } = useClock()
+  const { playBeep, stopBeep, setBeepVolume } = useBeepSound(masterVolume / 100)
+  const {
+    isSupported,
+    voices,
+    selectedVoice,
+    setSelectedVoice,
+    playSpeech,
+    setSpeechVolume,
+    cancelSpeech,
+  } = useSpeechSynthesis(masterVolume / 100)
 
-  useEffect(() => {
-    const normalizedVolume = masterVolume / 100
-    setBeepVolume(normalizedVolume)
-    audioSettings.setVolumeState(normalizedVolume)
-  }, [masterVolume, setBeepVolume, audioSettings.setVolumeState])
-
-  const handleInterval = useCallback(async () => {
-    if (!nextCallTime) return
-
-    const timeText = formatSpeechTime(nextCallTime)
-
-    const beepResult = await playBeepSequence()
-    if (!beepResult.ok) {
-      console.error('Beep failed:', beepResult.error)
-      return
-    }
-
-    const speakResult = await audioSettings.speak(timeText)
-    if (!speakResult.ok) {
-      console.error('Speech failed:', speakResult.error)
-      return
-    }
-  }, [nextCallTime, playBeepSequence, audioSettings.speak])
-
-  const timerState = useTimerState({
-    onInterval: handleInterval,
-  })
+  const {
+    isRunning,
+    interval,
+    setInterval,
+    startTimer,
+    stopTimer,
+    nextCallTime,
+  } = useTimeCallTimer({ currentTime, playBeep, playSpeech })
 
   useEffect(() => {
-    setNextCallTime(timerState.nextCallTime)
-  }, [timerState.nextCallTime])
+    setBeepVolume(masterVolume / 100)
+    setSpeechVolume(masterVolume / 100)
+  }, [masterVolume, setBeepVolume, setSpeechVolume])
 
   return (
     <main className='w-full max-w-2xl space-y-8'>
@@ -72,24 +62,24 @@ export function TimeCallService() {
         </h2>
 
         <TimerControls
-          isRunning={timerState.isRunning}
-          interval={timerState.interval}
-          onStart={timerState.start}
-          onStop={timerState.stop}
-          onIntervalChange={timerState.setInterval}
+          isRunning={isRunning}
+          interval={interval}
+          onStart={startTimer}
+          onStop={stopTimer}
+          onIntervalChange={setInterval}
         />
       </div>
 
       {/* Settings Panel */}
       <div className='bg-gray-50 dark:bg-zinc-900 p-6 rounded-lg'>
         <AudioSettings
-          isSupported={audioSettings.isSupported}
-          voices={audioSettings.voices}
-          selectedVoice={audioSettings.selectedVoice}
-          onVoiceChange={audioSettings.setSelectedVoice}
-          volume={masterVolume}
-          onVolumeChange={setMasterVolume}
-          onSpeak={audioSettings.speak}
+          isSupported={isSupported}
+          voices={voices}
+          selectedVoice={selectedVoice}
+          onVoiceChange={setSelectedVoice}
+          masterVolume={masterVolume}
+          onSetMasterVolume={setMasterVolume}
+          onPlaySpeech={playSpeech}
         />
       </div>
     </main>

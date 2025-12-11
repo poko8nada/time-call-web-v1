@@ -4,23 +4,23 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { err, ok, type Result } from '@/utils/types'
 
 type UseBeepSoundReturn = {
-  playBeepSequence: () => Promise<Result<void, string>>
+  playBeep: () => Promise<Result<void, string>>
   stopBeep: () => void
-  volume: number
-  setVolume: (volume: number) => void
+  setBeepVolume: (volume: number) => void
 }
 
 export function useBeepSound(defaultVolume = 0.5): UseBeepSoundReturn {
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [isAudioLoaded, setIsAudioLoaded] = useState(false)
-  const [volume, setVolumeState] = useState(defaultVolume)
+  const [beepVolume, setBeepVolume] = useState(() => {
+    return Math.max(0, Math.min(1, defaultVolume))
+  })
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies(volume): suppress dependency volume
   useEffect(() => {
     const audio = new Audio('/sounds/beep-sequence.mp3')
     audio.preload = 'auto'
     audio.loop = false
-    audio.volume = Math.max(0, Math.min(1, volume))
+    audio.volume = Math.max(0, Math.min(1, beepVolume))
     audioRef.current = audio
 
     const onCanPlay = () => setIsAudioLoaded(true)
@@ -41,18 +41,9 @@ export function useBeepSound(defaultVolume = 0.5): UseBeepSoundReturn {
       audio.removeEventListener('error', onError)
       audioRef.current = null
     }
-  }, [])
+  }, [beepVolume])
 
-  // Update volume when it changes
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = Math.max(0, Math.min(1, volume))
-    }
-  }, [volume])
-
-  const playBeepSequence = useCallback(async (): Promise<
-    Result<void, string>
-  > => {
+  const playBeep = useCallback(async (): Promise<Result<void, string>> => {
     return new Promise(resolve => {
       let settled = false
 
@@ -94,13 +85,5 @@ export function useBeepSound(defaultVolume = 0.5): UseBeepSoundReturn {
     }
   }, [])
 
-  const setVolume = useCallback((v: number) => {
-    const clampedVolume = Math.max(0, Math.min(1, v))
-    setVolumeState(clampedVolume)
-    if (audioRef.current) {
-      audioRef.current.volume = clampedVolume
-    }
-  }, [])
-
-  return { playBeepSequence, stopBeep, volume, setVolume }
+  return { playBeep, stopBeep, setBeepVolume }
 }

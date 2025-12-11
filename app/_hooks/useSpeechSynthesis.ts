@@ -92,9 +92,7 @@ function selectPreferredVoice(
   return voices[0] ?? null
 }
 
-async function loadUtterance(): Promise<
-  Result<SpeechSynthesisUtterance, string>
-> {
+function createUtterance(): Result<SpeechSynthesisUtterance, string> {
   try {
     const utterance = new SpeechSynthesisUtterance()
     return ok(utterance)
@@ -176,12 +174,12 @@ async function speakUtterance(
 
 type UseSpeechSynthesisReturn = {
   isSupported: boolean
-  speak: (text: string) => Promise<Result<void, string>>
+  playSpeech: (text: string) => Promise<Result<void, string>>
   voices: SpeechSynthesisVoice[]
   selectedVoice: SpeechSynthesisVoice | null
   setSelectedVoice: (v: SpeechSynthesisVoice | null) => void
-  setVolumeState: (v: number) => void
-  cancel: () => void
+  setSpeechVolume: (v: number) => void
+  cancelSpeech: () => void
 }
 
 export function useSpeechSynthesis(
@@ -195,7 +193,9 @@ export function useSpeechSynthesis(
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
   const [selectedVoice, setSelectedVoice] =
     useState<SpeechSynthesisVoice | null>(null)
-  const [volume, setVolumeState] = useState(defaultVolume)
+  const [speechVolume, setSpeechVolume] = useState(() => {
+    return Math.max(0, Math.min(1, defaultVolume))
+  })
   const currentUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
 
   useEffect(() => {
@@ -217,7 +217,7 @@ export function useSpeechSynthesis(
     }
   }, [isSupported])
 
-  const cancel = useCallback(() => {
+  const cancelSpeech = useCallback(() => {
     if (!isSupported) return
     const ss = (window as Window & { speechSynthesis: SpeechSynthesis })
       .speechSynthesis
@@ -231,7 +231,7 @@ export function useSpeechSynthesis(
     }
   }, [isSupported])
 
-  const speak = useCallback(
+  const playSpeech = useCallback(
     async (text: string): Promise<Result<void, string>> => {
       if (!isSupported) {
         return err('speechSynthesis not supported')
@@ -245,18 +245,21 @@ export function useSpeechSynthesis(
         ss.cancel()
       }
 
-      const utteranceResult = await loadUtterance()
+      const utteranceResult = createUtterance()
       if (!utteranceResult.ok) {
         return err(`Failed to create utterance: ${utteranceResult.error}`)
       }
 
       const utterance = utteranceResult.value
-      if (selectedVoice) {
-        utterance.voice = selectedVoice
-      }
-      utterance.volume = volume
+
+      utterance.volume = Math.max(0, Math.min(1, speechVolume))
+      utterance.text = `${text}`
+      utterance.voice = selectedVoice
       utterance.lang = selectedVoice?.lang || 'ja-JP'
-      utterance.text = text
+
+      console.log(utterance)
+      console.log(Math.max(0, Math.min(1, speechVolume)))
+      console.log(speechVolume)
 
       // Store reference to current utterance
       currentUtteranceRef.current = utterance
@@ -271,7 +274,7 @@ export function useSpeechSynthesis(
 
       return result
     },
-    [isSupported, selectedVoice, volume],
+    [isSupported, selectedVoice, speechVolume],
   )
 
   return {
@@ -279,8 +282,8 @@ export function useSpeechSynthesis(
     voices,
     selectedVoice,
     setSelectedVoice,
-    speak,
-    setVolumeState,
-    cancel,
+    playSpeech,
+    setSpeechVolume,
+    cancelSpeech,
   }
 }

@@ -97,7 +97,7 @@
      - 3秒間のビープ音シーケンス再生機能
      - 再生中の中断機能
      - 音源: OtoLogic (CC BY 4.0) - https://otologic.jp
-   - 戻り値: `{ playBeepSequence: () => Promise<Result<void, string>>, stopBeep: () => void, volume: number, setVolume: (v: number) => void }`
+   - 戻り値: `{ playBeep: () => Promise<Result<void, string>>, stopBeep: () => void, volume: number, setVolume: (v: number) => void }`
    - テスト観点: ビープ音が正しいタイミングで再生されること、音量調整が反映されること
 
 7. **FR-07: `useSpeechSynthesis.ts`**
@@ -109,7 +109,7 @@
      - テキスト読み上げ実行（`Promise<Result<void, string>>`を返す）
      - 読み上げ中断機能（cancel）
      - エラーハンドリング（interrupted は警告レベル、その他はエラーレベル）
-   - 戻り値: `{ isSupported: boolean, speak: (text: string) => Promise<Result<void, string>>, voices: SpeechSynthesisVoice[], selectedVoice: SpeechSynthesisVoice | null, setSelectedVoice: (voice: SpeechSynthesisVoice | null) => void, setVolumeState: (v: number) => void, cancel: () => void }`
+   - 戻り値: `{ isSupported: boolean, speak: (text: string) => Promise<Result<void, string>>, voices: SpeechSynthesisVoice[], selectedVoice: SpeechSynthesisVoice | null, setSelectedVoice: (voice: SpeechSynthesisVoice | null) => void, setSpeechVolume: (v: number) => void, cancel: () => void }`
    - テスト観点: 音声リストが取得できること、読み上げが実行されること、Promiseが正しく解決されること、中断機能が動作すること
 
 #### 3.4. UI表示 (UI Display)

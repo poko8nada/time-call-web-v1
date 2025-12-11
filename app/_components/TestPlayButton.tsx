@@ -5,7 +5,7 @@ import type { Result } from '@/utils/types'
 
 interface TestPlayButtonProps {
   selectedVoice: SpeechSynthesisVoice | null
-  onSpeak: (text: string) => Promise<Result<void, string>>
+  onPlaySpeech: (text: string) => Promise<Result<void, string>>
   isSupported: boolean
 }
 
@@ -16,15 +16,11 @@ interface TestPlayButtonProps {
  * Accepts callbacks as props (composition pattern).
  *
  * Usage:
- * <TestPlayButton
- *   selectedVoice={selectedVoice}
- *   onSpeak={speak}
- *   isSupported={true}
- * />
+
  */
 export function TestPlayButton({
   selectedVoice,
-  onSpeak,
+  onPlaySpeech,
   isSupported,
 }: TestPlayButtonProps) {
   const [isTestPlaying, setIsTestPlaying] = useState(false)
@@ -32,9 +28,9 @@ export function TestPlayButton({
   const handleTestPlay = useCallback(async () => {
     if (!selectedVoice) return
     setIsTestPlaying(true)
-    await onSpeak('こんにちは。現在の音声テストです。')
+    await onPlaySpeech('こんにちは。音声テストです。')
     setIsTestPlaying(false)
-  }, [selectedVoice, onSpeak])
+  }, [selectedVoice, onPlaySpeech])
 
   if (!isSupported || !selectedVoice) {
     return null

@@ -39,7 +39,7 @@
 - [x] `app/_hooks/useBeepSound.ts` - MP3音源再生 **(FR-06)**
 
 **依存関係**: なし  
-**成果物**: `playBeepSequence: () => Promise<Result<void, string>>`を実装した5秒間のビープ音シーケンス再生機能、音量調整機能  
+**成果物**: `playBeep: () => Promise<Result<void, string>>`を実装した5秒間のビープ音シーケンス再生機能、音量調整機能  
 **完了条件**: 実ブラウザでビープ音が正しく再生されること、音量調整が反映されること、PromiseベースのエラーハンドリングがResult型で動作すること  
 **テスト**: 単体テスト不要（UI連携コード）  
 **ライセンス**: CC BY 4.0 (OtoLogic - https://otologic.jp) - クレジット表記必須

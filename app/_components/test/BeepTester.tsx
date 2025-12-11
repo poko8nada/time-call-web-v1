@@ -10,15 +10,15 @@ import { useBeepSound } from '../../_hooks/useBeepSound'
  * - TODO: remove before merging to production or gate behind a dev-only flag.
  */
 export default function BeepTester() {
-  const { playBeepSequence, stopBeep, volume, setVolume } = useBeepSound(0.5)
+  const { playBeep, stopBeep, volume, setVolume } = useBeepSound(0.5)
   const [lastAction, setLastAction] = useState<string | null>(null)
   const inputId = useId()
   console.debug('BeepTester loaded')
 
   const handlePlay = useCallback(() => {
-    playBeepSequence()
+    playBeep()
     setLastAction('played')
-  }, [playBeepSequence])
+  }, [playBeep])
 
   const handleStop = useCallback(() => {
     stopBeep()

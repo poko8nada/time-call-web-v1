@@ -12,10 +12,10 @@ import { useSpeechSynthesis } from '../../_hooks/useSpeechSynthesis'
 export default function SpeechTester() {
   const {
     isSupported,
-    speak,
+    playSpeech,
     voices,
     setSelectedVoice,
-    setVolumeState,
+    setSpeechVolume,
     cancel,
   } = useSpeechSynthesis(0.5)
 
@@ -33,7 +33,7 @@ export default function SpeechTester() {
     voiceCount: voices.length,
   })
 
-  const handleSpeak = useCallback(async () => {
+  const handlePlaySpeech = useCallback(async () => {
     if (!testText.trim()) {
       setLastAction('error: empty text')
       setLastResult('❌ Empty')
@@ -43,7 +43,7 @@ export default function SpeechTester() {
     setLastAction('speaking...')
     setLastResult('⏳ Speaking...')
 
-    const result = await speak(testText)
+    const result = await playSpeech(testText)
 
     if (result.ok) {
       setLastAction('spoke successfully')
@@ -52,7 +52,7 @@ export default function SpeechTester() {
       setLastAction(`error: ${result.error}`)
       setLastResult(`❌ ${result.error}`)
     }
-  }, [speak, testText])
+  }, [playSpeech, testText])
 
   const handleCancel = useCallback(() => {
     cancel()
@@ -64,10 +64,10 @@ export default function SpeechTester() {
     (e: ChangeEvent<HTMLInputElement>) => {
       const v = Math.max(0, Math.min(100, Number(e.target.value)))
       setVolume(v)
-      setVolumeState(v / 100)
+      setSpeechVolume(v / 100)
       setLastAction(`volume ${v}%`)
     },
-    [setVolumeState],
+    [setSpeechVolume],
   )
 
   const handleVoiceChange = useCallback(
@@ -157,7 +157,7 @@ export default function SpeechTester() {
       <div className='flex gap-2 mb-3'>
         <button
           type='button'
-          onClick={handleSpeak}
+          onClick={handlePlaySpeech}
           className='px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 text-sm'
           aria-label='speak text'
         >
