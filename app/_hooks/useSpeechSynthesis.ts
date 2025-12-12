@@ -1,6 +1,7 @@
 'use client'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { err, ok, type Result } from '@/utils/types'
+import { filterVoicesByPresets } from '@/utils/voicePresets'
 
 function getVoicesByWaitFor(ss: SpeechSynthesis, timeoutMs = 1200) {
   return new Promise<SpeechSynthesisVoice[]>(resolve => {
@@ -54,20 +55,22 @@ function getVoicesByListener(ss: SpeechSynthesis) {
 async function loadVoices(): Promise<Result<SpeechSynthesisVoice[], string>> {
   const ss = (window as Window & { speechSynthesis: SpeechSynthesis })
     .speechSynthesis
-  const voices = ss.getVoices()
-  if (voices.length > 0) return ok(voices)
-
-  try {
-    // race listener and timer
-    const result = await Promise.race([
-      getVoicesByListener(ss),
-      getVoicesByWaitFor(ss, 1200),
-    ])
-    // result contains voices array
-    return ok(result)
-  } catch (e) {
-    return err(String(e))
+  let voices = ss.getVoices()
+  if (voices.length === 0) {
+    try {
+      // race listener and timer
+      voices = await Promise.race([
+        getVoicesByListener(ss),
+        getVoicesByWaitFor(ss, 1200),
+      ])
+    } catch (e) {
+      return err(String(e))
+    }
   }
+
+  // FR-17: Filter by voice presets
+  const filteredVoices = filterVoicesByPresets(voices)
+  return ok(filteredVoices)
 }
 
 function selectPreferredVoice(

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { DigitalClock } from '@/app/_components/DigitalClock'
+import { NextCallTimeDisplay } from '@/app/_components/NextCallTimeDisplay'
 import { useBeepSound } from '@/app/_hooks/useBeepSound'
 import { useClock } from '@/app/_hooks/useClock'
 import { useSpeechSynthesis } from '@/app/_hooks/useSpeechSynthesis'
@@ -13,7 +14,7 @@ export function TimeCallService() {
   const [masterVolume, setMasterVolume] = useState(70)
 
   const { currentTime } = useClock()
-  const { playBeep, stopBeep, setBeepVolume } = useBeepSound(masterVolume / 100)
+  const { playBeep, setBeepVolume } = useBeepSound(masterVolume / 100)
   const {
     isSupported,
     voices,
@@ -21,7 +22,6 @@ export function TimeCallService() {
     setSelectedVoice,
     playSpeech,
     setSpeechVolume,
-    cancelSpeech,
   } = useSpeechSynthesis(masterVolume / 100)
 
   const {
@@ -53,6 +53,10 @@ export function TimeCallService() {
       {/* Digital Clock Section */}
       <div className='flex flex-col items-center justify-center py-8 sm:py-12 md:py-16 bg-gray-50 dark:bg-zinc-900 rounded-lg'>
         <DigitalClock currentTime={currentTime} />
+        <NextCallTimeDisplay
+          nextCallTime={nextCallTime}
+          isRunning={isRunning}
+        />
       </div>
 
       {/* Timer Control Section */}

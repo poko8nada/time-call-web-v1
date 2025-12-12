@@ -1,6 +1,7 @@
 'use client'
 
 import { ControlButton } from '@/app/_components/ControlButton'
+import { CurrentIntervalDisplay } from '@/app/_components/CurrentIntervalDisplay'
 import { IntervalSelector } from '@/app/_components/IntervalSelector'
 
 interface TimerControlsProps {
@@ -20,6 +21,9 @@ export function TimerControls({
 }: TimerControlsProps) {
   return (
     <div className='space-y-6'>
+      {/* Current Interval Display (shown when running) */}
+      <CurrentIntervalDisplay isRunning={isRunning} interval={interval} />
+
       {/* Interval Selector */}
       <IntervalSelector
         interval={interval}

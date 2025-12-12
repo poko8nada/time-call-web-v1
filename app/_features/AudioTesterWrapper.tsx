@@ -10,9 +10,12 @@ const SpeechTester = dynamic(() => import('../_components/test/SpeechTester'), {
   ssr: false,
 })
 
-const TimeCallTester = dynamic(() => import('../_components/test/TimeCallTester'), {
-  ssr: false,
-})
+const TimeCallTester = dynamic(
+  () => import('../_components/test/TimeCallTester'),
+  {
+    ssr: false,
+  },
+)
 
 const isDev = process.env.NODE_ENV === 'development'
 
