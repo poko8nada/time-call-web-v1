@@ -3,20 +3,10 @@
 import { useCallback } from 'react'
 
 interface ControlButtonProps {
-  /**
-   * Current timer running state
-   */
   isRunning: boolean
-
-  /**
-   * Callback fired when start button is clicked
-   */
   onStart: () => void
-
-  /**
-   * Callback fired when stop button is clicked
-   */
   onStop: () => void
+  disabled?: boolean
 }
 
 /**
@@ -32,18 +22,12 @@ interface ControlButtonProps {
  * - Red when running (ready to stop)
  * - Visual feedback with color and icon
  * - Accessibility: aria-pressed, aria-label
- *
- * Usage:
- * <ControlButton
- *   isRunning={isRunning}
- *   onStart={() => startTimer()}
- *   onStop={() => stopTimer()}
- * />
  */
 export function ControlButton({
   isRunning,
   onStart,
   onStop,
+  disabled = false,
 }: ControlButtonProps) {
   const handleClick = useCallback(() => {
     if (isRunning) {
@@ -61,12 +45,15 @@ export function ControlButton({
     <button
       type='button'
       onClick={handleClick}
+      disabled={disabled}
       aria-pressed={isRunning}
       aria-label={ariaLabel}
       className={`px-6 py-3 rounded-lg font-semibold text-white text-lg transition-colors focus:outline-2 focus:outline-offset-2 ${
-        isRunning
-          ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-red-500'
-          : 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-green-500'
+        disabled
+          ? 'bg-gray-400 dark:bg-gray-500 cursor-not-allowed'
+          : isRunning
+            ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-red-500'
+            : 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-green-500'
       }`}
     >
       <span className='mr-2'>{buttonIcon}</span>

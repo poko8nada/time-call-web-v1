@@ -10,6 +10,7 @@ interface TimerControlsProps {
   onStart: () => void
   onStop: () => void
   onIntervalChange: (interval: number) => void
+  isAvailable: boolean
 }
 
 export function TimerControls({
@@ -18,6 +19,7 @@ export function TimerControls({
   onStart,
   onStop,
   onIntervalChange,
+  isAvailable,
 }: TimerControlsProps) {
   return (
     <div className='space-y-6'>
@@ -37,6 +39,7 @@ export function TimerControls({
           isRunning={isRunning}
           onStart={onStart}
           onStop={onStop}
+          disabled={!isAvailable}
         />
       </div>
     </div>

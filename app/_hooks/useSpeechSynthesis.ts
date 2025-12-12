@@ -155,6 +155,7 @@ async function speakUtterance(
 
 type UseSpeechSynthesisReturn = {
   isSupported: boolean
+  isAvailable: boolean
   playSpeech: (text: string) => Promise<Result<void, string>>
   voices: SpeechSynthesisVoice[]
   selectedVoice: SpeechSynthesisVoice | null
@@ -177,6 +178,7 @@ export function useSpeechSynthesis(
   const [speechVolume, setSpeechVolume] = useState(() => {
     return Math.max(0, Math.min(1, defaultVolume))
   })
+  const [isAvailable, setIsAvailable] = useState(false)
   const currentUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
 
   useEffect(() => {
@@ -187,14 +189,17 @@ export function useSpeechSynthesis(
       if (result.ok) {
         let voicesToSet = result.value
         // DEBUG: Temporarily set empty to test empty state UI
-        const DEBUG_EMPTY_VOICES = true
-        if (DEBUG_EMPTY_VOICES) voicesToSet = []
+        // const DEBUG_EMPTY_VOICES = true
+        // if (DEBUG_EMPTY_VOICES) voicesToSet = []
 
         setVoices(voicesToSet)
+        // FR-18: Set isAvailable based on voices availability
+        setIsAvailable(voicesToSet.length > 0)
         // FR-17: VOICE_PRESETS order defines priority, select first filtered voice
         setSelectedVoice(voicesToSet[0] ?? null)
       } else {
         console.error('Failed to load voices:', result.error)
+        setIsAvailable(false)
       }
     })
     return () => {
@@ -220,6 +225,11 @@ export function useSpeechSynthesis(
     async (text: string): Promise<Result<void, string>> => {
       if (!isSupported) {
         return err('speechSynthesis not supported')
+      }
+
+      // FR-18: Check if voices are available
+      if (!isAvailable) {
+        return err('No voice available')
       }
 
       const ss = (window as Window & { speechSynthesis: SpeechSynthesis })
@@ -259,11 +269,12 @@ export function useSpeechSynthesis(
 
       return result
     },
-    [isSupported, selectedVoice, speechVolume],
+    [isSupported, isAvailable, selectedVoice, speechVolume],
   )
 
   return {
     isSupported,
+    isAvailable,
     voices,
     selectedVoice,
     setSelectedVoice,
