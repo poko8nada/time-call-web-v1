@@ -145,10 +145,10 @@
 
 ### Task 17: Voice Unavailable Error Handling
 
-- [ ] `app/_components/VoiceUnavailableDialog.tsx` - エラーダイアログコンポーネント **(FR-18)**
-- [ ] `app/_hooks/useSpeechSynthesis.ts` - `isAvailable` フラグ追加 **(FR-18 Enhanced)**
-- [ ] `app/_features/TimeCallService/index.tsx` - エラーダイアログ統合 **(FR-18 Integration)**
-- [ ] `app/_features/TimeCallService/TimerControls.tsx` - start button disabled prop **(FR-18 Integration)**
+- [x] `app/_components/VoiceUnavailableDialog.tsx` - エラーダイアログコンポーネント **(FR-18)**
+- [x] `app/_hooks/useSpeechSynthesis.ts` - `isAvailable` フラグ追加 **(FR-18 Enhanced)**
+- [x] `app/_features/TimeCallService/index.tsx` - エラーダイアログ統合 **(FR-18 Integration)**
+- [x] `app/_features/TimeCallService/TimerControls.tsx` - start button disabled prop **(FR-18 Integration)**
 
 **依存関係**: Task 13 (voicePresets.ts 完成), Task 9 (TimeCallService)  
 **成果物**:
