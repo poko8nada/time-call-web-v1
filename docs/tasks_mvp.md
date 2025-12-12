@@ -110,7 +110,6 @@
 - [x] `app/_features/TimeCallService/index.tsx` - サービス全体統合 **(FR-10)**
 - [x] `app/_features/TimeCallService/TimerControls.tsx` - タイマー制御UI統合 **(FR-03.5)**
 - [x] `app/_features/TimeCallService/AudioSettings.tsx` - オーディオ設定統合
-- [ ] NextCallTimeDisplay と CurrentIntervalDisplay の統合 **(FR-15, FR-16)**
 
 **依存関係**: Task 5 (useTimeCallTimer.ts), Task 6 (DigitalClock.tsx, VolumeControl.tsx), Task 7 (IntervalSelector.tsx, ControlButton.tsx, VoiceSelector.tsx), Task 8 (SettingsPanel.tsx), Task 13 (NextCallTimeDisplay.tsx, CurrentIntervalDisplay.tsx)  
 **成果物**: 全フック・コンポーネントの統合、タイマー連携制御。TimeCallService/index.tsx が完全な統合を実現し、TimerControls.tsx と AudioSettings.tsx がUI群を組織化。NextCallTimeDisplay と CurrentIntervalDisplay を配置  
