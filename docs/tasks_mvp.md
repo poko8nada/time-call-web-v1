@@ -119,28 +119,53 @@
 
 ### Task 13: プリセット音声定義と Next Call Time 表示
 
-- [ ] `utils/voicePresets.ts` - 推奨音声プリセット定義 **(FR-17)**
-- [ ] `app/_components/NextCallTimeDisplay.tsx` - 次の読み上げ時刻表示 **(FR-16)**
-- [ ] `app/_components/CurrentIntervalDisplay.tsx` - タイマー実行中の現在間隔表示 **(FR-15)**
-- [ ] `app/_hooks/useSpeechSynthesis.ts` - プリセット音声フィルタリング機能追加 **(FR-07 Enhanced)**
+- [x] `utils/voicePresets.ts` - 推奨音声プリセット定義 **(FR-17)**
+- [x] `app/_components/NextCallTimeDisplay.tsx` - 次の読み上げ時刻表示 **(FR-16)**
+- [x] `app/_components/CurrentIntervalDisplay.tsx` - タイマー実行中の現在間隔表示 **(FR-15)**
+- [x] `app/_hooks/useSpeechSynthesis.ts` - プリセット音声フィルタリング機能と優先度設定 **(FR-07 Enhanced)**
 
 **依存関係**: Task 4 (useSpeechSynthesis.ts の基礎), Task 5 (useTimeCallTimer.ts)  
 **成果物**:
 
-- `voicePresets.ts`: ハードコードされた推奨音声配列。形式: `const VOICE_PRESETS = [{ name: string, lang: string }, ...]`
+- `voicePresets.ts`: ハードコードされた推奨音声配列（優先度順）。形式: `const VOICE_PRESETS = [{ name: string, lang: string }, ...]`。配列の上から順がプライオリティを定義
 - `NextCallTimeDisplay.tsx`: `nextCallTime`を「次の読み上げ: HH:MM:SS」形式で表示。Props: `{ nextCallTime: Date | null, isRunning: boolean }`
 - `CurrentIntervalDisplay.tsx`: 実行中に「現在: ○分間隔」と表示。Props: `{ isRunning: boolean, interval: number }`
-- `useSpeechSynthesis.ts` 更新: `loadVoices()`後にプリセットリストでフィルタリング。マッチなしの場合は空配列
+- `useSpeechSynthesis.ts` 更新: `loadVoices()`後にプリセットリストでフィルタリング、フィルタ済み音声リストの最初の要素を自動選択（`selectPreferredVoice()` 関数削除、プリセット優先度に統一）
 
 **完了条件**:
 
-- プリセット音声取得後、フィルタリングが正しく動作すること
+- プリセット音声取得後、フィルタリングが正しく動作すること（VOICE_PRESETS順序に従う）
+- フィルタ済み音声リストの最初の音声が自動選択されること
 - NextCallTimeDisplay が実行中のみ表示されること
 - CurrentIntervalDisplay が実行中のみ表示されること
 - プリセット音声がない場合は`voices`が空配列になること
 - 実ブラウザで全機能が動作確認できること
 
 **テスト**: 単体テスト不要（UI連携）
+
+### Task 17: Voice Unavailable Error Handling
+
+- [ ] `app/_components/VoiceUnavailableDialog.tsx` - エラーダイアログコンポーネント **(FR-18)**
+- [ ] `app/_hooks/useSpeechSynthesis.ts` - `isAvailable` フラグ追加 **(FR-18 Enhanced)**
+- [ ] `app/_features/TimeCallService/index.tsx` - エラーダイアログ統合 **(FR-18 Integration)**
+- [ ] `app/_features/TimeCallService/TimerControls.tsx` - start button disabled prop **(FR-18 Integration)**
+
+**依存関係**: Task 13 (voicePresets.ts 完成), Task 9 (TimeCallService)  
+**成果物**:
+
+- `VoiceUnavailableDialog.tsx`: voices が空の場合に表示するエラーダイアログコンポーネント。Props: `{ isOpen: boolean }`
+- `useSpeechSynthesis.ts` 更新: `isAvailable: boolean` を返す（`voices.length > 0` の場合 true）、`playSpeech()` が voices 空の場合にエラーを返す
+- `TimeCallService/index.tsx` 更新: `useSpeechSynthesis` から `isAvailable` を受け取り、false の場合 `VoiceUnavailableDialog` を表示
+- `TimerControls.tsx` 更新: `disabled` prop を受け取り、start button に反映
+
+**完了条件**:
+
+- voices が空の場合、ページロード直後にエラーダイアログが表示されること
+- エラーダイアログが表示されている間、start button が disabled になること
+- `playSpeech()` が voices 空の場合にエラーを返すこと
+- 実ブラウザで empty voices 環境にて確認できること
+
+**テスト**: 単体テスト不要（UI連携・エラーハンドリング）
 
 ### Task 10: ページ構成・スタイリング
 
@@ -149,8 +174,8 @@
 - [x] `app/globals.css` - グローバルスタイル
 - [x] ライセンスクレジット表示 - フッターにOtoLogic (CC BY 4.0)を表記 **(FR-14)**
 
-**依存関係**: Task 9 (TimeCallService)  
-**成果物**: 完成したトップページ、レスポンシブレイアウト、ライセンス表記。FR-14 は page.tsx フッター内に実装済み  
+**依存関係**: Task 9 (TimeCallService), Task 17 (Voice Error Handling)  
+**成果物**: 完成したトップページ、レスポンシブレイアウト、ライセンス表記。FR-14 は page.tsx フッター内に実装済み
 **完了条件**: 実ブラウザで PC・スマホで正しく表示されること、ライセンスクレジットが正しく表示されること  
 **テスト**: 単体テスト不要（ページ構成）
 
@@ -168,7 +193,7 @@
   - Screen reader対応確認（aria-label, role属性）
   - 色コントラスト確認（WCAG 2.1 AA基準）
 
-**依存関係**: Task 13 (NextCallTimeDisplay, CurrentIntervalDisplay)  
+**依存関係**: Task 13 (NextCallTimeDisplay, CurrentIntervalDisplay), Task 17 (Voice Error Dialog)  
 **成果物**: デザインシステム統一、レスポンシブ確認、アクセシビリティ基準達成  
 **完了条件**: PC・タブレット・スマホで正しく表示されること、axe DevTools で A基準合格  
 **テスト**: 手動確認のみ
@@ -191,7 +216,7 @@
 - [ ] 最小限の単体テスト実行
   - `pnpm test` - 全テストがパス
 
-**依存関係**: Task 14完了  
+**依存関係**: Task 14完了, Task 17完了
 **成果物**: 互換性レポート、パフォーマンスレポート
 **完了条件**: 全ブラウザで動作確認完了、最小限のテストがパス  
 **注**: E2E テストは実施しない（copilot-instructions.md ポリシー準拠）
@@ -236,7 +261,7 @@
 ```
 Task 1 → Task 2 → Task 3/4 (並行) → Task 5 → Task 6/7 (並行) → Task 8 → Task 9
 → Task 13 (プリセット音声・Next Call Time・Current Interval) → Task 9更新統合
-→ Task 14 (UI/UX Polish) → Task 15 (互換性確認) → Task 16 (デプロイ)
+→ Task 17 (Voice Error Handling) → Task 14 (UI/UX Polish) → Task 15 (互換性確認) → Task 16 (デプロイ)
 ```
 
 ### リスク管理

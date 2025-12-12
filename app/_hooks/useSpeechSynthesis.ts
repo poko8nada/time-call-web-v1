@@ -73,28 +73,6 @@ async function loadVoices(): Promise<Result<SpeechSynthesisVoice[], string>> {
   return ok(filteredVoices)
 }
 
-function selectPreferredVoice(
-  voices: SpeechSynthesisVoice[],
-  preferLangs = ['ja-JP', 'ja'],
-) {
-  if (voices.length === 0) return null
-  for (const lang of preferLangs) {
-    const found = voices.find(v => v.lang === lang)
-    if (found) return found
-  }
-
-  for (const voice of voices) {
-    if (voice.lang.startsWith('ja')) return voice
-  }
-
-  const heuristics = /google|meiko|hikari|yukari|aki|kiritan/i
-  const nameMatch = voices.find(v => heuristics.test(v.name))
-  if (nameMatch) return nameMatch
-
-  // Fallback to the first voice
-  return voices[0] ?? null
-}
-
 function createUtterance(): Result<SpeechSynthesisUtterance, string> {
   try {
     const utterance = new SpeechSynthesisUtterance()
@@ -207,10 +185,14 @@ export function useSpeechSynthesis(
     loadVoices().then(result => {
       if (!mounted) return
       if (result.ok) {
-        setVoices(result.value)
-        const receivedVoices = result.ok ? result.value : []
-        const prefVoise = selectPreferredVoice(receivedVoices)
-        setSelectedVoice(prefVoise)
+        let voicesToSet = result.value
+        // DEBUG: Temporarily set empty to test empty state UI
+        const DEBUG_EMPTY_VOICES = true
+        if (DEBUG_EMPTY_VOICES) voicesToSet = []
+
+        setVoices(voicesToSet)
+        // FR-17: VOICE_PRESETS order defines priority, select first filtered voice
+        setSelectedVoice(voicesToSet[0] ?? null)
       } else {
         console.error('Failed to load voices:', result.error)
       }

@@ -105,7 +105,8 @@
    - 詳細:
      - `speechSynthesis.getVoices()`で全音声リスト取得
      - `voicePresets.ts`で定義されたハードコード音声配列でフィルタリング
-     - プリセットに該当する音声のみUIに提供
+     - プリセットに該当する音声のみUIに提供（`VOICE_PRESETS`内の順序がプライオリティ定義）
+     - 初期選択: フィルタ済み音声リストの最初の音声を自動選択（プリセット優先度に従う）
      - 該当音声がない場合、リストは空（アプリは動作しない）
      - 選択された音声で`SpeechSynthesisUtterance`を生成
      - 音量調整（0.0〜1.0）
@@ -113,7 +114,7 @@
      - 読み上げ中断機能（cancel）
      - エラーハンドリング（interrupted は警告レベル、その他はエラーレベル）
    - 戻り値: `{ isSupported: boolean, playSpeech: (text: string) => Promise<Result<void, string>>, voices: SpeechSynthesisVoice[], selectedVoice: SpeechSynthesisVoice | null, setSelectedVoice: (voice: SpeechSynthesisVoice | null) => void, setSpeechVolume: (v: number) => void, cancelSpeech: () => void }`
-   - テスト観点: プリセット音声でフィルタリングが動作すること、読み上げが実行されること、Promiseが正しく解決されること、中止機能が動作すること
+   - テスト観点: プリセット音声でフィルタリングが動作すること、プリセット順序に従って初期音声が選択されること、読み上げが実行されること、Promiseが正しく解決されること、中止機能が動作すること
 
 #### 3.4. UI表示 (UI Display)
 
@@ -188,6 +189,23 @@
     - `useSpeechSynthesis.ts`でこのリストでフィルタリング
   - エクスポート: `const VOICE_PRESETS: Array<{ name: string; lang: string }>`
   - テスト観点: プリセット配列が正しい形式で定義されていること
+
+- **FR-18: Voice Unavailable Error Handling**
+  - 要件: プリセット音声が利用不可な環境での エラーハンドリング
+  - 詳細:
+    - ページロード直後（`useEffect`で voices 取得後）に voices が空である場合、エラーダイアログを表示
+    - エラーダイアログコンポーネント新規作成（`app/_components/VoiceUnavailableDialog.tsx`）
+    - メッセージ: 「申し訳ありません。このブラウザでは対応音声が見つかりません。Chrome 最新版、Firefox 最新版、Safari をお試しください。」
+    - `useSpeechSynthesis` から `isAvailable: boolean` を返す（`voices.length > 0` の場合 true）
+    - Timer start button を disabled にする（voices 空の場合）
+    - `playSpeech()` は voices 空の場合、エラーを返す（`err('No voice available')`）
+  - 新規ファイル:
+    - `app/_components/VoiceUnavailableDialog.tsx` - エラーダイアログコンポーネント
+  - 修正ファイル:
+    - `app/_hooks/useSpeechSynthesis.ts` - `isAvailable` フラグ追加、playSpeech() エラーハンドリング
+    - `app/_features/TimeCallService/index.tsx` - エラーダイアログ表示ロジック、start button disabled
+    - `app/_features/TimeCallService/TimerControls.tsx` - start button disabled prop
+  - テスト観点: voices が空の場合にエラーダイアログが表示されること、start button が disabled になること
 
 #### 3.5. 統合・設定 (Integration & Settings)
 
