@@ -34,14 +34,15 @@ export function CurrentIntervalDisplay({
   isRunning,
   interval,
 }: CurrentIntervalDisplayProps) {
-  // Only render when timer is running
-  if (!isRunning) {
-    return null
-  }
-
   return (
-    <div className='mb-4 p-3 bg-blue-50 dark:bg-blue-950 rounded-md border border-blue-200 dark:border-blue-800'>
-      <p className='text-sm font-medium text-blue-900 dark:text-blue-100'>
+    <div
+      className={`mb-4 p-3 bg-primary-50 dark:bg-primary-950 rounded-md border border-primary-200 dark:border-primary-800 transition-soft ${
+        isRunning
+          ? 'opacity-100 visible h-auto duration-300'
+          : 'opacity-0 invisible h-0 duration-300'
+      }`}
+    >
+      <p className='text-sm font-medium text-primary-900 dark:text-primary-100'>
         現在: <span className='font-bold text-lg'>{interval}</span>
         分間隔で実行中
       </p>

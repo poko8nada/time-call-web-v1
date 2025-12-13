@@ -38,7 +38,7 @@ export function VolumeControl({
         {/* Label */}
         <label
           htmlFor={`volume-${label}`}
-          className='text-sm font-semibold text-foreground dark:text-foreground'
+          className='text-sm font-semibold text-foreground dark:text-foreground block'
         >
           {label}
         </label>
@@ -52,7 +52,7 @@ export function VolumeControl({
           value={masterVolume}
           onChange={handleChange}
           disabled={disabled}
-          className='w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg accent-blue-500 dark:accent-blue-400 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
+          className='w-full h-2 bg-secondary-200 dark:bg-secondary-700 rounded-lg accent-primary-600 dark:accent-primary-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
           aria-label={label}
           aria-valuemin={0}
           aria-valuemax={100}
@@ -61,10 +61,10 @@ export function VolumeControl({
 
         {/* Value Display */}
         <div className='flex justify-between items-center'>
-          <span className='text-xs text-gray-600 dark:text-gray-400'>
+          <span className='text-xs text-secondary-600 dark:text-secondary-400'>
             {masterVolume} / 100
           </span>
-          <span className='text-xs text-gray-600 dark:text-gray-400'>
+          <span className='text-xs text-secondary-600 dark:text-secondary-400'>
             {Math.round((masterVolume / 100) * 100)}%
           </span>
         </div>
@@ -72,7 +72,7 @@ export function VolumeControl({
 
       {/* Optional Description */}
       {description && (
-        <p className='mt-2 text-xs text-gray-600 dark:text-gray-400'>
+        <p className='mt-2 text-xs text-secondary-600 dark:text-secondary-400'>
           {description}
         </p>
       )}

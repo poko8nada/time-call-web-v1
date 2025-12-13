@@ -59,11 +59,11 @@ export function IntervalSelector({
       className='border-0 p-0'
       aria-label='Time call interval selection'
     >
-      <legend className='text-sm font-semibold text-foreground dark:text-foreground mb-3'>
+      <legend className='text-sm font-semibold text-foreground dark:text-foreground mb-3 block'>
         読み上げ間隔
       </legend>
 
-      <div className='flex flex-wrap gap-2 sm:gap-3'>
+      <div className='flex flex-wrap gap-2 sm:gap-3 md:gap-4'>
         {INTERVAL_OPTIONS.map(option => (
           <label
             key={option}
@@ -75,11 +75,11 @@ export function IntervalSelector({
               value={option}
               checked={interval === option}
               onChange={handleChange}
-              className='w-4 h-4 cursor-pointer accent-blue-500 dark:accent-blue-400'
-              aria-label={`${option}分`}
+              className='w-4 h-4 cursor-pointer accent-primary-600 dark:accent-primary-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500'
+              aria-label={`${option}分間隔で読み上げ`}
               disabled={disabled}
             />
-            <span className='ml-2 text-sm font-medium text-foreground dark:text-foreground group-disabled:opacity-50 group-disabled:cursor-not-allowed'>
+            <span className='ml-2 text-xs sm:text-sm font-medium text-foreground dark:text-foreground group-disabled:opacity-50 group-disabled:cursor-not-allowed'>
               {option}分
             </span>
           </label>

@@ -34,7 +34,7 @@ export function SettingsPanel({ children }: SettingsPanelProps) {
 
   if (!mounted) {
     return (
-      <div className='w-full p-6 bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-700 shadow-sm'>
+      <div className='w-full p-6 sm:p-8 bg-background dark:bg-background rounded-lg border border-secondary-200 dark:border-secondary-800 shadow-sm'>
         <h2 className='text-lg font-bold text-foreground dark:text-foreground mb-6'>
           設定
         </h2>
@@ -44,7 +44,7 @@ export function SettingsPanel({ children }: SettingsPanelProps) {
   }
 
   return (
-    <div className='w-full p-6 bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-700 shadow-sm'>
+    <div className='w-full p-6 sm:p-8 bg-background dark:bg-background rounded-lg border border-secondary-200 dark:border-secondary-800 shadow-sm'>
       <h2 className='text-lg font-bold text-foreground dark:text-foreground mb-6'>
         設定
       </h2>

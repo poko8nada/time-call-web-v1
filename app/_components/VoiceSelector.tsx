@@ -61,7 +61,7 @@ export function VoiceSelector({
       <select
         value={voices.indexOf(selectedVoice || voices[0])}
         onChange={handleVoiceChange}
-        className='w-full px-4 py-2 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-600 rounded-md text-foreground dark:text-foreground focus:outline-2 focus:outline-blue-500 focus:outline-offset-0'
+        className='w-full px-4 py-2 bg-background dark:bg-secondary-800 border border-secondary-300 dark:border-secondary-600 rounded-md text-foreground dark:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
         aria-label='音声の選択'
       >
         {voices.map((voice, index) => (
@@ -70,7 +70,7 @@ export function VoiceSelector({
           </option>
         ))}
       </select>
-      <p className='mt-2 text-xs text-gray-600 dark:text-gray-400'>
+      <p className='mt-2 text-xs text-secondary-600 dark:text-secondary-400'>
         選択した音声で時刻が読み上げられます
       </p>
     </div>
