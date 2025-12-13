@@ -187,7 +187,7 @@ export function useSpeechSynthesis(
     loadVoices().then(result => {
       if (!mounted) return
       if (result.ok) {
-        let voicesToSet = result.value
+        const voicesToSet = result.value
         // DEBUG: Temporarily set empty to test empty state UI
         // const DEBUG_EMPTY_VOICES = true
         // if (DEBUG_EMPTY_VOICES) voicesToSet = []

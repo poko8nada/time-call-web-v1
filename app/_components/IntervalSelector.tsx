@@ -91,6 +91,7 @@ export function IntervalSelector({
                   : 'shadow-neuro-flat hover:shadow-neuro-raised'
               }
               ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
+              focus-within:ring-2 focus-within:ring-cyan-500/30 focus-within:ring-offset-2 focus-within:ring-offset-[#2d3748]
             `}
           >
             <input

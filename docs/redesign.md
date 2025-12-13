@@ -429,12 +429,18 @@ className =
 - `app/_components/VoiceSelector.tsx` - flat shadow select with focus state
 - `app/_features/TimeCallService/AudioSettings.tsx` - accordion hover transition
 
-### Phase 4: Polish (TODO)
+### Phase 4: Polish ✅ COMPLETED
 
-- [ ] Hover states on all interactive elements
-- [ ] Active/pressed states refinement
-- [ ] Focus indicators with ring
-- [ ] Smooth transitions (200-300ms)
+- [x] Hover states on all interactive elements
+- [x] Active/pressed states refinement
+- [x] Focus indicators with ring (focus-visible)
+- [x] Smooth transitions (200-300ms)
+
+**Files modified:**
+
+- `app/_components/IntervalSelector.tsx` - added focus-within ring for keyboard navigation
+- `app/_components/VolumeControl.tsx` - applied neumorphic style (pressed shadow, cyan accent, proper text colors)
+- `app/_components/TestPlayButton.tsx` - applied gradient button with neumorphic shadows and hover/active/focus states
 
 ### Phase 5: Testing (TODO)
 
