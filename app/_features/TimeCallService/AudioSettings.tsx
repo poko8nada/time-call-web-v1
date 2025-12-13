@@ -31,20 +31,20 @@ export function AudioSettings({
   const contentId = useId()
 
   return (
-    <div className='bg-secondary-50 dark:bg-secondary-900 rounded-lg border border-secondary-200 dark:border-secondary-800'>
+    <div className='bg-[#2d3748] rounded-2xl shadow-neuro-flat hover:shadow-neuro-raised transition-shadow duration-300 border-0'>
       {/* Accordion Header */}
       <button
         type='button'
         onClick={() => setIsOpen(!isOpen)}
-        className='w-full flex items-center justify-between p-4 sm:p-6 text-left hover:bg-secondary-100 dark:hover:bg-secondary-800 transition-colors rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
+        className='w-full flex items-center justify-between p-4 sm:p-6 text-left transition-colors rounded-2xl focus-visible:ring-2 focus-visible:ring-cyan-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2d3748]'
         aria-expanded={isOpen}
         aria-controls={contentId}
       >
-        <h2 className='text-base sm:text-lg font-semibold text-foreground dark:text-foreground'>
+        <h2 className='text-base sm:text-lg font-semibold text-[#e2e8f0]'>
           音声設定
         </h2>
         <svg
-          className={`w-5 h-5 text-secondary-600 dark:text-secondary-400 transition-transform duration-300 ${
+          className={`w-5 h-5 text-[#94a3b8] transition-transform duration-300 ${
             isOpen ? 'rotate-180' : ''
           }`}
           fill='none'

@@ -416,12 +416,18 @@ className =
 - `app/_components/NextCallTimeDisplay.tsx` - pressed style
 - `app/_components/ControlButton.tsx` - gradient button with neumorphic shadows
 
-### Phase 3: Secondary Components (TODO - Next Session)
+### Phase 3: Secondary Components ✅ COMPLETED
 
-- [ ] Interval Selector - flat shadow, neumorphic style
-- [ ] Voice Selector - flat shadow, neumorphic style
-- [ ] Accordion - flat to raised transition on hover
-- [ ] Input/Select focus states with pressed shadow
+- [x] Interval Selector - flat shadow, neumorphic button style with pressed state
+- [x] Voice Selector - flat shadow, focus pressed state
+- [x] Accordion - flat to raised transition on hover
+- [x] Input/Select focus states with pressed shadow
+
+**Files modified:**
+
+- `app/_components/IntervalSelector.tsx` - neumorphic radio buttons
+- `app/_components/VoiceSelector.tsx` - flat shadow select with focus state
+- `app/_features/TimeCallService/AudioSettings.tsx` - accordion hover transition
 
 ### Phase 4: Polish (TODO)
 
