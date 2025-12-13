@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback } from 'react'
-import { PlayIcon, PauseIcon } from './PlayIcon'
+import { PauseIcon, PlayIcon } from './PlayIcon'
 
 interface ControlButtonProps {
   isRunning: boolean
@@ -43,16 +43,16 @@ export function ControlButton({
   const ariaLabel = isRunning ? 'タイマーを停止' : 'タイマーを開始'
 
   const baseClasses =
-    'btn-enhanced px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-white text-sm sm:text-base md:text-lg flex items-center justify-center gap-2 sm:gap-3'
+    'px-12 py-4 rounded-full font-semibold text-white text-lg flex items-center justify-center gap-3 transition-all duration-200'
 
   const disabledClasses =
-    'bg-secondary-400 dark:bg-secondary-600 cursor-not-allowed opacity-60'
+    'bg-[#64748b] cursor-not-allowed opacity-50 shadow-neuro-flat'
 
   const runningClasses =
-    'bg-gradient-to-br from-error-500 to-error-600 hover:from-error-600 hover:to-error-700 dark:from-error-600 dark:to-error-700 dark:hover:from-error-700 dark:hover:to-error-800 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-error-500 shadow-md hover:shadow-lg'
+    'bg-gradient-to-br from-[#f43f5e] to-[#dc2626] shadow-neuro-raised hover:shadow-neuro-hover active:shadow-neuro-pressed hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-cyan-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2d3748]'
 
   const stoppedClasses =
-    'bg-gradient-to-br from-success-500 to-success-600 hover:from-success-600 hover:to-success-700 dark:from-success-600 dark:to-success-700 dark:hover:from-success-700 dark:hover:to-success-800 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-success-500 shadow-md hover:shadow-lg'
+    'bg-gradient-to-br from-[#06b6d4] to-[#a855f7] shadow-neuro-raised hover:shadow-neuro-hover active:shadow-neuro-pressed hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-cyan-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2d3748]'
 
   const buttonClasses = `${baseClasses} ${
     disabled ? disabledClasses : isRunning ? runningClasses : stoppedClasses
@@ -60,18 +60,18 @@ export function ControlButton({
 
   return (
     <button
-      type="button"
+      type='button'
       onClick={handleClick}
       disabled={disabled}
       aria-pressed={isRunning}
       aria-label={ariaLabel}
       className={buttonClasses}
     >
-      <span className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center">
+      <span className='w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center'>
         {isRunning ? (
-          <PauseIcon className="w-full h-full" />
+          <PauseIcon className='w-full h-full' />
         ) : (
-          <PlayIcon className="w-full h-full" />
+          <PlayIcon className='w-full h-full' />
         )}
       </span>
       {buttonLabel}

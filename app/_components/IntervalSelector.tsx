@@ -17,6 +17,11 @@ interface IntervalSelectorProps {
    * Disable the selector (e.g., when timer is running)
    */
   disabled?: boolean
+
+  /**
+   * Compact mode for horizontal Quick Settings bar
+   */
+  compact?: boolean
 }
 
 const INTERVAL_OPTIONS = [1, 5, 10, 15, 30, 60]
@@ -44,6 +49,7 @@ export function IntervalSelector({
   interval,
   onChange,
   disabled = false,
+  compact = false,
 }: IntervalSelectorProps) {
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,15 +65,34 @@ export function IntervalSelector({
       className='border-0 p-0'
       aria-label='Time call interval selection'
     >
-      <legend className='text-sm font-semibold text-foreground dark:text-foreground mb-3 block'>
+      <legend
+        className={`font-semibold text-[#e2e8f0] block ${
+          compact ? 'text-xs mb-2' : 'text-sm mb-3'
+        }`}
+      >
         読み上げ間隔
       </legend>
 
-      <div className='flex flex-wrap gap-2 sm:gap-3 md:gap-4'>
+      <div
+        className={`flex flex-wrap ${compact ? 'gap-2' : 'gap-2 sm:gap-3 md:gap-4'}`}
+      >
         {INTERVAL_OPTIONS.map(option => (
           <label
             key={option}
-            className='flex items-center cursor-pointer group'
+            className={`
+              flex items-center justify-center
+              px-4 py-2 rounded-xl
+              bg-[#2d3748]
+              cursor-pointer
+              transition-all duration-200
+              ${
+                interval === option
+                  ? 'shadow-neuro-pressed'
+                  : 'shadow-neuro-flat hover:shadow-neuro-raised'
+              }
+              ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
+              focus-within:ring-2 focus-within:ring-cyan-500/30 focus-within:ring-offset-2 focus-within:ring-offset-[#2d3748]
+            `}
           >
             <input
               type='radio'
@@ -75,11 +100,15 @@ export function IntervalSelector({
               value={option}
               checked={interval === option}
               onChange={handleChange}
-              className='w-4 h-4 cursor-pointer accent-primary-600 dark:accent-primary-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500'
+              className='sr-only'
               aria-label={`${option}分間隔で読み上げ`}
               disabled={disabled}
             />
-            <span className='ml-2 text-xs sm:text-sm font-medium text-foreground dark:text-foreground group-disabled:opacity-50 group-disabled:cursor-not-allowed'>
+            <span
+              className={`text-xs sm:text-sm font-medium ${
+                interval === option ? 'text-[#06b6d4]' : 'text-[#e2e8f0]'
+              }`}
+            >
               {option}分
             </span>
           </label>

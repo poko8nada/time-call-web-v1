@@ -29,7 +29,11 @@ export function DigitalClock({ currentTime }: { currentTime: Date }) {
   if (!isMounted) {
     return (
       <div className='flex items-center justify-center w-full'>
-        <time className='font-mono font-bold tracking-wider text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-foreground dark:text-foreground invisible' aria-hidden='true' style={{ textShadow: '0 0 20px rgba(0, 0, 0, 0.1)' }}>
+        <time
+          className='font-mono font-bold tracking-tight text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-[#e2e8f0] invisible'
+          aria-hidden='true'
+          style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)' }}
+        >
           00:00:00
         </time>
       </div>
@@ -42,12 +46,11 @@ export function DigitalClock({ currentTime }: { currentTime: Date }) {
     <div className='flex items-center justify-center w-full px-4'>
       <time
         dateTime={currentTime.toISOString()}
-        className='font-mono font-bold tracking-wider text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-foreground dark:text-foreground drop-shadow-lg'
+        className='font-mono font-bold tracking-tight text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-[#e2e8f0]'
         role='status'
         aria-label={`現在時刻: ${displayTime}`}
         style={{
-          textShadow: '0 4px 12px rgba(0, 0, 0, 0.15), 0 0 20px rgba(79, 70, 229, 0.1)',
-          letterSpacing: '0.05em',
+          textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
         }}
       >
         {displayTime}

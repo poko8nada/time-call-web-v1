@@ -38,7 +38,7 @@ export function VolumeControl({
         {/* Label */}
         <label
           htmlFor={`volume-${label}`}
-          className='text-sm font-semibold text-foreground dark:text-foreground block'
+          className='text-sm font-semibold text-[#e2e8f0] block'
         >
           {label}
         </label>
@@ -52,7 +52,7 @@ export function VolumeControl({
           value={masterVolume}
           onChange={handleChange}
           disabled={disabled}
-          className='w-full h-2 bg-secondary-200 dark:bg-secondary-700 rounded-lg accent-primary-600 dark:accent-primary-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
+          className='w-full h-2 bg-[#2d3748] rounded-lg shadow-neuro-pressed accent-cyan-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-cyan-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2d3748] transition-all duration-200'
           aria-label={label}
           aria-valuemin={0}
           aria-valuemax={100}
@@ -61,10 +61,8 @@ export function VolumeControl({
 
         {/* Value Display */}
         <div className='flex justify-between items-center'>
-          <span className='text-xs text-secondary-600 dark:text-secondary-400'>
-            {masterVolume} / 100
-          </span>
-          <span className='text-xs text-secondary-600 dark:text-secondary-400'>
+          <span className='text-xs text-[#94a3b8]'>{masterVolume} / 100</span>
+          <span className='text-xs text-[#94a3b8]'>
             {Math.round((masterVolume / 100) * 100)}%
           </span>
         </div>
@@ -72,9 +70,7 @@ export function VolumeControl({
 
       {/* Optional Description */}
       {description && (
-        <p className='mt-2 text-xs text-secondary-600 dark:text-secondary-400'>
-          {description}
-        </p>
+        <p className='mt-2 text-xs text-[#94a3b8]'>{description}</p>
       )}
     </div>
   )

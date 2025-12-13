@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { VoiceUnavailableDialog } from '@/app/_components/VoiceUnavailableDialog'
 import { DigitalClock } from '@/app/_components/DigitalClock'
+import { IntervalSelector } from '@/app/_components/IntervalSelector'
 import { NextCallTimeDisplay } from '@/app/_components/NextCallTimeDisplay'
+import { VoiceSelector } from '@/app/_components/VoiceSelector'
+import { VoiceUnavailableDialog } from '@/app/_components/VoiceUnavailableDialog'
 import { useBeepSound } from '@/app/_hooks/useBeepSound'
 import { useClock } from '@/app/_hooks/useClock'
 import { useSpeechSynthesis } from '@/app/_hooks/useSpeechSynthesis'
@@ -46,53 +48,73 @@ export function TimeCallService() {
       <VoiceUnavailableDialog isOpen={!isAvailable} />
 
       <main className='w-full max-w-2xl mx-auto space-y-6 sm:space-y-8 px-3 sm:px-4'>
-        {/* Header */}
-        <div className='text-center space-y-2'>
-          <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground dark:text-foreground drop-shadow-sm'>
+        {/* Header - Minimized */}
+        <div className='text-center space-y-1'>
+          <h1 className='text-base sm:text-lg font-bold text-[#e2e8f0]'>
             時刻読み上げサービス
           </h1>
-          <p className='text-xs sm:text-sm md:text-base text-secondary-600 dark:text-secondary-400'>
+          <p className='text-xs sm:text-sm text-[#94a3b8]'>
             指定した間隔で現在時刻をお知らせします
           </p>
         </div>
 
-        {/* Digital Clock Section */}
-        <div className='flex flex-col items-center justify-center py-6 sm:py-8 md:py-10 lg:py-16 bg-gradient-to-br from-secondary-50 to-secondary-100 dark:from-secondary-900 dark:to-secondary-800 rounded-lg border border-secondary-200 dark:border-secondary-700 shadow-elevated'>
-          <DigitalClock currentTime={currentTime} />
-          <NextCallTimeDisplay
-            nextCallTime={nextCallTime}
-            isRunning={isRunning}
-          />
-        </div>
+        {/* Main Timer Section - Unified with integrated button */}
+        <div className='flex flex-col items-center justify-between min-h-[50vh] sm:min-h-[55vh] py-8 sm:py-10 md:py-12 px-6 bg-[#2d3748] rounded-[32px] shadow-neuro-raised-lg border-0'>
+          {/* Digital Clock - Enlarged */}
+          <div className='flex-1 flex items-center justify-center w-full'>
+            <DigitalClock currentTime={currentTime} />
+          </div>
 
-        {/* Timer Control Section */}
-        <div className='space-y-4 sm:space-y-6 bg-secondary-50 dark:bg-secondary-900 p-4 sm:p-6 md:p-8 rounded-lg border border-secondary-200 dark:border-secondary-800'>
-          <h2 className='text-base sm:text-lg font-semibold text-foreground dark:text-foreground'>
-            タイマー制御
-          </h2>
+          {/* Next Call Time - Integrated below clock */}
+          <div className='mb-6'>
+            <NextCallTimeDisplay
+              nextCallTime={nextCallTime}
+              isRunning={isRunning}
+            />
+          </div>
 
+          {/* Control Button - Inside timer area */}
           <TimerControls
             isRunning={isRunning}
-            interval={interval}
             onStart={startTimer}
             onStop={stopTimer}
-            onIntervalChange={setInterval}
             isAvailable={isAvailable}
           />
         </div>
 
-        {/* Settings Panel */}
-        <div className='bg-secondary-50 dark:bg-secondary-900 p-4 sm:p-6 md:p-8 rounded-lg border border-secondary-200 dark:border-secondary-800'>
-          <AudioSettings
-            isSupported={isSupported}
-            voices={voices}
-            selectedVoice={selectedVoice}
-            onVoiceChange={setSelectedVoice}
-            masterVolume={masterVolume}
-            onSetMasterVolume={setMasterVolume}
-            onPlaySpeech={playSpeech}
-          />
+        {/* Quick Settings - Horizontal bar */}
+        <div className='flex flex-col sm:flex-row gap-4 sm:gap-6 items-stretch sm:items-center justify-center py-4 px-4 sm:px-6'>
+          {/* Interval Selector */}
+          <div className='flex-1 max-w-xs'>
+            <IntervalSelector
+              interval={interval}
+              onChange={setInterval}
+              disabled={isRunning}
+              compact={true}
+            />
+          </div>
+
+          {/* Voice Selector */}
+          <div className='flex-1 max-w-xs'>
+            <VoiceSelector
+              voices={voices}
+              selectedVoice={selectedVoice}
+              onVoiceChange={setSelectedVoice}
+              isSupported={isSupported}
+              disabled={isRunning}
+              compact={true}
+            />
+          </div>
         </div>
+
+        {/* Audio Settings - Accordion */}
+        <AudioSettings
+          isSupported={isSupported}
+          selectedVoice={selectedVoice}
+          masterVolume={masterVolume}
+          onSetMasterVolume={setMasterVolume}
+          onPlaySpeech={playSpeech}
+        />
       </main>
     </>
   )

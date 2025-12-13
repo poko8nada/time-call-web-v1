@@ -1,12 +1,14 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useId, useState } from 'react'
 
 interface VoiceSelectorProps {
   voices: SpeechSynthesisVoice[]
   selectedVoice: SpeechSynthesisVoice | null
   onVoiceChange: (voice: SpeechSynthesisVoice) => void
-  isSupported: boolean
+  isSupported?: boolean
+  disabled?: boolean
+  compact?: boolean
 }
 
 /**
@@ -27,9 +29,12 @@ export function VoiceSelector({
   voices,
   selectedVoice,
   onVoiceChange,
-  isSupported,
+  isSupported = true,
+  disabled = false,
+  compact = false,
 }: VoiceSelectorProps) {
   const [mounted, setMounted] = useState(false)
+  const selectId = useId()
 
   useEffect(() => {
     setMounted(true)
@@ -53,15 +58,21 @@ export function VoiceSelector({
   return (
     <div>
       <label
-        htmlFor='voice-select'
-        className='block text-sm font-semibold text-foreground dark:text-foreground mb-3'
+        htmlFor={selectId}
+        className={`block font-semibold text-[#e2e8f0] ${
+          compact ? 'text-xs mb-2' : 'text-sm mb-3'
+        }`}
       >
         音声選択
       </label>
       <select
+        id={selectId}
         value={voices.indexOf(selectedVoice || voices[0])}
         onChange={handleVoiceChange}
-        className='w-full px-4 py-2 bg-background dark:bg-secondary-800 border border-secondary-300 dark:border-secondary-600 rounded-md text-foreground dark:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
+        disabled={disabled}
+        className={`w-full bg-[#2d3748] border-0 rounded-xl text-[#e2e8f0] shadow-neuro-flat focus:shadow-neuro-pressed focus-visible:ring-2 focus-visible:ring-cyan-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2d3748] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 ${
+          compact ? 'px-3 py-1.5 text-sm' : 'px-4 py-2'
+        }`}
         aria-label='音声の選択'
       >
         {voices.map((voice, index) => (
@@ -70,9 +81,11 @@ export function VoiceSelector({
           </option>
         ))}
       </select>
-      <p className='mt-2 text-xs text-secondary-600 dark:text-secondary-400'>
-        選択した音声で時刻が読み上げられます
-      </p>
+      {!compact && (
+        <p className='mt-2 text-xs text-[#94a3b8]'>
+          選択した音声で時刻が読み上げられます
+        </p>
+      )}
     </div>
   )
 }

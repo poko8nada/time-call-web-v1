@@ -29,14 +29,14 @@ export function NextCallTimeDisplay({
 
   return (
     <div
-      className={`mt-3 sm:mt-4 md:mt-6 px-2 sm:px-4 transition-opacity transition-height duration-300 overflow-hidden ${
-        isRunning && nextCallTime ? 'opacity-100 h-auto' : 'opacity-0 h-0'
+      className={`min-h-[4rem] sm:min-h-[4.5rem] flex items-center justify-center px-2 sm:px-4 transition-opacity duration-300 ${
+        isRunning && nextCallTime ? 'opacity-100' : 'opacity-0'
       }`}
     >
-      <div className='bg-gradient-to-r from-primary-50/50 to-secondary-50/50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-lg p-3 sm:p-4 border border-primary-200/30 dark:border-primary-700/30 shadow-subtle'>
-        <p className='text-xs sm:text-sm md:text-base text-center text-secondary-600 dark:text-secondary-400'>
+      <div className='bg-[#2d3748] rounded-2xl px-6 py-3 shadow-neuro-pressed w-full'>
+        <p className='text-xs sm:text-sm md:text-base text-center text-[#94a3b8]'>
           次の読み上げ:{' '}
-          <span className='font-bold text-primary-600 dark:text-primary-400 tracking-wider'>
+          <span className='font-bold text-[#06b6d4] tracking-wider'>
             {timeString}
           </span>
         </p>
