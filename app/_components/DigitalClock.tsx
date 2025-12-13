@@ -29,7 +29,11 @@ export function DigitalClock({ currentTime }: { currentTime: Date }) {
   if (!isMounted) {
     return (
       <div className='flex items-center justify-center w-full'>
-        <time className='font-mono font-bold tracking-wider text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-foreground dark:text-foreground invisible' aria-hidden='true' style={{ textShadow: '0 0 20px rgba(0, 0, 0, 0.1)' }}>
+        <time
+          className='font-mono font-bold tracking-wider text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-foreground dark:text-foreground invisible'
+          aria-hidden='true'
+          style={{ textShadow: '0 0 20px rgba(0, 0, 0, 0.1)' }}
+        >
           00:00:00
         </time>
       </div>
@@ -46,7 +50,8 @@ export function DigitalClock({ currentTime }: { currentTime: Date }) {
         role='status'
         aria-label={`現在時刻: ${displayTime}`}
         style={{
-          textShadow: '0 4px 12px rgba(0, 0, 0, 0.15), 0 0 20px rgba(79, 70, 229, 0.1)',
+          textShadow:
+            '0 4px 12px rgba(0, 0, 0, 0.15), 0 0 20px rgba(79, 70, 229, 0.1)',
           letterSpacing: '0.05em',
         }}
       >

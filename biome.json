@@ -3,13 +3,23 @@
   "extends": [],
   "files": {
     "ignoreUnknown": true,
-    "includes": ["app/**/*", "components/**/*", "!test"]
+    "includes": [
+      "app/**/*.{ts,tsx,js,jsx}",
+      "components/**/*.{ts,tsx,js,jsx}",
+      "!test"
+    ]
   },
   "linter": {
     "rules": {
       "recommended": true,
       "nursery": {
         "useSortedClasses": "off"
+      },
+      "a11y": {
+        "useSemanticElements": "off"
+      },
+      "suspicious": {
+        "noUnknownAtRules": "off"
       },
       "correctness": {
         "noUnusedImports": "warn",

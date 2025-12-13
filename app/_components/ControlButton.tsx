@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback } from 'react'
-import { PlayIcon, PauseIcon } from './PlayIcon'
+import { PauseIcon, PlayIcon } from './PlayIcon'
 
 interface ControlButtonProps {
   isRunning: boolean
@@ -60,18 +60,18 @@ export function ControlButton({
 
   return (
     <button
-      type="button"
+      type='button'
       onClick={handleClick}
       disabled={disabled}
       aria-pressed={isRunning}
       aria-label={ariaLabel}
       className={buttonClasses}
     >
-      <span className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center">
+      <span className='w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center'>
         {isRunning ? (
-          <PauseIcon className="w-full h-full" />
+          <PauseIcon className='w-full h-full' />
         ) : (
-          <PlayIcon className="w-full h-full" />
+          <PlayIcon className='w-full h-full' />
         )}
       </span>
       {buttonLabel}

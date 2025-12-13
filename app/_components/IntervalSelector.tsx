@@ -17,6 +17,11 @@ interface IntervalSelectorProps {
    * Disable the selector (e.g., when timer is running)
    */
   disabled?: boolean
+
+  /**
+   * Compact mode for horizontal Quick Settings bar
+   */
+  compact?: boolean
 }
 
 const INTERVAL_OPTIONS = [1, 5, 10, 15, 30, 60]
@@ -44,6 +49,7 @@ export function IntervalSelector({
   interval,
   onChange,
   disabled = false,
+  compact = false,
 }: IntervalSelectorProps) {
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,11 +65,17 @@ export function IntervalSelector({
       className='border-0 p-0'
       aria-label='Time call interval selection'
     >
-      <legend className='text-sm font-semibold text-foreground dark:text-foreground mb-3 block'>
+      <legend
+        className={`font-semibold text-foreground dark:text-foreground block ${
+          compact ? 'text-xs mb-2' : 'text-sm mb-3'
+        }`}
+      >
         読み上げ間隔
       </legend>
 
-      <div className='flex flex-wrap gap-2 sm:gap-3 md:gap-4'>
+      <div
+        className={`flex flex-wrap ${compact ? 'gap-2' : 'gap-2 sm:gap-3 md:gap-4'}`}
+      >
         {INTERVAL_OPTIONS.map(option => (
           <label
             key={option}
