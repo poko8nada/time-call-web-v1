@@ -28,7 +28,9 @@ export function getAudioContext(): AudioContext {
 
   const AudioCtor = window.AudioContext ?? window.webkitAudioContext
   if (!AudioCtor) {
-    throw new Error('getAudioContext: Web Audio API is not supported in this environment')
+    throw new Error(
+      'getAudioContext: Web Audio API is not supported in this environment',
+    )
   }
 
   if (audioContextInstance) {

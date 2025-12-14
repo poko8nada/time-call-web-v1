@@ -10,7 +10,7 @@ import { useBeepSound } from '../../_hooks/useBeepSound'
  * - TODO: remove before merging to production or gate behind a dev-only flag.
  */
 export default function BeepTester() {
-  const { playBeep, stopBeep, volume, setVolume } = useBeepSound(0.5)
+  const { playBeep, stopBeep, setBeepVolume, beepVolume } = useBeepSound(0.5)
   const [lastAction, setLastAction] = useState<string | null>(null)
   const inputId = useId()
   console.debug('BeepTester loaded')
@@ -28,10 +28,10 @@ export default function BeepTester() {
   const handleVolumeChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const v = Math.max(0, Math.min(100, Number(e.target.value)))
-      setVolume(v / 100)
+      setBeepVolume(v / 100)
       setLastAction(`volume ${v}%`)
     },
-    [setVolume],
+    [setBeepVolume],
   )
 
   return (
@@ -76,7 +76,7 @@ export default function BeepTester() {
 
       <div className='mb-2'>
         <label htmlFor={inputId} className='block text-xs text-gray-600 mb-1'>
-          Volume: {Math.round(volume * 100)}%
+          Volume: {Math.round(beepVolume * 100)}%
         </label>
         <input
           id={inputId}
@@ -84,7 +84,7 @@ export default function BeepTester() {
           min={0}
           max={100}
           step={1}
-          value={Math.round(volume * 100)}
+          value={Math.round(beepVolume * 100)}
           onChange={handleVolumeChange}
           aria-label='beep volume'
           className='w-full'

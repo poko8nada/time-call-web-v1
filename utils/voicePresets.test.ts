@@ -1,9 +1,12 @@
-import { describe, it, expect } from 'vitest'
-import { filterVoicesByPresets, VOICE_PRESETS } from './voicePresets'
+import { describe, expect, it } from 'vitest'
+import { filterVoicesByPresets } from './voicePresets'
 
 describe('filterVoicesByPresets', () => {
   // Helper to create mock SpeechSynthesisVoice
-  const createMockVoice = (name: string, lang: string): SpeechSynthesisVoice => ({
+  const createMockVoice = (
+    name: string,
+    lang: string,
+  ): SpeechSynthesisVoice => ({
     name,
     lang,
     localService: true,
@@ -39,7 +42,10 @@ describe('filterVoicesByPresets', () => {
 
   it('should match voices by partial name (case-insensitive)', () => {
     const voices = [
-      createMockVoice('microsoft nanami online (natural) - japanese (japan)', 'ja-JP'),
+      createMockVoice(
+        'microsoft nanami online (natural) - japanese (japan)',
+        'ja-JP',
+      ),
     ]
     const filtered = filterVoicesByPresets(voices)
     expect(filtered).toHaveLength(1)

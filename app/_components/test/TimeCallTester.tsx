@@ -1,8 +1,10 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import { useClock } from '../../_hooks/useClock'
-import { useTimeCallTimer } from '../../_hooks/useTimeCallTimer'
+import { useTimeCallTimer } from '@/app/_features/TimeCallService/useTimeCallTimer'
+import { useBeepSound } from '@/app/_hooks/useBeepSound'
+import { useClock } from '@/app/_hooks/useClock'
+import { useSpeechSynthesis } from '@/app/_hooks/useSpeechSynthesis'
 
 /**
  * Dev-only TimeCallTester component
@@ -14,28 +16,36 @@ import { useTimeCallTimer } from '../../_hooks/useTimeCallTimer'
  */
 export default function TimeCallTester() {
   const { currentTime } = useClock()
-  const { isRunning, interval, setInterval, start, stop, nextCallTime } =
-    useTimeCallTimer()
+  const { playBeep } = useBeepSound(0.5)
+  const { playSpeech } = useSpeechSynthesis(0.5)
+  const {
+    isRunning,
+    interval,
+    setInterval,
+    startTimer,
+    stopTimer,
+    nextCallTime,
+  } = useTimeCallTimer({ currentTime, playBeep, playSpeech })
 
   const [debugLog, setDebugLog] = useState<string[]>([])
 
   const intervals = [1, 5, 10, 15, 30, 60]
 
   const handleStart = useCallback(() => {
-    start()
+    startTimer()
     setDebugLog(prev => [
       ...prev,
       `[${new Date().toLocaleTimeString()}] Started with interval ${interval}min`,
     ])
-  }, [start, interval])
+  }, [startTimer, interval])
 
   const handleStop = useCallback(() => {
-    stop()
+    stopTimer()
     setDebugLog(prev => [
       ...prev,
       `[${new Date().toLocaleTimeString()}] Stopped`,
     ])
-  }, [stop])
+  }, [stopTimer])
 
   const handleIntervalChange = useCallback(
     (newInterval: number) => {

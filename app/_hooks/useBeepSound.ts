@@ -7,6 +7,7 @@ type UseBeepSoundReturn = {
   playBeep: () => Promise<Result<void, string>>
   stopBeep: () => void
   setBeepVolume: (volume: number) => void
+  beepVolume: number
 }
 
 export function useBeepSound(defaultVolume = 0.5): UseBeepSoundReturn {
@@ -85,5 +86,5 @@ export function useBeepSound(defaultVolume = 0.5): UseBeepSoundReturn {
     }
   }, [])
 
-  return { playBeep, stopBeep, setBeepVolume }
+  return { playBeep, stopBeep, setBeepVolume, beepVolume }
 }

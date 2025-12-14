@@ -16,7 +16,7 @@ export default function SpeechTester() {
     voices,
     setSelectedVoice,
     setSpeechVolume,
-    cancel,
+    cancelSpeech,
   } = useSpeechSynthesis(0.5)
 
   const [testText, setTestText] = useState('午前10時30分です。')
@@ -55,10 +55,10 @@ export default function SpeechTester() {
   }, [playSpeech, testText])
 
   const handleCancel = useCallback(() => {
-    cancel()
+    cancelSpeech()
     setLastAction('cancelled')
     setLastResult('⏹️ Cancelled')
-  }, [cancel])
+  }, [cancelSpeech])
 
   const handleVolumeChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
