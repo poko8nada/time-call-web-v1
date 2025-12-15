@@ -55,7 +55,7 @@ export function IntervalSelector({
           compact ? 'text-xs mb-2' : 'text-sm mb-3'
         }`}
       >
-        読み上げ間隔
+        Interval Selection
       </legend>
 
       <div
@@ -91,7 +91,7 @@ export function IntervalSelector({
             />
             <span
               className={`text-xs sm:text-sm font-medium ${
-                interval === option ? 'text-[#06b6d4]' : 'text-text-light'
+                interval === option ? 'text-accent-cyan' : 'text-text-light'
               }`}
             >
               {option}分

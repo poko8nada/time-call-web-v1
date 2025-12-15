@@ -180,14 +180,14 @@
 
 ### Task 14: UI/UX & Design Polish (Phase 6-7統合)
 
-- [ ] デザインシステム統合
+- [x] デザインシステム統合
   - 色パレット統一（primary, secondary, background, text）
   - タイポグラフィスケール確認（font-size, font-weight, line-height）
   - スペーシング確認（4px/8px グリッド準拠）
-- [ ] レスポンシブ改善
+- [x] レスポンシブ改善
   - sm (640px), md (768px), lg (1024px) でのレイアウト確認
   - モバイル・タブレット・PCでの表示確認
-- [ ] アクセシビリティ確認
+- [x] アクセシビリティ確認
   - キーボードナビゲーション動作確認
   - Screen reader対応確認（aria-label, role属性）
   - 色コントラスト確認（WCAG 2.1 AA基準）

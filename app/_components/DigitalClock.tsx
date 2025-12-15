@@ -30,7 +30,7 @@ export function DigitalClock({ currentTime }: { currentTime: Date }) {
     return (
       <div className='flex items-center justify-center w-full'>
         <time
-          className='font-mono font-bold tracking-tight text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-text-light invisible'
+          className='font-mono font-bold tracking-tight text-6xl sm:text-7xl md:text-8xl lg:text-8xl text-text-light invisible'
           aria-hidden='true'
           style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)' }}
         >
@@ -46,7 +46,7 @@ export function DigitalClock({ currentTime }: { currentTime: Date }) {
     <div className='flex items-center justify-center w-full px-4'>
       <time
         dateTime={currentTime.toISOString()}
-        className='font-mono font-bold tracking-tight text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-text-light'
+        className='font-mono font-bold tracking-tight text-6xl sm:text-7xl md:text-8xl lg:text-8xl text-text-light'
         role='status'
         aria-label={`現在時刻: ${displayTime}`}
         style={{

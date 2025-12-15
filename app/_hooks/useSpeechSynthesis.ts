@@ -252,10 +252,6 @@ export function useSpeechSynthesis(
       utterance.voice = selectedVoice
       utterance.lang = selectedVoice?.lang || 'ja-JP'
 
-      console.log(utterance)
-      console.log(Math.max(0, Math.min(1, speechVolume)))
-      console.log(speechVolume)
-
       // Store reference to current utterance
       currentUtteranceRef.current = utterance
 

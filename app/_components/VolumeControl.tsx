@@ -34,7 +34,7 @@ export function VolumeControl({
 
   return (
     <div>
-      <div className='flex flex-col gap-3 w-full max-w-xs'>
+      <div className='flex flex-col gap-3 w-full max-w-md'>
         {/* Label */}
         <label
           htmlFor={`volume-${label}`}

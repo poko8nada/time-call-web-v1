@@ -39,8 +39,8 @@ export function ControlButton({
     }
   }, [isRunning, onStart, onStop])
 
-  const buttonLabel = isRunning ? '停止' : '開始'
-  const ariaLabel = isRunning ? 'タイマーを停止' : 'タイマーを開始'
+  const buttonLabel = isRunning ? 'Stop' : 'Start'
+  const ariaLabel = isRunning ? 'Stop timer' : 'Start timer'
 
   const baseClasses =
     'px-12 py-4 rounded-full font-semibold text-white text-lg flex items-center justify-center gap-3 transition-all duration-200'

@@ -41,7 +41,7 @@ export function TestPlayButton({
       className='w-full px-4 py-2 bg-linear-to-br from-accent-cyan to-accent-purple shadow-neuro-flat hover:shadow-neuro-raised active:shadow-neuro-pressed disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-neuro-flat text-white font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-cyan-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-neuro-base'
       aria-label='選択した音声をテスト再生'
     >
-      {isTestPlaying ? '再生中...' : '音声テスト'}
+      {isTestPlaying ? 'Playing...' : 'Test Voice'}
     </button>
   )
 }

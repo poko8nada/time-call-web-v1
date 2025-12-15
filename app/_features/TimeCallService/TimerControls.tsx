@@ -23,7 +23,7 @@ export function TimerControls({
   isAvailable,
 }: TimerControlsProps) {
   return (
-    <div className='flex justify-center w-full min-h-[3.5rem] items-center'>
+    <div className='flex justify-center w-full min-h-14 items-center'>
       <ControlButton
         isRunning={isRunning}
         onStart={onStart}

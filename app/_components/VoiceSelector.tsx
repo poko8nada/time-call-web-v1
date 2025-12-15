@@ -55,7 +55,7 @@ export function VoiceSelector({
           compact ? 'text-xs mb-2' : 'text-sm mb-3'
         }`}
       >
-        音声選択
+        Voice Selection
       </label>
       <select
         id={selectId}
