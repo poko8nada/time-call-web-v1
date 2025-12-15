@@ -231,13 +231,13 @@
 - [ ] Vercel デプロイ設定
   - 環境変数設定（必要に応じて）
   - ビルド設定確認
-- [ ] OGP 画像作成・配置
+- [x] OGP 画像作成・配置
   - `/public/og.png` (1200x630px)
   - メタデータ設定（layout.tsx）
-- [ ] Favicon 準備・追加
+- [x] Favicon 準備・追加
   - `/public/favicon.ico`
   - `/app/icon.png` (App Router形式)
-- [ ] 本番環境での動作確認
+- [x] 本番環境での動作確認
   - 全機能の動作確認
   - 音声再生の確認
   - レスポンシブ表示確認

@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     images: [
       {
-        url: '/og.png',
+        url: '/timecall-ogp.png',
         width: 1200,
         height: 630,
         alt: 'Time Call preview',
