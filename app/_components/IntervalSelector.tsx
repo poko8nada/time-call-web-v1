@@ -3,24 +3,9 @@
 import { useCallback } from 'react'
 
 interface IntervalSelectorProps {
-  /**
-   * Current selected interval in minutes
-   */
   interval: number
-
-  /**
-   * Callback fired when interval changes
-   */
   onChange: (minutes: number) => void
-
-  /**
-   * Disable the selector (e.g., when timer is running)
-   */
   disabled?: boolean
-
-  /**
-   * Compact mode for horizontal Quick Settings bar
-   */
   compact?: boolean
 }
 
@@ -66,7 +51,7 @@ export function IntervalSelector({
       aria-label='Time call interval selection'
     >
       <legend
-        className={`font-semibold text-[#e2e8f0] block ${
+        className={`font-semibold text-text-light block ${
           compact ? 'text-xs mb-2' : 'text-sm mb-3'
         }`}
       >
@@ -82,7 +67,7 @@ export function IntervalSelector({
             className={`
               flex items-center justify-center
               px-4 py-2 rounded-xl
-              bg-[#2d3748]
+              bg-neuro-base
               cursor-pointer
               transition-all duration-200
               ${
@@ -91,7 +76,7 @@ export function IntervalSelector({
                   : 'shadow-neuro-flat hover:shadow-neuro-raised'
               }
               ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-              focus-within:ring-2 focus-within:ring-cyan-500/30 focus-within:ring-offset-2 focus-within:ring-offset-[#2d3748]
+              focus-within:ring-2 focus-within:ring-cyan-500/30 focus-within:ring-offset-2 focus-within:ring-offset-neuro-base
             `}
           >
             <input
@@ -106,7 +91,7 @@ export function IntervalSelector({
             />
             <span
               className={`text-xs sm:text-sm font-medium ${
-                interval === option ? 'text-[#06b6d4]' : 'text-[#e2e8f0]'
+                interval === option ? 'text-[#06b6d4]' : 'text-text-light'
               }`}
             >
               {option}分

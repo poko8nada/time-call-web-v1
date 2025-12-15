@@ -160,7 +160,7 @@ className="
   text-8xl sm:text-9xl
   font-bold
   tracking-tight
-  text-[#e2e8f0]
+  text-text-light
 "
 style={{
   textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
@@ -211,7 +211,7 @@ className="
   rounded-xl
   px-4 py-2
   border-0
-  text-[#e2e8f0]
+  text-text-light
   focus:shadow-neuro-pressed
 "
 ```
@@ -404,7 +404,7 @@ className =
 ### Phase 2: Main Components ✅ COMPLETED
 
 - [x] Main Timer Card - apply raised-lg shadow, rounded-[32px]
-- [x] Digital Clock - text-9xl, tracking-tight, text-[#e2e8f0], subtle text-shadow
+- [x] Digital Clock - text-9xl, tracking-tight, text-text-light, subtle text-shadow
 - [x] Next Call Display - inset shadow (shadow-neuro-pressed), rounded-2xl
 - [x] START/STOP Button - gradient (cyan→purple / rose→red), rounded-full, raised shadow with hover/active states
 

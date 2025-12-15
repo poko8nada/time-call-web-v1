@@ -33,8 +33,8 @@ export function NextCallTimeDisplay({
         isRunning && nextCallTime ? 'opacity-100' : 'opacity-0'
       }`}
     >
-      <div className='bg-[#2d3748] rounded-2xl px-6 py-3 shadow-neuro-pressed w-full'>
-        <p className='text-xs sm:text-sm md:text-base text-center text-[#94a3b8]'>
+      <div className='bg-neuro-base rounded-2xl px-6 py-3 shadow-neuro-pressed w-full'>
+        <p className='text-xs sm:text-sm md:text-base text-center text-text-muted'>
           次の読み上げ:{' '}
           <span className='font-bold text-[#06b6d4] tracking-wider'>
             {timeString}

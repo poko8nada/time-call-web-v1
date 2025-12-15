@@ -50,16 +50,16 @@ export function TimeCallService() {
       <main className='w-full max-w-2xl mx-auto space-y-6 sm:space-y-8 px-3 sm:px-4'>
         {/* Header - Minimized */}
         <div className='text-center space-y-1'>
-          <h1 className='text-base sm:text-lg font-bold text-[#e2e8f0]'>
+          <h1 className='text-base sm:text-lg font-bold text-text-light'>
             時刻読み上げサービス
           </h1>
-          <p className='text-xs sm:text-sm text-[#94a3b8]'>
+          <p className='text-xs sm:text-sm text-text-muted'>
             指定した間隔で現在時刻をお知らせします
           </p>
         </div>
 
         {/* Main Timer Section - Unified with integrated button */}
-        <div className='flex flex-col items-center justify-between min-h-[50vh] sm:min-h-[55vh] py-8 sm:py-10 md:py-12 px-6 bg-[#2d3748] rounded-[32px] shadow-neuro-raised-lg border-0'>
+        <div className='flex flex-col items-center justify-between min-h-[50vh] sm:min-h-[55vh] py-8 sm:py-10 md:py-12 px-6 bg-neuro-base rounded-4xl shadow-neuro-raised-lg border-0'>
           {/* Digital Clock - Enlarged */}
           <div className='flex-1 flex items-center justify-center w-full'>
             <DigitalClock currentTime={currentTime} />
