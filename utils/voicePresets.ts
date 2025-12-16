@@ -22,14 +22,19 @@ export type VoicePreset = {
  * マッチ結果の最初の要素が自動選択される
  */
 export const VOICE_PRESETS: VoicePreset[] = [
-
   // Safari / macOS / iOS
   { name: 'Kyoko', lang: 'ja-JP' },
   { name: 'Hattori', lang: 'ja-JP' },
 
   // Microsoft Edge (Windows)
-  { name: 'Microsoft Nanami Online (Natural) - Japanese (Japan)', lang: 'ja-JP' },
-  { name: 'Microsoft Keita Online (Natural) - Japanese (Japan)', lang: 'ja-JP' },
+  {
+    name: 'Microsoft Nanami Online (Natural) - Japanese (Japan)',
+    lang: 'ja-JP',
+  },
+  {
+    name: 'Microsoft Keita Online (Natural) - Japanese (Japan)',
+    lang: 'ja-JP',
+  },
 
   // Chrome/Edge (Google TTS)
   { name: 'Google 日本語', lang: 'ja-JP' },

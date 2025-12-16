@@ -6,7 +6,6 @@
   --foreground: #e2e8f0;
 }
 
-/* biome-ignore lint:unknownAtRules */
 @theme inline {
   /* Fonts */
   --font-sans: var(--font-geist-sans);

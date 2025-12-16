@@ -16,13 +16,6 @@ interface SettingsPanelProps {
  * - Container for settings UI
  * - Composition pattern (children only)
  * - Hydration-safe rendering
- *
- * Usage:
- * <SettingsPanel>
- *   <VolumeControl ... />
- *   <VoiceSelector ... />
- *   <TestButton ... />
- * </SettingsPanel>
  */
 export function SettingsPanel({ children }: SettingsPanelProps) {
   const [mounted, setMounted] = useState(false)

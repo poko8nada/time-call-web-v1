@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react'
 import { DigitalClock } from '@/app/_components/DigitalClock'
 import { IntervalSelector } from '@/app/_components/IntervalSelector'
 import { NextCallTimeDisplay } from '@/app/_components/NextCallTimeDisplay'
+import { TestPlayButton } from '@/app/_components/TestPlayButton'
 import { VoiceSelector } from '@/app/_components/VoiceSelector'
 import { VoiceUnavailableDialog } from '@/app/_components/VoiceUnavailableDialog'
+import { VolumeControl } from '@/app/_components/VolumeControl'
 import { useBeepSound } from '@/app/_hooks/useBeepSound'
 import { useClock } from '@/app/_hooks/useClock'
 import { useSpeechSynthesis } from '@/app/_hooks/useSpeechSynthesis'
-import { AudioSettings } from './AudioSettings'
 import { TimerControls } from './TimerControls'
 import { useTimeCallTimer } from './useTimeCallTimer'
 
@@ -50,16 +51,16 @@ export function TimeCallService() {
       <main className='w-full max-w-2xl mx-auto space-y-6 sm:space-y-8 px-3 sm:px-4'>
         {/* Header - Minimized */}
         <div className='text-center space-y-1'>
-          <h1 className='text-base sm:text-lg font-bold text-[#e2e8f0]'>
-            時刻読み上げサービス
+          <h1 className='text-base sm:text-2xl font-bold text-text-light'>
+            Time Call Service
           </h1>
-          <p className='text-xs sm:text-sm text-[#94a3b8]'>
+          <p className='text-xs sm:text-sm text-text-muted'>
             指定した間隔で現在時刻をお知らせします
           </p>
         </div>
 
         {/* Main Timer Section - Unified with integrated button */}
-        <div className='flex flex-col items-center justify-between min-h-[50vh] sm:min-h-[55vh] py-8 sm:py-10 md:py-12 px-6 bg-[#2d3748] rounded-[32px] shadow-neuro-raised-lg border-0'>
+        <div className='flex flex-col items-center justify-between min-h-[50vh] sm:min-h-[55vh] py-8 sm:py-10 md:py-12 px-6 bg-neuro-base rounded-4xl shadow-neuro-raised-lg border-0'>
           {/* Digital Clock - Enlarged */}
           <div className='flex-1 flex items-center justify-center w-full'>
             <DigitalClock currentTime={currentTime} />
@@ -83,9 +84,9 @@ export function TimeCallService() {
         </div>
 
         {/* Quick Settings - Horizontal bar */}
-        <div className='flex flex-col sm:flex-row gap-4 sm:gap-6 items-stretch sm:items-center justify-center py-4 px-4 sm:px-6'>
+        <div className='flex flex-col sm:items-stretch sm:flex-row gap-4 sm:gap-6 justify-center items-center-safe py-4 px-4 sm:px-6'>
           {/* Interval Selector */}
-          <div className='flex-1 max-w-xs'>
+          <div className='flex-1 max-w-sm'>
             <IntervalSelector
               interval={interval}
               onChange={setInterval}
@@ -95,7 +96,7 @@ export function TimeCallService() {
           </div>
 
           {/* Voice Selector */}
-          <div className='flex-1 max-w-xs'>
+          <div className='flex-1 max-w-sm'>
             <VoiceSelector
               voices={voices}
               selectedVoice={selectedVoice}
@@ -106,15 +107,22 @@ export function TimeCallService() {
             />
           </div>
         </div>
-
-        {/* Audio Settings - Accordion */}
-        <AudioSettings
-          isSupported={isSupported}
-          selectedVoice={selectedVoice}
-          masterVolume={masterVolume}
-          onSetMasterVolume={setMasterVolume}
-          onPlaySpeech={playSpeech}
-        />
+        {/* Audio Settings & Test Play */}
+        <div className='p-4 sm:p-6 pt-0 space-y-6 max-w-md mx-auto'>
+          <VolumeControl
+            masterVolume={masterVolume}
+            onSetMasterVolume={setMasterVolume}
+            label='Master Volume'
+            description='ビープ音と読み上げ音の両方に適用されます'
+          />
+          <div>
+            <TestPlayButton
+              selectedVoice={selectedVoice}
+              onPlaySpeech={playSpeech}
+              isSupported={isSupported}
+            />
+          </div>
+        </div>
       </main>
     </>
   )

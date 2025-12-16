@@ -3,11 +3,7 @@
   "extends": [],
   "files": {
     "ignoreUnknown": true,
-    "includes": [
-      "app/**/*.{ts,tsx,js,jsx}",
-      "components/**/*.{ts,tsx,js,jsx}",
-      "!test"
-    ]
+    "includes": ["app/**", "componets/**", "hooks/**", "utils/**"]
   },
   "linter": {
     "rules": {

@@ -16,14 +16,6 @@ interface VoiceSelectorProps {
  *
  * Voice selection dropdown component.
  * Accepts voices and callbacks as props (composition pattern).
- *
- * Usage:
- * <VoiceSelector
- *   voices={voices}
- *   selectedVoice={selectedVoice}
- *   onVoiceChange={setSelectedVoice}
- *   isSupported={true}
- * />
  */
 export function VoiceSelector({
   voices,
@@ -59,18 +51,18 @@ export function VoiceSelector({
     <div>
       <label
         htmlFor={selectId}
-        className={`block font-semibold text-[#e2e8f0] ${
+        className={`block font-semibold text-text-light ${
           compact ? 'text-xs mb-2' : 'text-sm mb-3'
         }`}
       >
-        音声選択
+        Voice Selection
       </label>
       <select
         id={selectId}
         value={voices.indexOf(selectedVoice || voices[0])}
         onChange={handleVoiceChange}
         disabled={disabled}
-        className={`w-full bg-[#2d3748] border-0 rounded-xl text-[#e2e8f0] shadow-neuro-flat focus:shadow-neuro-pressed focus-visible:ring-2 focus-visible:ring-cyan-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2d3748] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 ${
+        className={`w-full bg-neuro-base border-0 rounded-xl text-text-light shadow-neuro-flat focus:shadow-neuro-pressed focus-visible:ring-2 focus-visible:ring-cyan-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-neuro-base disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 ${
           compact ? 'px-3 py-1.5 text-sm' : 'px-4 py-2'
         }`}
         aria-label='音声の選択'
@@ -82,7 +74,7 @@ export function VoiceSelector({
         ))}
       </select>
       {!compact && (
-        <p className='mt-2 text-xs text-[#94a3b8]'>
+        <p className='mt-2 text-xs text-text-muted'>
           選択した音声で時刻が読み上げられます
         </p>
       )}

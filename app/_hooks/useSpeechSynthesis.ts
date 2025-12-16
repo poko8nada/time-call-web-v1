@@ -178,7 +178,7 @@ export function useSpeechSynthesis(
   const [speechVolume, setSpeechVolume] = useState(() => {
     return Math.max(0, Math.min(1, defaultVolume))
   })
-  const [isAvailable, setIsAvailable] = useState(false)
+  const [isAvailable, setIsAvailable] = useState(true)
   const currentUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
 
   useEffect(() => {
@@ -251,10 +251,6 @@ export function useSpeechSynthesis(
       utterance.text = `${text}`
       utterance.voice = selectedVoice
       utterance.lang = selectedVoice?.lang || 'ja-JP'
-
-      console.log(utterance)
-      console.log(Math.max(0, Math.min(1, speechVolume)))
-      console.log(speechVolume)
 
       // Store reference to current utterance
       currentUtteranceRef.current = utterance

@@ -1,14 +1,7 @@
 'use client'
 
 interface CurrentIntervalDisplayProps {
-  /**
-   * Timer running state
-   */
   isRunning: boolean
-
-  /**
-   * Current interval in minutes
-   */
   interval: number
 }
 
@@ -23,12 +16,6 @@ interface CurrentIntervalDisplayProps {
  * - Only visible when timer is running
  * - Positioned above IntervalSelector
  * - Always visible even when IntervalSelector is disabled
- *
- * Usage:
- * <CurrentIntervalDisplay
- *   isRunning={isRunning}
- *   interval={interval}
- * />
  */
 export function CurrentIntervalDisplay({
   isRunning,
