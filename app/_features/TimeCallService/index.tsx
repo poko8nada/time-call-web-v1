@@ -51,7 +51,7 @@ export function TimeCallService() {
       <main className='w-full max-w-2xl mx-auto space-y-6 sm:space-y-8 px-3 sm:px-4'>
         {/* Header - Minimized */}
         <div className='text-center space-y-1'>
-          <h1 className='text-base sm:text-lg font-bold text-text-light'>
+          <h1 className='text-base sm:text-2xl font-bold text-text-light'>
             Time Call Service
           </h1>
           <p className='text-xs sm:text-sm text-text-muted'>

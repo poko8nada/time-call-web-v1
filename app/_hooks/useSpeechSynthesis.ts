@@ -178,7 +178,7 @@ export function useSpeechSynthesis(
   const [speechVolume, setSpeechVolume] = useState(() => {
     return Math.max(0, Math.min(1, defaultVolume))
   })
-  const [isAvailable, setIsAvailable] = useState(false)
+  const [isAvailable, setIsAvailable] = useState(true)
   const currentUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
 
   useEffect(() => {

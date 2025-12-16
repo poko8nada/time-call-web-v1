@@ -35,8 +35,8 @@ export function NextCallTimeDisplay({
     >
       <div className='bg-neuro-base rounded-2xl px-6 py-3 shadow-neuro-pressed w-full'>
         <p className='text-xs sm:text-sm md:text-base text-center text-text-muted'>
-          次の読み上げ:{' '}
-          <span className='font-bold text-[#06b6d4] tracking-wider'>
+          NEXT IS{' '}
+          <span className='font-bold text-accent-cyan tracking-wider'>
             {timeString}
           </span>
         </p>
